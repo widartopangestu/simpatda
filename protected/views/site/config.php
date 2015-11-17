@@ -1,11 +1,11 @@
 <?php
-$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('config', 'Config');
+$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Config');
 ?>
 
 <div class="widget ">
 
     <div class="widget-header">
-        <i class="icon-cogs"></i>
+        <i class="icon-cog"></i>
         <h3><?php echo Yii::t('trans', 'Settings'); ?></h3>
     </div> <!-- /widget-header -->
 
@@ -26,9 +26,9 @@ $this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('config', 'Confi
         <?php
         $this->widget('bootstrap.widgets.TbTabs', array(
             'tabs' => array(
-                array('label' => Yii::t('trans', 'Sistem'), 'content' => $this->renderPartial('_sistem', array('model' => $model, 'form' => $form), true), 'active' => true),
-                array('label' => Yii::t('trans', 'Perusahaan'), 'content' => $this->renderPartial('_perusahaan', array('model' => $model, 'form' => $form), true)),
-                array('label' => Yii::t('trans', 'Laporan'), 'content' => $this->renderPartial('_report', array('model' => $model, 'form' => $form), true)),
+                array('label' => Yii::t('trans', 'System'), 'content' => $this->renderPartial('_sistem', array('model' => $model, 'form' => $form), true), 'active' => true),
+                array('label' => Yii::t('trans', 'Company'), 'content' => $this->renderPartial('_perusahaan', array('model' => $model, 'form' => $form), true)),
+                array('label' => Yii::t('trans', 'Reports'), 'content' => $this->renderPartial('_report', array('model' => $model, 'form' => $form), true)),
             ),
         ));
         ?>

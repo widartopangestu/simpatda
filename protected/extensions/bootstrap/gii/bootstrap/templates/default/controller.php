@@ -31,7 +31,7 @@ class <?php echo $this->controllerClass; ?> extends <?php echo $this->baseContro
 	 */
 	public function actionView($id)
 	{
-                Yii::app()->util->setLog(AccessLog::TYPE_INFO, 'View <?php echo $this->pluralize($this->class2name($this->modelClass)); ?> ID : ' . $id);
+                Yii::app()->util->setLog(AccessLog::TYPE_INFO, Yii::t('trans', 'View <?php echo $this->pluralize($this->class2name($this->modelClass)); ?> ID : {id}', array('{id}' => $id)));
                 $this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
@@ -51,7 +51,7 @@ class <?php echo $this->controllerClass; ?> extends <?php echo $this->baseContro
 		if (isset($_POST['<?php echo $this->modelClass; ?>'])) {
 			$model->attributes=$_POST['<?php echo $this->modelClass; ?>'];
 			if ($model->save()) {
-				Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, 'Create <?php echo $this->pluralize($this->class2name($this->modelClass)); ?> ID : ' . $model->primaryKey);
+				Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Create <?php echo $this->pluralize($this->class2name($this->modelClass)); ?> ID : ') . $model->primaryKey);
                                 $this->redirect(array('view','id'=>$model-><?php echo $this->tableSchema->primaryKey; ?>));
 			}
 		}
@@ -76,7 +76,7 @@ class <?php echo $this->controllerClass; ?> extends <?php echo $this->baseContro
 		if (isset($_POST['<?php echo $this->modelClass; ?>'])) {
 			$model->attributes=$_POST['<?php echo $this->modelClass; ?>'];
 			if ($model->save()) {
-				Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, 'Update <?php echo $this->pluralize($this->class2name($this->modelClass)); ?> ID : ' . $model-><?php echo $this->tableSchema->primaryKey; ?>);
+				Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Update <?php echo $this->pluralize($this->class2name($this->modelClass)); ?> ID : ') . $model-><?php echo $this->tableSchema->primaryKey; ?>);
                                 $this->redirect(array('view','id'=>$model-><?php echo $this->tableSchema->primaryKey; ?>));
 			}
 		}
@@ -96,14 +96,14 @@ class <?php echo $this->controllerClass; ?> extends <?php echo $this->baseContro
 		if (Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
 			if($this->loadModel($id)->delete())
-                            Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, 'Delete <?php echo $this->pluralize($this->class2name($this->modelClass)); ?> ID : ' . $id);
+                            Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Delete <?php echo $this->pluralize($this->class2name($this->modelClass)); ?> ID : ') . $id);
                                 
 			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 			if (!isset($_GET['ajax'])) {
 				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
 			}
 		} else {
-			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+			throw new CHttpException(400, Yii::t('trans', 'Invalid request. Please do not repeat this request again.'));
 		}
 	}
 
@@ -122,7 +122,7 @@ class <?php echo $this->controllerClass; ?> extends <?php echo $this->baseContro
                     Yii::app()->user->setState('pageSize' . $model->tableName(), (int) $_GET['pageSize']);
                     unset($_GET['pageSize']);  // would interfere with pager and repetitive page size change
                 }
-                Yii::app()->util->setLog(AccessLog::TYPE_INFO, 'Manage <?php echo $this->pluralize($this->class2name($this->modelClass)); ?>');
+                Yii::app()->util->setLog(AccessLog::TYPE_INFO, Yii::t('trans', 'Manage <?php echo $this->pluralize($this->class2name($this->modelClass)); ?>'));
                                 
 		$this->render('index',array(
 			'model'=>$model,
@@ -140,7 +140,7 @@ class <?php echo $this->controllerClass; ?> extends <?php echo $this->baseContro
 	{
 		$model=<?php echo $this->modelClass; ?>::model()->findByPk($id);
 		if ($model===null) {
-			throw new CHttpException(404,'The requested page does not exist.');
+			throw new CHttpException(404, Yii::t('trans', 'The requested page does not exist.'));
 		}
 		return $model;
 	}

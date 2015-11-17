@@ -59,11 +59,11 @@ class AccessLog extends CActiveRecord {
      */
     public function attributeLabels() {
         return array(
-            'id' => Yii::t('access_log', 'ID'),
-            'type' => Yii::t('access_log', 'Type'),
-            'activity' => Yii::t('access_log', 'Activity'),
-            'time' => Yii::t('access_log', 'Time'),
-            'user_id' => Yii::t('access_log', 'User'),
+            'id' => Yii::t('trans', 'ID'),
+            'type' => Yii::t('trans', 'Type'),
+            'activity' => Yii::t('trans', 'Activity'),
+            'time' => Yii::t('trans', 'Time'),
+            'user_id' => Yii::t('trans', 'User'),
         );
     }
 

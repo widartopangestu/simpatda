@@ -23,7 +23,7 @@ class RoleController extends Controller {
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
-        Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, 'View Role ID : ' . $id);
+        Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'View Role ID : ') . $id);
         $this->render('view', array(
             'model' => $this->loadModel($id),
         ));
@@ -54,7 +54,7 @@ class RoleController extends Controller {
                     }
                 }
                 if ($valid) {
-                    Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, 'Crerate Role ID : ' . $model->primaryKey);
+                    Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Crerate Role ID : ') . $model->primaryKey);
                     $transaction->commit();
                     $this->redirect(array('view', 'id' => $model->id));
                 }
@@ -104,7 +104,7 @@ class RoleController extends Controller {
                     }
                 }
                 if ($valid) {
-                    Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, 'Update Role ID : ' . $model->id);
+                    Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Update Role ID : ') . $model->id);
                     $transaction->commit();
                     $this->redirect(array('view', 'id' => $model->id));
                 }
@@ -189,7 +189,7 @@ class RoleController extends Controller {
 
             if ($this->loadModel($id)->delete() && $valid) {
                 $transaction->commit();
-                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, 'Delete Role ID : ' . $id);
+                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Delete Role ID : ') . $id);
             }
 
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
@@ -210,7 +210,7 @@ class RoleController extends Controller {
             $role_id = $user->role_id;
             $user->role_id = NULL;
             if ($user->save(FALSE))
-                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, 'Revoke user ID : ' . $user_id . ' from Role ID : ' . $role_id);
+                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Revoke user ID : {user_id} from Role ID : {role_id}', array('{user_id}' => $user_id, '{role_id}' => $role_id)));
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             if (!isset($_GET['ajax'])) {
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('view', 'id' => $role_id));
@@ -224,7 +224,7 @@ class RoleController extends Controller {
      * Lists all models.
      */
     public function actionIndex() {
-        Yii::app()->util->setLog(AccessLog::TYPE_INFO, 'List Role');
+        Yii::app()->util->setLog(AccessLog::TYPE_INFO, Yii::t('trans', 'List Role'));
         $dataProvider = new CActiveDataProvider('Role');
         $this->render('index', array(
             'dataProvider' => $dataProvider,
@@ -240,7 +240,7 @@ class RoleController extends Controller {
         if (isset($_GET['Role'])) {
             $model->attributes = $_GET['Role'];
         }
-        Yii::app()->util->setLog(AccessLog::TYPE_INFO, 'Manage Role');
+        Yii::app()->util->setLog(AccessLog::TYPE_INFO, Yii::t('trans', 'Manage Role'));
 
         $this->render('admin', array(
             'model' => $model,
@@ -294,7 +294,7 @@ class RoleController extends Controller {
                 throw new CHttpException(404, Yii::t('trans', 'The requested page does not exist.'));
             $user->role_id = $role_id;
             if ($user->save(FALSE))
-                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, 'Assign user ID : ' . $user_id . ' to Role ID : ' . $role_id);
+                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Assign user ID : {user_id} to Role ID : {role_id}', array('{user_id}' => $user_id, '{role_id}' => $role_id)));
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             if (!isset($_GET['ajax'])) {
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('view', 'id' => $role_id));

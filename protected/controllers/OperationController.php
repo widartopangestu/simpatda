@@ -31,7 +31,7 @@ class OperationController extends Controller {
         if (isset($_POST['Operation'])) {
             $model->attributes = $_POST['Operation'];
             if ($model->save()) {
-                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, 'Create Operation ID : ' . $model->primaryKey);
+                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Create Operation ID : ') . $model->primaryKey);
                 $this->redirect(array('admin'));
             }
         }
@@ -55,7 +55,7 @@ class OperationController extends Controller {
         if (isset($_POST['Operation'])) {
             $model->attributes = $_POST['Operation'];
             if ($model->save()) {
-                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, 'Update Operation ID : ' . $model->id);
+                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Update Operation ID : ') . $model->id);
                 $this->redirect(array('admin'));
             }
         }
@@ -74,7 +74,7 @@ class OperationController extends Controller {
         if (Yii::app()->request->isPostRequest) {
             // we only allow deletion via POST request
             if ($this->loadModel($id)->delete())
-                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, 'Delete Operation ID : ' . $id);
+                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Delete Operation ID : ') . $id);
 
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             if (!isset($_GET['ajax'])) {
@@ -98,7 +98,7 @@ class OperationController extends Controller {
             Yii::app()->user->setState('pageSize' . $model->tableName(), (int) $_GET['pageSize']);
             unset($_GET['pageSize']);  // would interfere with pager and repetitive page size change 
         }
-        Yii::app()->util->setLog(AccessLog::TYPE_INFO, 'Manage Operation ');
+        Yii::app()->util->setLog(AccessLog::TYPE_INFO, Yii::t('trans', 'Manage Operation'));
 
         $this->render('admin', array(
             'model' => $model,

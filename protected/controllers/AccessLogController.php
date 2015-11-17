@@ -49,7 +49,7 @@ class AccessLogController extends Controller {
             Yii::app()->user->setState('pageSize' . $model->tableName(), (int) $_GET['pageSize']);
             unset($_GET['pageSize']);  // would interfere with pager and repetitive page size change 
         }
-//        Yii::app()->util->setLog(AccessLog::TYPE_INFO, 'Manage Access Logs');
+//        Yii::app()->util->setLog(AccessLog::TYPE_INFO, Yii::t('trans', 'Manage Access Logs');
 
         $this->render('index', array(
             'model' => $model,

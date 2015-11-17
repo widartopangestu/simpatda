@@ -4,11 +4,11 @@
 
 
 $this->breadcrumbs = array(
-    Yii::t('access_log', 'Access Logs') => array('index'),
+    Yii::t('trans', 'Access Logs') => array('index'),
     Yii::t('trans', 'Manage'),
 );
 
-$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Manage') . ' ' . Yii::t('access_log', 'Access Logs');
+$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Manage') . ' ' . Yii::t('trans', 'Access Logs');
 $this->menu = array(
     array('label' => Yii::t('trans', 'Create'), 'url' => array('create'), 'icon' => 'file', 'visible' => (Yii::app()->util->is_authorized('accessLog.create')) ? true : false),
 );
@@ -18,7 +18,7 @@ $pageSize = Yii::app()->user->getState('pageSize' . $model->tableName(), Yii::ap
 <div class="widget ">
     <div class="widget-header">
         <i class="icon-list-alt"></i>
-        <h3><?php echo Yii::t('trans', 'Manage') . ' ' . Yii::t('access_log', 'Access Logs'); ?></h3>
+        <h3><?php echo Yii::t('trans', 'Manage') . ' ' . Yii::t('trans', 'Access Logs'); ?></h3>
     </div> <!-- /widget-header -->
     <div class="widget-content">
         <div class="grid-view pull-right">

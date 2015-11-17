@@ -119,7 +119,7 @@ class Role extends CActiveRecord {
         } else {
             $user = User::model()->findByPk(Yii::app()->user->id);
             if (!in_array($operation, $user->operationsArray))
-                throw new CHttpException(403, "You do not have sufficient permissions to access this page.");
+                throw new CHttpException(403, Yii::t('trans', 'You do not have sufficient permissions to access this page.'));
         }
     }
 

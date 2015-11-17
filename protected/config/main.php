@@ -8,7 +8,7 @@ return array(
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
     'name' => 'SIMPATDA',
     // preloading 'log' component
-    'preload' => array('log'),
+    'preload' => array('log', 'translate'),
     'aliases' => array(
         // yiistrap configuration
         'bootstrap' => realpath(__DIR__ . '/../extensions/bootstrap'), // change if necessary
@@ -24,6 +24,10 @@ return array(
         'application.modules.translate.TranslateModule',
     ),
     'modules' => array(
+        'translate',
+        'backup' => array(
+            'path' => __DIR__ . '/../_backup/'
+        ),
         // uncomment the following to enable the Gii tool
         'gii' => array(
             'class' => 'system.gii.GiiModule',
@@ -34,10 +38,6 @@ return array(
                 'bootstrap.gii',
             ),
         ),
-        'translate',
-        'backup' => array(
-            'path' => __DIR__ . '/../_backup/'
-        ),
     ),
     // application components
     'components' => array(
@@ -45,6 +45,8 @@ return array(
         'messages' => array(
             'class' => 'CDbMessageSource',
             'onMissingTranslation' => array('TranslateModule', 'missingTranslation'),
+            'sourceMessageTable' => 'sourcemessage',
+            'translatedMessageTable' => 'message'
         ),
         'translate' => array(//if you name your component something else change TranslateModule
             'class' => 'translate.components.MPTranslate',

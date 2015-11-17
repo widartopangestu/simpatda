@@ -50,7 +50,16 @@
             <div class="footer-inner">
                 <div class="container">
                     <div class="row">
-                        <div class="span12"><?php echo Yii::app()->params['copyrightInfo']; ?></div>
+                        <div class="span12"><?php echo Yii::app()->params['copyrightInfo']; ?>
+                            <span class="pull-right">
+                                <?php
+                                $translate = Yii::app()->translate;
+                                if ($translate->hasMessages()) {
+                                    echo $translate->translateLink('Translate');
+                                }
+                                ?>
+                            </span>
+                        </div>
                         <!-- /span12 --> 
                     </div>
                     <!-- /row --> 
@@ -62,6 +71,9 @@
         <!-- /footer --> 
         <script type="text/javascript">
             jQuery('.nav-collapse').height(0);
+            $('form:not(.report)').on('submit', function () {
+                $(this).find('button[type=submit]:first').prop('disabled', true);
+            });
         </script>
     </body>
 </html>

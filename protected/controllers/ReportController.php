@@ -26,7 +26,7 @@ class ReportController extends Controller {
             $model->attributes = $_GET['User'];
         }
 
-        Yii::app()->util->setLog(AccessLog::TYPE_INFO, 'User Log Report');
+        Yii::app()->util->setLog(AccessLog::TYPE_INFO, Yii::t('trans', 'User Log Report'));
 
         $this->render('user_log_form', array(
             'model' => $model,
@@ -34,7 +34,7 @@ class ReportController extends Controller {
     }
 
     public function actionUserLogForm($id) {
-        $title = Yii::t('trans', 'USER LOGS REPORT {date}', array('{date}' => date('D j M Y G:i:s')));
+        $title = Yii::t('trans', 'User Log Report {date}', array('{date}' => date('D j M Y G:i:s')));
         $filename = 'user_logs_report_' . date("d-m-Y_h:i:s-A");
         $model = new AccessLogReportForm;
         $model->dateFrom = date("01/m/Y");
@@ -67,7 +67,7 @@ class ReportController extends Controller {
         ));
         if (isset($_POST['type_report']) && $_POST['type_report'] == 'pdf') {
             $filename = $filename . '.pdf';
-            Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, 'Export User Logs Report To PDF > \'filename\' : ' . $filename);
+            Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Export User Logs Report To PDF > \'filename\' : {filename}', array('{filename}' => $filename)));
             $this->layout = '//layouts/report';
             $mPDF1 = Yii::app()->ePdf->mpdf('', 'A4-L');
 
@@ -80,7 +80,7 @@ class ReportController extends Controller {
             $author = User::model()->findByPk(Yii::app()->user->id)->nickname;
             $filename = $filename . '.xlsx';
             $titleSheet = 'User Log Report';
-            Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, 'Export User Logs Report To Excel > \'filename\' : ' . $filename);
+            Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Export User Logs Report To Excel > \'filename\' : {filename}', array('{filename}' => $filename)));
             spl_autoload_unregister(array('YiiBase', 'autoload'));
             Yii::import('application.vendors.phpexcel.PHPExcel', true);
             spl_autoload_register(array('YiiBase', 'autoload'));

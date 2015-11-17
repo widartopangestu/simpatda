@@ -69,7 +69,7 @@ class SiteController extends Controller {
                 $str = base64_encode(serialize($config));
                 file_put_contents($file, $str);
                 $model->setAttributes($config);
-                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, 'Configuration has been changed.');
+                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Configuration has been changed.'));
             }
         }
 

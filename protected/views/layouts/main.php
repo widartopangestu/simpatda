@@ -73,8 +73,8 @@
                         <?php
                         $this->widget('bootstrap.widgets.TbNav', array(
                             'items' => array(
-                                array('label' => Yii::t('trans', '<span>Dashboard</span>'), 'visible' => !Yii::app()->user->isGuest, 'url' => array('/site/index')),
-                                array('label' => Yii::t('trans', '<span>Report</span>'), 'visible' => Yii::app()->util->is_authorized('site.config'), 'url' => '#', 'items' => array(
+                                array('label' => '<span>' . Yii::t('trans', 'Dashboard') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => array('/site/index')),
+                                array('label' => '<span>' . Yii::t('trans', 'Report') . '</span>', 'visible' => Yii::app()->util->is_authorized('site.config'), 'url' => '#', 'items' => array(
                                         array('label' => Yii::t('trans', 'User Log'), 'visible' => Yii::app()->util->is_authorized('report.userLog'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/report/userLog')),
                                         array('label' => Yii::t('trans', 'User List'), 'visible' => Yii::app()->util->is_authorized('jReport.userList'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jReport/userList')),
                                         array('label' => Yii::t('trans', 'User Actvity'), 'visible' => Yii::app()->util->is_authorized('jReport.userActivityList'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jReport/userActivityList')),
@@ -96,13 +96,6 @@
         <?php endif; ?>
         <div class="main-inner">
             <div class="container">
-                <?php if (isset($this->breadcrumbs)): ?>
-                    <?php
-//                    $this->widget('zii.widgets.CBreadcrumbs', array(
-//                        'links' => $this->breadcrumbs,
-//                    ));
-                    ?><!-- breadcrumbs -->
-                <?php endif ?>
                 <?php if (Yii::app()->user->getFlashes(false)): ?>
                     <?php $flashes = Yii::app()->user->getFlashes(false) ?>
                     <?php foreach ($flashes as $k => $v): ?>
@@ -114,6 +107,13 @@
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
+                <?php if (isset($this->breadcrumbs)): ?>
+                    <?php
+//                    $this->widget('zii.widgets.CBreadcrumbs', array(
+//                        'links' => $this->breadcrumbs,
+//                    ));
+                    ?><!-- breadcrumbs -->
+                <?php endif ?>
                 <?php echo $content; ?>
 
             </div>
@@ -146,6 +146,9 @@
         <!-- /footer --> 
         <script type="text/javascript">
             jQuery('.nav-collapse').height(0);
+            $('form:not(.report)').on('submit', function () {
+                $(this).find('button[type=submit]:first').prop('disabled', true);
+            });
         </script>
     </body>
 </html>

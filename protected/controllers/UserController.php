@@ -35,7 +35,7 @@ class UserController extends Controller {
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
-        Yii::app()->util->setLog(AccessLog::TYPE_INFO, 'View User ID : ' . $id);
+        Yii::app()->util->setLog(AccessLog::TYPE_INFO, Yii::t('trans', 'View User ID : {id}', array('{id}' => $id)));
         $this->render('view', array(
             'model' => $this->loadModel($id),
         ));
@@ -54,7 +54,7 @@ class UserController extends Controller {
         if (isset($_POST['User'])) {
             $model->attributes = $_POST['User'];
             if ($model->save()) {
-                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, 'Create User ID : ' . $model->primaryKey);
+                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Create User ID : ') . $model->primaryKey);
                 $this->redirect(array('view', 'id' => $model->id));
             }
         }
@@ -81,7 +81,7 @@ class UserController extends Controller {
             if (empty($model->password))
                 $model->password = $old_pass;
             if ($model->save()) {
-                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, 'Update User ID : ' . $id);
+                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Update User ID : ') . $id);
                 $this->redirect(array('view', 'id' => $model->id));
             }
         }
@@ -102,10 +102,10 @@ class UserController extends Controller {
             // we only allow deletion via POST request
             if (Yii::app()->user->id == $id) {
                 if (!isset($_GET['ajax'])) {
-                    Yii::app()->util->setLog(AccessLog::TYPE_ERROR, 'You Can\'t Delete Current Loged In  User ID : ' . $id);
+                    Yii::app()->util->setLog(AccessLog::TYPE_ERROR, Yii::t('trans', 'You Can\'t Delete Current Loged In  User ID : {id}', array('{id}' => $id)));
                     $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
                 } else {
-                    throw new CHttpException(403, 'You Can\'t Delete Current Loged In  User ID : ' . $id);
+                    throw new CHttpException(403, Yii::t('trans', 'You Can\'t Delete Current Loged In  User ID : {id}', array('{id}' => $id)));
                 }
             } else {
                 $transaction = Yii::app()->db->beginTransaction();
@@ -124,17 +124,17 @@ class UserController extends Controller {
                 if ($valid) {
                     if ($this->loadModel($id)->delete()) {
                         $transaction->commit();
-                        Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, 'Delete User ID : ' . $id); // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+                        Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Delete User ID : ') . $id); // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
                         if (!isset($_GET['ajax'])) {
                             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
                         }
                     }
                 } else {
                     if (!isset($_GET['ajax'])) {
-                        Yii::app()->util->setLog(AccessLog::TYPE_ERROR, 'You Can\'t Delete Current User ID : ' . $id . ' Because, this user has been doing transactions. Set User to Not Active or Banned.');
+                        Yii::app()->util->setLog(AccessLog::TYPE_ERROR, Yii::t('trans', 'You Can\'t Delete Current Loged In  User ID : {id} Because, this user has been doing transactions. Set User to Not Active or Banned.', array('{id}' => $id)));
                         $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
                     } else {
-                        throw new CHttpException(403, 'You Can\'t Delete Current User ID : ' . $id . ' Because, this user has been doing transactions. Set User to Not Active or Banned.');
+                        throw new CHttpException(403, Yii::t('trans', 'You Can\'t Delete Current Loged In  User ID : {id} Because, this user has been doing transactions. Set User to Not Active or Banned.', array('{id}' => $id)));
                     }
                 }
             }
@@ -162,7 +162,7 @@ class UserController extends Controller {
         $this->layout = '//layouts/member1';
         $this->mainNav = array(
             array('label' => Yii::t('trans', 'Already have an account? Login now'), 'url' => Yii::app()->user->loginUrl),
-            array('label' => Yii::t('trans', 'Back to Home'), 'icon' => 'icon-chevron-left', 'url' => Yii::app()->request->baseUrl)
+//            array('label' => Yii::t('trans', 'Back to Home'), 'icon' => 'icon-chevron-left', 'url' => Yii::app()->request->baseUrl)
         );
         if (Yii::app()->user->id)
             $this->redirect(array('/profile/profile'));
@@ -196,7 +196,7 @@ class UserController extends Controller {
         $this->layout = '//layouts/member1';
         $this->mainNav = array(
             array('label' => Yii::t('trans', 'Already have an account? Login now'), 'url' => Yii::app()->user->loginUrl),
-            array('label' => Yii::t('trans', 'Back to Home'), 'icon' => 'icon-chevron-left', 'url' => Yii::app()->request->baseUrl)
+//            array('label' => Yii::t('trans', 'Back to Home'), 'icon' => 'icon-chevron-left', 'url' => Yii::app()->request->baseUrl)
         );
         if (Yii::app()->user->id)
             $this->redirect(array('/user/profile'));
@@ -222,7 +222,7 @@ class UserController extends Controller {
         $this->layout = '//layouts/member1';
         $this->mainNav = array(
             array('label' => Yii::t('trans', 'Already have an account? Login now'), 'url' => Yii::app()->user->loginUrl),
-            array('label' => Yii::t('trans', 'Back to Home'), 'icon' => 'icon-chevron-left', 'url' => Yii::app()->request->baseUrl)
+//            array('label' => Yii::t('trans', 'Back to Home'), 'icon' => 'icon-chevron-left', 'url' => Yii::app()->request->baseUrl)
         );
         if (Yii::app()->user->id)
             $this->redirect(array('/user/profile'));
@@ -279,7 +279,7 @@ class UserController extends Controller {
         $this->layout = '//layouts/member1';
         $this->mainNav = array(
             array('label' => Yii::t('trans', 'Don\'t have an account?'), 'url' => array('user/registration'), 'visible' => Yii::app()->params['member']),
-            array('label' => Yii::t('trans', 'Back to Home'), 'icon' => 'icon-chevron-left', 'url' => Yii::app()->request->baseUrl)
+//            array('label' => Yii::t('trans', 'Back to Home'), 'icon' => 'icon-chevron-left', 'url' => Yii::app()->request->baseUrl)
         );
 
         $model = new LoginForm;

@@ -55,7 +55,7 @@ class ProfileController extends Controller {
         if (isset($_POST['User'])) {
             $model->attributes = $_POST['User'];
             if ($model->save()) {
-                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, 'Update Profile Saved');
+                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Update Profile Saved'));
                 $this->redirect(array('/profile/profile'));
             }
         }
@@ -77,7 +77,7 @@ class ProfileController extends Controller {
                     $new_password = User::model()->findbyPk(Yii::app()->user->id);
                     $new_password->password = $model->password;
                     $new_password->save(FALSE);
-                    Yii::app()->util->setLog(AccessLog::TYPE_INFO, 'Password has been changed.');
+                    Yii::app()->util->setLog(AccessLog::TYPE_INFO, Yii::t('trans', 'Password has been changed.'));
                     $this->redirect(array('/profile/profile'));
                 }
             }
@@ -115,7 +115,7 @@ class ProfileController extends Controller {
                     $new_image = User::model()->findByPk(Yii::app()->user->id);
                     $new_image->image = $model->image;
                     $new_image->save();
-                    Yii::app()->util->setLog(AccessLog::TYPE_INFO, 'Image has been changed.');
+                    Yii::app()->util->setLog(AccessLog::TYPE_INFO, Yii::t('trans', 'Image has been changed.'));
                     $this->redirect(array("profile"));
                 }
             }

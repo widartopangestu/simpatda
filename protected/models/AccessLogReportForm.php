@@ -16,9 +16,9 @@ class AccessLogReportForm extends CFormModel {
 
     public function attributeLabels() {
         return array(
-            'dateFrom' => Yii::t('access_log', 'Date From'),
-            'dateTo' => Yii::t('access_log', 'Date To'),
-            'user' => Yii::t('access_log', 'User'),
+            'dateFrom' => Yii::t('trans', 'Date From'),
+            'dateTo' => Yii::t('trans', 'Date To'),
+            'user' => Yii::t('trans', 'User'),
         );
     }
 
