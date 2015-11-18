@@ -99,12 +99,16 @@ class Golongan extends CActiveRecord {
         return parent::model($className);
     }
 
-    public function beforeSave() {
-        if ($this->isNewRecord)
-            $this->created = new CDbExpression('NOW()');
-        else
-            $this->updated = new CDbExpression('NOW()');
-        return parent::beforeSave();
+    public function behaviors() {
+        return array(
+            'timestamps' => array(
+                'class' => 'zii.behaviors.CTimestampBehavior',
+                'createAttribute' => 'created',
+                'updateAttribute' => 'updated',
+                'timestampExpression' => new CDbExpression('NOW()'),
+                'setUpdateOnCreate' => true,
+            ),
+        );
     }
 
 }

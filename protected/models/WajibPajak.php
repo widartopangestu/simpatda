@@ -45,6 +45,13 @@
  */
 class WajibPajak extends CActiveRecord {
 
+    const STATUS_NOACTIVE = 0;
+    const STATUS_ACTIVE = 1;
+    const JENIS_PAJAK = 'P';
+    const JENIS_RETRIBUSI = 'R';
+    const WARGANEGARA_WNI = 'WNI';
+    const WARGANEGARA_WNA = 'WNA';
+
     /**
      * @return string the associated database table name
      */
@@ -59,7 +66,7 @@ class WajibPajak extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('jenis, nomor, nama, kabupaten, kecamatan, kelurahan, telepon, kodepos', 'required'),
+            array('jenis, nomor, nama, kabupaten, kecamatan_id, kelurahan_id, telepon, kodepos', 'required'),
             array('golongan, id_jenis, kelurahan_id, kecamatan_id, bidang_usaha_id', 'numerical', 'integerOnly' => true),
             array('jenis', 'length', 'max' => 1),
             array('nomor', 'length', 'max' => 7),
@@ -197,11 +204,87 @@ class WajibPajak extends CActiveRecord {
     }
 
     public function beforeSave() {
-        if ($this->isNewRecord)
-            $this->created = new CDbExpression('NOW()');
-        else
-            $this->updated = new CDbExpression('NOW()');
+        $this->kecamatan = $this->namaKecamatan;
+        $this->kelurahan = $this->namaKelurahan;
         return parent::beforeSave();
+    }
+
+    public function behaviors() {
+        return array(
+            'timestamps' => array(
+                'class' => 'zii.behaviors.CTimestampBehavior',
+                'createAttribute' => 'created',
+                'updateAttribute' => 'updated',
+                'timestampExpression' => new CDbExpression('NOW()'),
+                'setUpdateOnCreate' => true,
+            ),
+        );
+    }
+
+    public function getStatusOptions() {
+        return array(
+            self::STATUS_ACTIVE => Yii::t('trans', 'Active'),
+            self::STATUS_NOACTIVE => Yii::t('trans', 'Not Active'),
+        );
+    }
+
+    public function getJenisOptions() {
+        return array(
+            self::JENIS_PAJAK => Yii::t('trans', 'PAJAK'),
+            self::JENIS_RETRIBUSI => Yii::t('trans', 'RETRIBUSI'),
+        );
+    }
+
+    public function getWargaNegaraOptions() {
+        return array(
+            self::WARGANEGARA_WNI => 'WNI',
+            self::WARGANEGARA_WNA => 'WNA',
+        );
+    }
+
+    public function getStatusText($status = null) {
+        $value = ($status === null) ? $this->status : $status;
+        $statusOptions = $this->getStatusOptions();
+        return isset($statusOptions[$value]) ?
+                $statusOptions[$value] : "unknown status ({$value})";
+    }
+
+    public function getJenisText($jenis = null) {
+        $value = ($jenis === null) ? $this->jenis : $jenis;
+        $jenisOptions = $this->getJenisOptions();
+        return isset($jenisOptions[$value]) ?
+                $jenisOptions[$value] : "unknown jenis ({$value})";
+    }
+
+    public function getWargaNegaraText($wargaNegara = null) {
+        $value = ($wargaNegara === null) ? $this->wargaNegara : $wargaNegara;
+        $wargaNegaraOptions = $this->getWargaNegaraOptions();
+        return isset($wargaNegaraOptions[$value]) ?
+                $wargaNegaraOptions[$value] : "unknown wargaNegara ({$value})";
+    }
+
+    public function getKelurahanOptions() {
+        return CHtml::listData(Kelurahan::model()->findAll(), 'id', 'nama');
+    }
+
+    public function getNamaKelurahan() {
+        return ($this->kelurahan_id !== NULL) ? $this->kelurahan0->nama : Yii::t('trans', 'Not Set');
+    }
+
+    public function getKecamatanOptions() {
+        return CHtml::listData(Kecamatan::model()->findAll(), 'id', 'nama');
+    }
+
+    public function getNamaKecamatan() {
+        return ($this->kecamatan_id !== NULL) ? $this->kecamatan0->nama : Yii::t('trans', 'Not Set');
+    }
+
+    public function getBidangUsahaOptions() {
+        return CHtml::listData(BidangUsaha::model()->findAll(), 'id', 'nama');
+    }
+
+    public function getNamaBidangUsaha() {
+        return ($this->bidang_usaha_id !== NULL) ? $this->bidangUsaha->nama : Yii::t('trans', 'Not Set');
     }
 
 }

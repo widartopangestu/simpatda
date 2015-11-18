@@ -33,6 +33,21 @@ $this->menu = array(
                 'phone_1',
                 'phone_2',
                 'address',
+                array(
+                    'name' => 'status',
+                    'type' => 'raw',
+                    'value' => CHtml::encode($model->statusText),
+                ),
+                array(
+                    'name' => 'role_id',
+                    'type' => 'raw',
+                    'value' => $model->roleName,
+                ),
+                array(
+                    'name' => 'last_login',
+                    'type' => 'raw',
+                    'value' => Yii::app()->format->timeago($model->last_login),
+                ),
         )));
         ?>
 
@@ -74,7 +89,7 @@ $this->menu = array(
                 array(
                     'name' => 'time',
                     'type' => 'raw',
-                    'value' => 'date("d-m-Y h:i:s A", $data->time)',
+                    'value' => 'date("d-m-Y h:i:s A", strtotime($data->time))',
                     'filter' => false,
                 ),
                 array(
@@ -95,12 +110,12 @@ $this->menu = array(
         ?>
         <div class="grid-view">
             <div class="summary">
-<?php
-echo Yii::t('trans', 'Tampil') . ' : ' . CHtml::dropDownList("pageSize", $pageSize, Yii::app()->params['optionsPage'], array(
-    "onchange" => "$.fn.yiiGridView.update('access-log-grid',{ data:{pageSize: $(this).val() }})",
-    "style" => "width:70px;"
-));
-?>
+                <?php
+                echo Yii::t('trans', 'Tampil') . ' : ' . CHtml::dropDownList("pageSize", $pageSize, Yii::app()->params['optionsPage'], array(
+                    "onchange" => "$.fn.yiiGridView.update('access-log-grid',{ data:{pageSize: $(this).val() }})",
+                    "style" => "width:70px;"
+                ));
+                ?>
             </div>
         </div>
         <script type="text/javascript">

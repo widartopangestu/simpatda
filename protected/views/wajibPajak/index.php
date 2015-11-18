@@ -49,12 +49,17 @@ $pageSize = Yii::app()->user->getState('pageSize' . $model->tableName(), Yii::ap
 		'nomor',
 		'nama',
 		'alamat',
+                array(
+                    'name' => 'status',
+                    'type' => 'raw',
+                    'value' => 'CHtml::encode($data->statusText)',
+                    'filter' => $model->statusOptions,
+                ),
 		/*
 		'kabupaten',
 		'kecamatan',
 		'kelurahan',
 		'telepon',
-		'status',
 		'tanggal_tutup',
 		'kodepos',
 		'id_jenis',

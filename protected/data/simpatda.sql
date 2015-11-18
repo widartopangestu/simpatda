@@ -51,8 +51,8 @@ CREATE TABLE access_log (
     id integer DEFAULT nextval('access_log_seq'::regclass) NOT NULL,
     type smallint,
     activity text,
-    "time" character varying(50) NOT NULL,
-    user_id integer NOT NULL
+    user_id integer NOT NULL,
+    "time" timestamp without time zone
 );
 
 
@@ -552,6 +552,49 @@ CREATE TABLE "user" (
 ALTER TABLE "user" OWNER TO simpatdadb;
 
 --
+-- Name: v_userlist; Type: VIEW; Schema: public; Owner: simpatdadb
+--
+
+CREATE VIEW v_userlist AS
+ SELECT a.id,
+    a.username,
+    a.image,
+    a.password,
+    a.email,
+    a.fullname,
+    a.phone_1,
+    a.phone_2,
+    a.address,
+    a.status,
+    a.last_login,
+    a.activkey,
+    a.role_id,
+    b.name AS namarole
+   FROM ("user" a
+     JOIN role b ON ((a.role_id = b.id)))
+  ORDER BY a.username;
+
+
+ALTER TABLE v_userlist OWNER TO simpatdadb;
+
+--
+-- Name: v_userlog; Type: VIEW; Schema: public; Owner: simpatdadb
+--
+
+CREATE VIEW v_userlog AS
+ SELECT a.id,
+    a.type,
+    a.activity,
+    a."time",
+    a.user_id,
+    b.username
+   FROM (access_log a
+     JOIN "user" b ON ((a.user_id = b.id)));
+
+
+ALTER TABLE v_userlog OWNER TO simpatdadb;
+
+--
 -- Name: wajib_pajak; Type: TABLE; Schema: public; Owner: simpatdadb; Tablespace: 
 --
 
@@ -567,11 +610,11 @@ CREATE TABLE wajib_pajak (
     kelurahan character varying(255) NOT NULL,
     telepon character varying(20) NOT NULL,
     status boolean DEFAULT true NOT NULL,
-    tanggal_tutup timestamp without time zone,
+    tanggal_tutup date,
     kodepos character varying(5) NOT NULL,
     id_jenis integer,
     id_nomor character varying(255) DEFAULT NULL::character varying,
-    tanggal_lahir timestamp without time zone,
+    tanggal_lahir date,
     kk_nomor character varying(255) DEFAULT NULL::character varying,
     kk_tanggal timestamp without time zone,
     pekerjaan character varying(255) DEFAULT NULL::character varying,
@@ -689,87 +732,86 @@ ALTER TABLE ONLY wajib_pajak ALTER COLUMN id SET DEFAULT nextval('wajib_pajak_id
 -- Data for Name: access_log; Type: TABLE DATA; Schema: public; Owner: simpatdadb
 --
 
-COPY access_log (id, type, activity, "time", user_id) FROM stdin;
-1	3	Daftar Role	1447764586	1
-2	2	Update Role ID : 1	1447764601	1
-3	0	403 You do not have sufficient permissions to access this page. - Access Page : "/simpatda/role/1"	1447764601	1
-4	2	View Role ID : 1	1447764808	1
-5	2	Update Role ID : 1	1447764839	1
-6	2	View Role ID : 1	1447764840	1
-7	3	View Profile	1447765175	1
-8	3	View Profile	1447765207	1
-9	3	Daftar Operasi	1447766310	1
-10	3	Daftar Operasi	1447766607	1
-11	3	Daftar Operasi	1447766814	1
-12	3	Daftar Operasi	1447766973	1
-13	2	Generated bidangUsaha.view BidangUsaha View Success | Generated bidangUsaha.create BidangUsaha Create Success | Generated bidangUsaha.update BidangUsaha Update Success | Generated bidangUsaha.delete BidangUsaha Delete Success | Generated bidangUsaha.index BidangUsaha Index Success | Generated golongan.view Golongan View Success | Generated golongan.create Golongan Create Success | Generated golongan.update Golongan Update Success | Generated golongan.delete Golongan Delete Success | Generated golongan.index Golongan Index Success | Generated jabatan.view Jabatan View Success | Generated jabatan.create Jabatan Create Success | Generated jabatan.update Jabatan Update Success | Generated jabatan.delete Jabatan Delete Success | Generated jabatan.index Jabatan Index Success | Generated jenisSurat.view JenisSurat View Success | Generated jenisSurat.create JenisSurat Create Success | Generated jenisSurat.update JenisSurat Update Success | Generated jenisSurat.delete JenisSurat Delete Success | Generated jenisSurat.index JenisSurat Index Success | Generated kecamatan.view Kecamatan View Success | Generated kecamatan.create Kecamatan Create Success | Generated kecamatan.update Kecamatan Update Success | Generated kecamatan.delete Kecamatan Delete Success | Generated kecamatan.index Kecamatan Index Success | Generated kelurahan.view Kelurahan View Success | Generated kelurahan.create Kelurahan Create Success | Generated kelurahan.update Kelurahan Update Success | Generated kelurahan.delete Kelurahan Delete Success | Generated kelurahan.index Kelurahan Index Success | Generated kodeRekening.view KodeRekening View Success | Generated kodeRekening.create KodeRekening Create Success | Generated kodeRekening.update KodeRekening Update Success | Generated kodeRekening.delete KodeRekening Delete Success | Generated kodeRekening.index KodeRekening Index Success | Generated pangkat.view Pangkat View Success | Generated pangkat.create Pangkat Create Success | Generated pangkat.update Pangkat Update Success | Generated pangkat.delete Pangkat Delete Success | Generated pangkat.index Pangkat Index Success | Generated pejabat.view Pejabat View Success | Generated pejabat.create Pejabat Create Success | Generated pejabat.update Pejabat Update Success | Generated pejabat.delete Pejabat Delete Success | Generated pejabat.index Pejabat Index Success | Generated profile.changePassword Profile ChangePassword Success | Generated wajibPajak.view WajibPajak View Success | Generated wajibPajak.create WajibPajak Create Success | Generated wajibPajak.update WajibPajak Update Success | Generated wajibPajak.delete WajibPajak Delete Success | Generated wajibPajak.index WajibPajak Index Success | 	1447767056	1
-14	3	Daftar Role	1447767062	1
-15	3	Daftar Role	1447767274	1
-16	3	Daftar Operasi	1447767322	1
-17	3	Daftar Operasi	1447767329	1
-18	3	Daftar Operasi	1447767334	1
-19	3	Daftar Operasi	1447767337	1
-20	3	Daftar Operasi	1447767343	1
-21	2	Update Operation ID : 10	1447767385	1
-22	3	Daftar Operasi	1447767386	1
-23	2	Update Role ID : 1	1447767464	1
-24	2	View Role ID : 1	1447767465	1
-25	3	Manage Bidang Usahas	1447767486	1
-26	3	Daftar Operasi	1447768923	1
-27	3	Daftar Operasi	1447768981	1
-28	3	Manage Bidang Usahas	1447769293	1
-29	3	Manage Bidang Usahas	1447769414	1
-30	3	Manage Jenis Surat	1447771262	1
-31	3	Daftar Role	1447771711	1
-32	2	Update Role ID : 1	1447771762	1
-33	2	View Role ID : 1	1447771762	1
-34	3	Daftar Operasi	1447771769	1
-35	3	Daftar Operasi	1447771777	1
-36	2	Delete Operation ID : 48	1447771782	1
-37	3	Daftar Operasi	1447771782	1
-38	3	Daftar Operasi	1447771795	1
-39	2	Delete Operation ID : 53	1447771799	1
-40	3	Daftar Operasi	1447771800	1
-41	3	Daftar Operasi	1447771804	1
-42	3	Daftar Operasi	1447771809	1
-43	2	Delete Operation ID : 58	1447771812	1
-44	3	Daftar Operasi	1447771813	1
-45	3	Daftar Operasi	1447771816	1
-46	2	Delete Operation ID : 73	1447771819	1
-47	3	Daftar Operasi	1447771819	1
-48	3	Daftar Operasi	1447771834	1
-49	2	Delete Operation ID : 68	1447771838	1
-50	3	Daftar Operasi	1447771838	1
-51	3	Daftar Operasi	1447771854	1
-52	2	Delete Operation ID : 83	1447771857	1
-53	3	Daftar Operasi	1447771857	1
-54	3	Daftar Role	1447771891	1
-55	3	Manage Bidang Usaha	1447771920	1
-56	3	Manage Bidang Usaha	1447772001	1
-57	2	Create Bidang Usaha ID : 3	1447774355	1
-58	0	404 Sistem tidak bisa menemukan action "view" seperti yang diminta. - Access Page : "/simpatda/bidangUsaha/3"	1447774355	1
-59	3	Manage Bidang Usaha	1447774367	1
-60	2	Update Bidang Usaha ID : 3	1447774794	1
-61	0	404 Sistem tidak bisa menemukan action "view" seperti yang diminta. - Access Page : "/simpatda/bidangUsaha/3"	1447774795	1
-62	3	Manage Bidang Usaha	1447774802	1
-63	2	Delete Bidang Usaha ID : 3	1447774813	1
-64	3	Manage Bidang Usaha	1447774813	1
-65	2	Create Bidang Usaha ID : 4	1447774822	1
-66	0	404 Sistem tidak bisa menemukan action "view" seperti yang diminta. - Access Page : "/simpatda/bidangUsaha/4"	1447774822	1
-67	3	Manage Bidang Usaha	1447774827	1
-68	2	Update Bidang Usaha ID : 4	1447774905	1
-69	0	404 Sistem tidak bisa menemukan action "view" seperti yang diminta. - Access Page : "/simpatda/bidangUsaha/4"	1447774905	1
-70	3	Manage Bidang Usaha	1447774909	1
-71	2	Create Bidang Usaha ID : 5	1447775242	1
-72	3	Manage Bidang Usaha	1447775243	1
-73	3	Manage Bidang Usaha	1447775370	1
-74	3	Manage Bidang Usaha	1447775390	1
-75	3	Manage Jenis Surat	1447775696	1
-76	2	Create Jenis Surat ID : 2	1447775982	1
-77	3	View Jenis Surat ID : 2	1447775982	1
-78	3	View Jenis Surat ID : 2	1447776023	1
-79	3	Manage Bidang Usaha	1447776075	1
-80	3	Manage Bidang Usaha	1447776115	1
+COPY access_log (id, type, activity, user_id, "time") FROM stdin;
+2	0	404 Tidak bisa mengurai request "zadad" - Access Page : "/simpatda/zadad"	1	2015-11-18 06:29:45.722
+3	3	Laporan Log Pengguna	1	2015-11-18 06:31:19.126
+4	0	Caught Exception: Resource /reports/simpatda_new/ag_user_list not found.	1	2015-11-18 06:32:17.129
+5	3	Manage Bidang Usaha	1	2015-11-18 07:05:46.712
+6	3	Manage Golongan	1	2015-11-18 07:09:52.098
+7	2	Create Golongan ID : 1	1	2015-11-18 07:10:07.318
+8	3	Manage Golongan	1	2015-11-18 07:10:07.558
+9	3	Manage Jabatan	1	2015-11-18 07:10:16.027
+10	2	Create Jabatan ID : 1	1	2015-11-18 07:10:37.028
+11	3	Manage Jabatan	1	2015-11-18 07:10:37.27
+12	3	Manage Jenis Surat	1	2015-11-18 07:10:48.308
+13	3	Manage Kecamatan	1	2015-11-18 07:11:10.709
+14	3	Manage Kelurahan	1	2015-11-18 07:11:15.396
+15	3	Manage Kode Rekening	1	2015-11-18 07:11:32.037
+16	3	Manage Pangkat	1	2015-11-18 07:12:08.646
+17	3	Manage Pangkat	1	2015-11-18 07:12:44.55
+18	3	Manage Pejabat	1	2015-11-18 07:12:55.738
+19	3	Manage Wajib Pajak	1	2015-11-18 07:13:31.265
+20	3	View Profile	1	2015-11-18 07:15:28.146
+21	3	View Profile	1	2015-11-18 07:16:45.006
+22	3	View Profile	1	2015-11-18 07:17:31.943
+23	3	View Profile	1	2015-11-18 07:17:48.916
+24	3	Manage Kelurahan	1	2015-11-18 07:26:49.003
+25	3	Manage Pejabat	1	2015-11-18 07:39:33.884
+26	3	Manage Pejabat	1	2015-11-18 07:39:43.862
+27	3	Manage Pejabat	1	2015-11-18 07:39:47.402
+28	3	Manage Pejabat	1	2015-11-18 07:40:21.807
+29	3	Manage Pejabat	1	2015-11-18 07:40:23.66
+30	3	Manage Pejabat	1	2015-11-18 07:40:26.513
+31	3	Manage Pejabat	1	2015-11-18 07:40:28.768
+32	3	Manage Kecamatan	1	2015-11-18 07:41:43.28
+33	2	Create Kecamatan ID : 1	1	2015-11-18 07:43:28.653
+34	3	Manage Kecamatan	1	2015-11-18 07:43:28.943
+35	3	Manage Kelurahan	1	2015-11-18 07:43:34.713
+36	2	Create Kelurahan ID : 1	1	2015-11-18 07:49:15.976
+37	3	Manage Kelurahan	1	2015-11-18 07:49:16.207
+38	3	Manage Kelurahan	1	2015-11-18 07:49:20.691
+39	3	Manage Kelurahan	1	2015-11-18 07:49:22.233
+40	3	Manage Jabatan	1	2015-11-18 07:49:31.813
+41	2	Update Jabatan ID : 1	1	2015-11-18 07:49:49.91
+42	3	Manage Jabatan	1	2015-11-18 07:49:50.135
+43	3	Manage Pangkat	1	2015-11-18 07:49:56.605
+44	2	Create Pangkat ID : 1	1	2015-11-18 07:50:09.654
+45	3	Manage Pangkat	1	2015-11-18 07:50:09.878
+46	3	Manage Pejabat	1	2015-11-18 07:50:22.11
+47	2	Create Pejabat ID : 1	1	2015-11-18 07:50:49.3
+48	3	View Pejabat ID : 1	1	2015-11-18 07:50:49.551
+49	3	View Pejabat ID : 1	1	2015-11-18 07:58:14.793
+50	2	Delete Pejabat ID : 1	1	2015-11-18 07:59:01.748
+51	3	Manage Pejabat	1	2015-11-18 07:59:02.029
+52	3	Manage Wajib Pajak	1	2015-11-18 07:59:21.061
+53	3	Manage Pejabat	1	2015-11-18 08:00:37.956
+54	3	Manage Kelurahan	1	2015-11-18 08:17:49.73
+55	3	Manage Kecamatan	1	2015-11-18 08:18:00.841
+56	2	Delete Kecamatan ID : 1	1	2015-11-18 08:18:05.942
+57	3	Manage Kecamatan	1	2015-11-18 08:18:06.185
+58	3	Manage Kelurahan	1	2015-11-18 08:18:21.542
+59	3	Manage Kecamatan	1	2015-11-18 08:19:06.075
+60	2	Create Kecamatan ID : 2	1	2015-11-18 08:19:15.59
+61	3	Manage Kecamatan	1	2015-11-18 08:19:15.835
+62	2	Create Kelurahan ID : 2	1	2015-11-18 08:19:30.779
+63	3	Manage Kelurahan	1	2015-11-18 08:19:31.012
+64	3	Manage Golongan	1	2015-11-18 08:21:18.533
+65	2	Delete Golongan ID : 1	1	2015-11-18 08:21:23.529
+66	3	Manage Golongan	1	2015-11-18 08:21:23.757
+67	3	Manage Pejabat	1	2015-11-18 08:21:30.632
+68	3	Manage Pangkat	1	2015-11-18 08:22:08.48
+69	3	Manage Pejabat	1	2015-11-18 08:22:14.06
+70	3	Manage Wajib Pajak	1	2015-11-18 08:23:44.573
+71	3	Manage Kecamatan	1	2015-11-18 08:23:54.091
+72	3	Manage Kelurahan	1	2015-11-18 08:23:57.284
+73	3	Manage Pejabat	1	2015-11-18 08:25:02.503
+74	3	Manage Wajib Pajak	1	2015-11-18 08:25:22.779
+75	3	Manage Wajib Pajak	1	2015-11-18 08:55:29.182
+76	3	View Wajib Pajak ID : 1	1	2015-11-18 08:56:03.881
+77	3	Manage Bidang Usaha	1	2015-11-18 12:32:38.701
+78	2	Create Bidang Usaha ID : 6	1	2015-11-18 12:33:14.391
+79	3	Manage Bidang Usaha	1	2015-11-18 12:33:14.646
+80	3	Manage Wajib Pajak	1	2015-11-18 12:40:08.866
 \.
 
 
@@ -787,6 +829,7 @@ SELECT pg_catalog.setval('access_log_seq', 80, true);
 COPY bidang_usaha (id, kode, nama, created, updated) FROM stdin;
 4	01	Hiburan	2015-11-17 22:40:22.04	2015-11-17 22:41:44.978
 5	02	Pariwisata	2015-11-17 22:47:22.725	\N
+6	03	Perikanan	2015-11-18 12:33:14.335	2015-11-18 12:33:14.335
 \.
 
 
@@ -794,7 +837,7 @@ COPY bidang_usaha (id, kode, nama, created, updated) FROM stdin;
 -- Name: bidang_usaha_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('bidang_usaha_id_seq', 5, true);
+SELECT pg_catalog.setval('bidang_usaha_id_seq', 6, true);
 
 
 --
@@ -809,7 +852,7 @@ COPY golongan (id, nama, created, updated) FROM stdin;
 -- Name: golongan_id_seq; Type: SEQUENCE SET; Schema: public; Owner: simpatdadb
 --
 
-SELECT pg_catalog.setval('golongan_id_seq', 1, false);
+SELECT pg_catalog.setval('golongan_id_seq', 1, true);
 
 
 --
@@ -817,6 +860,7 @@ SELECT pg_catalog.setval('golongan_id_seq', 1, false);
 --
 
 COPY jabatan (id, nama, created, updated) FROM stdin;
+1	Kepala Dinas	2015-11-18 07:10:36.984	2015-11-18 07:49:49.866
 \.
 
 
@@ -824,7 +868,7 @@ COPY jabatan (id, nama, created, updated) FROM stdin;
 -- Name: jabatan_id_seq; Type: SEQUENCE SET; Schema: public; Owner: simpatdadb
 --
 
-SELECT pg_catalog.setval('jabatan_id_seq', 1, false);
+SELECT pg_catalog.setval('jabatan_id_seq', 1, true);
 
 
 --
@@ -848,6 +892,7 @@ SELECT pg_catalog.setval('jenis_surat_id_seq', 2, true);
 --
 
 COPY kecamatan (id, kode, nama, created, updated) FROM stdin;
+2	00	LUAR DAERAH	2015-11-18 08:19:15.545	\N
 \.
 
 
@@ -855,7 +900,7 @@ COPY kecamatan (id, kode, nama, created, updated) FROM stdin;
 -- Name: kecamatan_id_seq; Type: SEQUENCE SET; Schema: public; Owner: simpatdadb
 --
 
-SELECT pg_catalog.setval('kecamatan_id_seq', 1, false);
+SELECT pg_catalog.setval('kecamatan_id_seq', 2, true);
 
 
 --
@@ -863,6 +908,7 @@ SELECT pg_catalog.setval('kecamatan_id_seq', 1, false);
 --
 
 COPY kelurahan (id, kode, nama, created, updated, kecamatan_id) FROM stdin;
+2	00	LUAR DAERAH	2015-11-18 08:19:30.752	\N	2
 \.
 
 
@@ -870,7 +916,7 @@ COPY kelurahan (id, kode, nama, created, updated, kecamatan_id) FROM stdin;
 -- Name: kelurahan_id_seq; Type: SEQUENCE SET; Schema: public; Owner: simpatdadb
 --
 
-SELECT pg_catalog.setval('kelurahan_id_seq', 1, false);
+SELECT pg_catalog.setval('kelurahan_id_seq', 2, true);
 
 
 --
@@ -1086,6 +1132,7 @@ SELECT pg_catalog.setval('operation_seq', 98, true);
 --
 
 COPY pangkat (id, nama, created, updated) FROM stdin;
+1	Eselon 1	2015-11-18 07:50:09.616	\N
 \.
 
 
@@ -1093,7 +1140,7 @@ COPY pangkat (id, nama, created, updated) FROM stdin;
 -- Name: pangkat_id_seq; Type: SEQUENCE SET; Schema: public; Owner: simpatdadb
 --
 
-SELECT pg_catalog.setval('pangkat_id_seq', 1, false);
+SELECT pg_catalog.setval('pangkat_id_seq', 1, true);
 
 
 --
@@ -1108,7 +1155,7 @@ COPY pejabat (id, kode, nama, nip, status, created, updated, golongan_id, jabata
 -- Name: pejabat_id_seq; Type: SEQUENCE SET; Schema: public; Owner: simpatdadb
 --
 
-SELECT pg_catalog.setval('pejabat_id_seq', 1, false);
+SELECT pg_catalog.setval('pejabat_id_seq', 1, true);
 
 
 --
@@ -1368,6 +1415,72 @@ COPY sourcemessage (id, category, message) FROM stdin;
 144	trans	Create Jenis Surat ID : 
 145	trans	View Jenis Surat ID : {id}
 146	trans	Are you sure you want to delete this item?
+147	trans	User Logs Report
+148	trans	Actions
+149	trans	MASTER USER REPORT
+150	trans	Master User
+151	trans	--Semua Status--
+152	trans	Aktif Status
+153	trans	--Semua Role--
+154	trans	Preview
+155	trans	Export to PDF
+156	trans	Export to Excel
+157	trans	By User Name
+158	trans	Caught Exception: {ex}
+159	trans	Manage Golongan
+160	trans	Create Golongan ID : 
+161	trans	Manage Jabatan
+162	trans	Create Jabatan ID : 
+163	trans	Manage Kecamatan
+164	trans	Manage Kelurahan
+165	trans	Manage Kode Rekening
+166	trans	Tarif Persen
+167	trans	Tarif Dasar
+168	trans	Parent
+169	trans	Manage Pangkat
+170	trans	Manage Pejabat
+171	trans	Nip
+172	trans	Manage Wajib Pajak
+173	trans	Jenis
+174	trans	Nomor
+175	trans	Alamat
+176	trans	Kabupaten
+177	trans	Telepon
+178	trans	Tanggal Tutup
+179	trans	Kodepos
+180	trans	Id Jenis
+181	trans	Id Nomor
+182	trans	Tanggal Lahir
+183	trans	Kk Nomor
+184	trans	Kk Tanggal
+185	trans	Pekerjaan
+186	trans	Alamat Pekerjaan
+187	trans	Bu Nama
+188	trans	Bu Alamat
+189	trans	Bu Kabupaten
+190	trans	Bu Kecamatan
+191	trans	Bu Kelurahan
+192	trans	Bu Telepon
+193	trans	Bu Kodepos
+194	trans	Warga Negara
+195	trans	Create Kecamatan ID : 
+196	trans	Create Kelurahan ID : 
+197	trans	Update Jabatan ID : 
+198	trans	Create Pangkat ID : 
+199	trans	Create Pejabat ID : 
+200	trans	View Pejabat ID : {id}
+201	trans	Active
+202	trans	Not Active
+203	trans	Delete Pejabat ID : 
+204	trans	Banned
+205	trans	Delete Kecamatan ID : 
+206	trans	Delete Golongan ID : 
+207	trans	View Wajib Pajak ID : {id}
+208	trans	Not Set
+209	trans	- Pilih Kecamatan -
+210	trans	- Pilih Kelurahan -
+211	trans	PAJAK
+212	trans	RETRIBUSI
 \.
 
 
@@ -1375,7 +1488,7 @@ COPY sourcemessage (id, category, message) FROM stdin;
 -- Name: sourcemessage_seq; Type: SEQUENCE SET; Schema: public; Owner: simpatdadb
 --
 
-SELECT pg_catalog.setval('sourcemessage_seq', 146, true);
+SELECT pg_catalog.setval('sourcemessage_seq', 212, true);
 
 
 --
@@ -1383,7 +1496,7 @@ SELECT pg_catalog.setval('sourcemessage_seq', 146, true);
 --
 
 COPY "user" (id, username, image, password, email, fullname, phone_1, phone_2, address, status, last_login, activkey, role_id) FROM stdin;
-1	admin	eb775e4610fe263212b228cb1290253c8dbe66ac.jpg	d033e22ae348aeb5660fc2140aec35850c4da997	admin@taneweb.com	Administrator PG	081888888	\N	Jl. Jambu Klutuk	1	2015-11-17 20:37:56	\N	1
+1	admin	eb775e4610fe263212b228cb1290253c8dbe66ac.jpg	d033e22ae348aeb5660fc2140aec35850c4da997	admin@taneweb.com	Administrator PG	081888888	\N	Jl. Jambu Klutuk	1	2015-11-18 12:30:26	\N	1
 \.
 
 
@@ -1399,6 +1512,7 @@ SELECT pg_catalog.setval('user_seq', 2, true);
 --
 
 COPY wajib_pajak (id, jenis, golongan, nomor, nama, alamat, kabupaten, kecamatan, kelurahan, telepon, status, tanggal_tutup, kodepos, id_jenis, id_nomor, tanggal_lahir, kk_nomor, kk_tanggal, pekerjaan, alamat_pekerjaan, bu_nama, bu_alamat, bu_kabupaten, bu_kecamatan, bu_kelurahan, bu_telepon, bu_kodepos, kelurahan_id, kecamatan_id, bidang_usaha_id, warga_negara, created, updated) FROM stdin;
+1	p	1	12	tet	\N	a	s	d	123	t	\N	12	\N	\N	1988-06-28	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	WNI	\N	\N
 \.
 
 
@@ -1406,7 +1520,7 @@ COPY wajib_pajak (id, jenis, golongan, nomor, nama, alamat, kabupaten, kecamatan
 -- Name: wajib_pajak_id_seq; Type: SEQUENCE SET; Schema: public; Owner: simpatdadb
 --
 
-SELECT pg_catalog.setval('wajib_pajak_id_seq', 1, false);
+SELECT pg_catalog.setval('wajib_pajak_id_seq', 1, true);
 
 
 --

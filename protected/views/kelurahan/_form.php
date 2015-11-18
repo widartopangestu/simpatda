@@ -25,7 +25,7 @@
 
     <?php echo $form->textFieldControlGroup($model, 'nama', array('span' => 5, 'maxlength' => 255)); ?>
 
-    <?php echo $form->textFieldControlGroup($model, 'kecamatan_id', array('span' => 5)); ?>
+    <?php echo $form->dropDownListControlGroup($model, 'kecamatan_id', $model->kecamatanOptions, array('span' => 5)); ?>
 
     <div class="form-actions">
         <?php

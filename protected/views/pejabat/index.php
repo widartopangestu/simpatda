@@ -45,9 +45,32 @@ $pageSize = Yii::app()->user->getState('pageSize' . $model->tableName(), Yii::ap
                     'value' => '$this->grid->dataProvider->getPagination()->getOffset()+$row+1'
                 ),
 		'kode',
-		'nama',
 		'nip',
-		'status',
+		'nama',
+                array(
+                    'name' => 'status',
+                    'type' => 'raw',
+                    'value' => 'CHtml::encode($data->statusText)',
+                    'filter' => $model->statusOptions,
+                ),
+                array(
+                    'name' => 'golongan_id',
+                    'type' => 'raw',
+                    'value' => 'CHtml::encode($data->namaGolongan)',
+                    'filter' => $model->golonganOptions,
+                ),
+                array(
+                    'name' => 'jabatan_id',
+                    'type' => 'raw',
+                    'value' => 'CHtml::encode($data->namaJabatan)',
+                    'filter' => $model->jabatanOptions,
+                ),
+                array(
+                    'name' => 'pangkat_id',
+                    'type' => 'raw',
+                    'value' => 'CHtml::encode($data->namaPangkat)',
+                    'filter' => $model->pangkatOptions,
+                ),
                 array(
                     'filter' => false,
                     'name' => 'created',
@@ -58,11 +81,6 @@ $pageSize = Yii::app()->user->getState('pageSize' . $model->tableName(), Yii::ap
                     'name' => 'updated',
                     'value' => '$data->updated !== NULL ? date("d-M-Y H:i:s", strtotime($data->updated)) : \'\'',
                 ),
-		/*
-		'golongan_id',
-		'jabatan_id',
-		'pangkat_id',
-		*/
 		array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',
                         'buttons' => array(

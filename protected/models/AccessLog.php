@@ -128,17 +128,23 @@ class AccessLog extends CActiveRecord {
     }
 
     public function getUserName() {
-        return ($this->user !== NULL) ? $this->user->username : 'Not Set';
+        return ($this->user !== NULL) ? $this->user->username : Yii::t('trans', 'Not Set');
     }
 
     public function getUserOptions() {
         return CHtml::listData(User::model()->findAll('status=' . User::STATUS_ACTIVE), 'id', 'username');
     }
 
-    public function beforeSave() {
-        if ($this->isNewRecord)
-            $this->time = new CDbExpression('NOW()');
-        return parent::beforeSave();
+    public function behaviors() {
+        return array(
+            'timestamps' => array(
+                'class' => 'zii.behaviors.CTimestampBehavior',
+                'createAttribute' => 'time',
+                'updateAttribute' => null,
+                'timestampExpression' => new CDbExpression('NOW()'),
+                'setUpdateOnCreate' => false,
+            ),
+        );
     }
 
 }

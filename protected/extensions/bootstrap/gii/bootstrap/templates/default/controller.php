@@ -31,7 +31,7 @@ class <?php echo $this->controllerClass; ?> extends <?php echo $this->baseContro
 	 */
 	public function actionView($id)
 	{
-                Yii::app()->util->setLog(AccessLog::TYPE_INFO, Yii::t('trans', 'View <?php echo $this->pluralize($this->class2name($this->modelClass)); ?> ID : {id}', array('{id}' => $id)));
+                Yii::app()->util->setLog(AccessLog::TYPE_INFO, Yii::t('trans', 'View <?php echo $this->class2name($this->modelClass); ?> ID : {id}', array('{id}' => $id)));
                 $this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
@@ -51,7 +51,7 @@ class <?php echo $this->controllerClass; ?> extends <?php echo $this->baseContro
 		if (isset($_POST['<?php echo $this->modelClass; ?>'])) {
 			$model->attributes=$_POST['<?php echo $this->modelClass; ?>'];
 			if ($model->save()) {
-				Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Create <?php echo $this->pluralize($this->class2name($this->modelClass)); ?> ID : ') . $model->primaryKey);
+				Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Create <?php echo $this->class2name($this->modelClass); ?> ID : ') . $model->primaryKey);
                                 $this->redirect(array('view','id'=>$model-><?php echo $this->tableSchema->primaryKey; ?>));
 			}
 		}
@@ -76,7 +76,7 @@ class <?php echo $this->controllerClass; ?> extends <?php echo $this->baseContro
 		if (isset($_POST['<?php echo $this->modelClass; ?>'])) {
 			$model->attributes=$_POST['<?php echo $this->modelClass; ?>'];
 			if ($model->save()) {
-				Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Update <?php echo $this->pluralize($this->class2name($this->modelClass)); ?> ID : ') . $model-><?php echo $this->tableSchema->primaryKey; ?>);
+				Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Update <?php echo $this->class2name($this->modelClass); ?> ID : ') . $model-><?php echo $this->tableSchema->primaryKey; ?>);
                                 $this->redirect(array('view','id'=>$model-><?php echo $this->tableSchema->primaryKey; ?>));
 			}
 		}
@@ -95,10 +95,13 @@ class <?php echo $this->controllerClass; ?> extends <?php echo $this->baseContro
 	{
 		if (Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if($this->loadModel($id)->delete())
-                            Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Delete <?php echo $this->pluralize($this->class2name($this->modelClass)); ?> ID : ') . $id);
-                                
-			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+			try {
+                            if($this->loadModel($id)->delete())
+                            Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Delete <?php echo $this->class2name($this->modelClass); ?> ID : ') . $id);
+                        } catch (CDbException $exc) {        
+			    throw new CHttpException(500, Yii::t('trans', 'Delete <?php echo $this->class2name($this->modelClass); ?> ID : {id}. Item ini sudah dipakai pada transaksi', array('{id}' => $id)));
+                        }
+                        // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 			if (!isset($_GET['ajax'])) {
 				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
 			}
@@ -122,7 +125,7 @@ class <?php echo $this->controllerClass; ?> extends <?php echo $this->baseContro
                     Yii::app()->user->setState('pageSize' . $model->tableName(), (int) $_GET['pageSize']);
                     unset($_GET['pageSize']);  // would interfere with pager and repetitive page size change
                 }
-                Yii::app()->util->setLog(AccessLog::TYPE_INFO, Yii::t('trans', 'Manage <?php echo $this->pluralize($this->class2name($this->modelClass)); ?>'));
+                Yii::app()->util->setLog(AccessLog::TYPE_INFO, Yii::t('trans', 'Manage <?php echo $this->class2name($this->modelClass); ?>'));
                                 
 		$this->render('index',array(
 			'model'=>$model,

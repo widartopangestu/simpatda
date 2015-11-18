@@ -22,6 +22,9 @@
  */
 class Pejabat extends CActiveRecord {
 
+    const STATUS_NOACTIVE = 0;
+    const STATUS_ACTIVE = 1;
+
     /**
      * @return string the associated database table name
      */
@@ -125,12 +128,54 @@ class Pejabat extends CActiveRecord {
         return parent::model($className);
     }
 
-    public function beforeSave() {
-        if ($this->isNewRecord)
-            $this->created = new CDbExpression('NOW()');
-        else
-            $this->updated = new CDbExpression('NOW()');
-        return parent::beforeSave();
+    public function behaviors() {
+        return array(
+            'timestamps' => array(
+                'class' => 'zii.behaviors.CTimestampBehavior',
+                'createAttribute' => 'created',
+                'updateAttribute' => 'updated',
+                'timestampExpression' => new CDbExpression('NOW()'),
+                'setUpdateOnCreate' => true,
+            ),
+        );
+    }
+
+    public function getStatusOptions() {
+        return array(
+            self::STATUS_ACTIVE => Yii::t('trans', 'Active'),
+            self::STATUS_NOACTIVE => Yii::t('trans', 'Not Active'),
+        );
+    }
+
+    public function getStatusText($status = null) {
+        $value = ($status === null) ? $this->status : $status;
+        $statusOptions = $this->getStatusOptions();
+        return isset($statusOptions[$value]) ?
+                $statusOptions[$value] : "unknown status ({$value})";
+    }
+
+    public function getGolonganOptions() {
+        return CHtml::listData(Golongan::model()->findAll(), 'id', 'nama');
+    }
+
+    public function getNamaGolongan() {
+        return ($this->golongan_id !== NULL) ? $this->golongan->nama : Yii::t('trans', 'Not Set');
+    }
+
+    public function getJabatanOptions() {
+        return CHtml::listData(Jabatan::model()->findAll(), 'id', 'nama');
+    }
+
+    public function getNamaJabatan() {
+        return ($this->jabatan_id !== NULL) ? $this->jabatan->nama : Yii::t('trans', 'Not Set');
+    }
+
+    public function getPangkatOptions() {
+        return CHtml::listData(Pangkat::model()->findAll(), 'id', 'nama');
+    }
+
+    public function getNamaPangkat() {
+        return ($this->pangkat_id !== NULL) ? $this->pangkat->nama : Yii::t('trans', 'Not Set');
     }
 
 }

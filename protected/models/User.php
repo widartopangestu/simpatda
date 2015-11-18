@@ -151,9 +151,9 @@ class User extends CActiveRecord {
 
     public function getStatusOptions() {
         return array(
-            self::STATUS_ACTIVE => 'Active',
-            self::STATUS_NOACTIVE => 'Not Active',
-            self::STATUS_BANNED => 'Banned',
+            self::STATUS_ACTIVE => Yii::t('trans', 'Active'),
+            self::STATUS_NOACTIVE => Yii::t('trans', 'Not Active'),
+            self::STATUS_BANNED => Yii::t('trans', 'Banned'),
         );
     }
 
@@ -187,11 +187,11 @@ class User extends CActiveRecord {
     }
 
     public function getRoleName() {
-        return ($this->role !== NULL) ? $this->role->name : 'Not Set';
+        return ($this->role !== NULL) ? $this->role->name : Yii::t('trans', 'Not Set');
     }
 
     public function getRoleNameLink() {
-        return ($this->role !== NULL) ? CHtml::link(CHtml::encode($model->role->name), array('role/view', 'id' => $model->role_id)) : 'Not Set';
+        return ($this->role !== NULL) ? CHtml::link(CHtml::encode($model->role->name), array('role/view', 'id' => $model->role_id)) : Yii::t('trans', 'Not Set');
     }
 
     /**

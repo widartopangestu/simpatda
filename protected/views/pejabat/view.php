@@ -33,10 +33,26 @@ array('label'=>Yii::t('trans', 'Manage'), 'url'=>array('index'), 'icon' => 'list
 		'kode',
 		'nama',
 		'nip',
-		'status',
-		'golongan_id',
-		'jabatan_id',
-		'pangkat_id',
+                array(
+                    'name' => 'status',
+                    'type' => 'raw',
+                    'value' => CHtml::encode($model->statusText),
+                ),
+                array(
+                    'name' => 'golongan_id',
+                    'type' => 'raw',
+                    'value' => $model->namaGolongan,
+                ),
+                array(
+                    'name' => 'jabatan_id',
+                    'type' => 'raw',
+                    'value' => $model->namaJabatan,
+                ),
+                array(
+                    'name' => 'pangkat_id',
+                    'type' => 'raw',
+                    'value' => $model->namaPangkat,
+                ),
                 array(
                     'name' => 'created',
                     'value' => $model->created !== NULL ? date("d-M-Y H:i:s", strtotime($model->created)) : '',

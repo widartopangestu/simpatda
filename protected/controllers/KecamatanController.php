@@ -71,10 +71,13 @@ class KecamatanController extends Controller {
      */
     public function actionDelete($id) {
         if (Yii::app()->request->isPostRequest) {
-            // we only allow deletion via POST request
-            if ($this->loadModel($id)->delete())
-                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Delete Kecamatan ID : ') . $id);
-
+            // we only allow deletion via POST request 
+            try {
+                if ($this->loadModel($id)->delete())
+                    Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Delete Kecamatan ID : ') . $id);
+            } catch (CDbException $exc) {
+                throw new CHttpException(500, Yii::t('trans', 'Delete Kecamatan ID : {id}. Item ini sudah dipakai pada transaksi', array('{id}' => $id)));
+            }
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             if (!isset($_GET['ajax'])) {
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));

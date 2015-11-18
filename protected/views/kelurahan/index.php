@@ -45,7 +45,12 @@ $pageSize = Yii::app()->user->getState('pageSize' . $model->tableName(), Yii::ap
                 ),
 		'kode',
 		'nama',
-		'kecamatan_id',
+                array(
+                    'name' => 'kecamatan_id',
+                    'type' => 'raw',
+                    'value' => 'CHtml::encode($data->namaKecamatan)',
+                    'filter' => $model->kecamatanOptions,
+                ),
                 array(
                     'filter' => false,
                     'name' => 'created',

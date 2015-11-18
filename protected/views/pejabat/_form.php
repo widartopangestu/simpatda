@@ -27,13 +27,13 @@
 
     <?php echo $form->textFieldControlGroup($model, 'nip', array('span' => 5, 'maxlength' => 30)); ?>
 
-    <?php echo $form->checkBoxControlGroup($model, 'status'); ?>
+    <?php echo $form->dropDownListControlGroup($model, 'status', $model->statusOptions, array('span' => 5)); ?>
 
-    <?php echo $form->textFieldControlGroup($model, 'golongan_id', array('span' => 5)); ?>
+    <?php echo $form->dropDownListControlGroup($model, 'golongan_id', $model->golonganOptions, array('span' => 5)); ?>
 
-    <?php echo $form->textFieldControlGroup($model, 'jabatan_id', array('span' => 5)); ?>
+    <?php echo $form->dropDownListControlGroup($model, 'jabatan_id', $model->jabatanOptions, array('span' => 5)); ?>
 
-    <?php echo $form->textFieldControlGroup($model, 'pangkat_id', array('span' => 5)); ?>
+    <?php echo $form->dropDownListControlGroup($model, 'pangkat_id', $model->pangkatOptions, array('span' => 5)); ?>
 
     <div class="form-actions">
         <?php
