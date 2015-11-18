@@ -148,10 +148,10 @@ return array(
             ),
         ),
         'db' => array(
-            'connectionString' => 'mysql:host=localhost;port=3307;dbname=simpatda',
+            'connectionString' => 'pgsql:host=localhost;port=5432;dbname=simpatda',
             'emulatePrepare' => true,
-            'username' => 'root',
-            'password' => 'C430darinaC430',
+            'username' => 'simpatdadb',
+            'password' => 'simpatdadb',
             'charset' => 'utf8',
         ),
         'errorHandler' => array(

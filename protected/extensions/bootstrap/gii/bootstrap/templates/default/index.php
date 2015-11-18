@@ -12,12 +12,12 @@
 echo "\n";
 $label = $this->pluralize($this->class2name($this->modelClass));
 echo "\$this->breadcrumbs=array(
-	Yii::t('".$this->tableSchema->name."', '$label')=>array('index'),
+	Yii::t('trans', '$label')=>array('index'),
 	Yii::t('trans', 'Manage'),
 );\n";
 ?>
 
-$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Manage') . ' ' . <?php echo "Yii::t('".$this->tableSchema->name."', '$label')"; ?>;
+$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Manage') . ' ' . <?php echo "Yii::t('trans', '$label')"; ?>;
 $this->menu=array(
 	array('label'=>Yii::t('trans', 'Create'), 'url'=>array('create'), 'icon'=>'file', 'visible' => (Yii::app()->util->is_authorized('<?php echo lcfirst($this->modelClass); ?>.create')) ? true : false),
 );
@@ -26,7 +26,7 @@ $pageSize = Yii::app()->user->getState('pageSize' . $model->tableName(), Yii::ap
 <div class="widget ">
     <div class="widget-header">
         <i class="icon-list-alt"></i>
-        <h3><?php echo "<?php echo Yii::t('trans', 'Manage') . ' ' . Yii::t('".$this->tableSchema->name."', '".$this->pluralize($this->class2name($this->modelClass))."'); ?>"; ?></h3>
+        <h3><?php echo "<?php echo Yii::t('trans', 'Manage') . ' ' . Yii::t('trans', '".$this->pluralize($this->class2name($this->modelClass))."'); ?>"; ?></h3>
     </div> <!-- /widget-header -->
     <div class="widget-content">
         <div class="grid-view pull-right">

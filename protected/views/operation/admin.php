@@ -42,7 +42,7 @@ $pageSize = Yii::app()->user->getState('pageSize' . $model->tableName(), Yii::ap
                 'name',
                 'description',
                 array(
-                    'filter' => CHtml::listData($model->findAll(new CDbCriteria(array('group' => 'nama_modul'))), 'nama_modul', 'nama_modul'),
+                    'filter' => CHtml::listData($model->findAll(new CDbCriteria(array('group' => 'id'))), 'nama_modul', 'nama_modul'),
                     'name' => 'nama_modul',
                     'type' => 'raw',
                     'value' => '$data->nama_modul',

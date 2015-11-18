@@ -55,7 +55,7 @@ $pageSize = Yii::app()->user->getState('pageSize' . $model->tableName(), Yii::ap
                 ),
                 array(
                     'name' => 'language',
-                    'filter' => CHtml::listData($model->findAll(new CDbCriteria(array('group' => 'language'))), 'language', 'language')
+                    'filter' => CHtml::listData($model->findAll(new CDbCriteria(array('group' => 'id'))), 'language', 'language')
                 ),
                 'translation',
                 array(

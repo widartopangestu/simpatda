@@ -1285,3 +1285,13 @@ color: #333;
 	
 }
 
+.preview-jasper {
+    -moz-transform: scale(2);
+    -moz-transform-origin: top;
+    -o-transform: scale(2);
+    -o-transform-origin: top;
+    -ms-transform: scale(2);
+    -ms-transform-origin: top;
+    -webkit-transform: scale(2);
+    -webkit-transform-origin: top;
+}

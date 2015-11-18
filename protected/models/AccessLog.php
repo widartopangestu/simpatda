@@ -135,14 +135,10 @@ class AccessLog extends CActiveRecord {
         return CHtml::listData(User::model()->findAll('status=' . User::STATUS_ACTIVE), 'id', 'username');
     }
 
-    public function behaviors() {
-        return array(
-            'CTimestampBehavior' => array(
-                'class' => 'zii.behaviors.CTimestampBehavior',
-                'createAttribute' => 'time',
-                'updateAttribute' => null,
-            )
-        );
+    public function beforeSave() {
+        if ($this->isNewRecord)
+            $this->time = new CDbExpression('NOW()');
+        return parent::beforeSave();
     }
 
 }

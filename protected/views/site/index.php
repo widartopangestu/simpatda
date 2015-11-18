@@ -79,7 +79,7 @@ $this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Home')
                             array(
                                 'name' => 'time',
                                 'type' => 'raw',
-                                'value' => 'date("d-m-Y h:i:s A", $data->time)',
+                                'value' => 'date("d-m-Y h:i:s A", strtotime($data->time))',
                                 'filter' => false,
                             ),
                         ),

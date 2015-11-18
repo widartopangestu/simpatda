@@ -51,7 +51,7 @@
                             array('label' => User::model()->findByPk(Yii::app()->user->id)->nickname, 'icon' => TbHtml::ICON_USER, 'items' => array(
                                     array('label' => Yii::t('trans', 'Profile'), 'icon' => TbHtml::ICON_USER, 'url' => array('/profile/profile'), 'visible' => Yii::app()->util->is_authorized('profile.profile')),
                                     array('label' => Yii::t('trans', 'Edit Profile'), 'icon' => TbHtml::ICON_EDIT, 'url' => array('/profile/edit'), 'visible' => Yii::app()->util->is_authorized('profile.edit')),
-                                    array('label' => Yii::t('trans', 'Change Password'), 'icon' => TbHtml::ICON_COG, 'url' => array('/profile/changepassword'), 'visible' => Yii::app()->util->is_authorized('profile.changepassword')),
+                                    array('label' => Yii::t('trans', 'Change Password'), 'icon' => TbHtml::ICON_COG, 'url' => array('/profile/changePassword'), 'visible' => Yii::app()->util->is_authorized('profile.changePassword')),
                                     array('label' => Yii::t('trans', 'Upload Photo'), 'icon' => TbHtml::ICON_PICTURE, 'url' => array('/profile/changePhoto'), 'visible' => Yii::app()->util->is_authorized('profile.changePhoto')),
                                     (Yii::app()->util->is_authorized('profile.profile') || Yii::app()->util->is_authorized('profile.edit') || Yii::app()->util->is_authorized('profile.changepassword')) ? TbHtml::menuDivider() : array(),
                                     array('label' => Yii::t('trans', 'Login'), 'icon' => TbHtml::ICON_GLOBE, 'url' => Yii::app()->user->loginUrl, 'visible' => Yii::app()->user->isGuest),
@@ -74,10 +74,23 @@
                         $this->widget('bootstrap.widgets.TbNav', array(
                             'items' => array(
                                 array('label' => '<span>' . Yii::t('trans', 'Dashboard') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => array('/site/index')),
-                                array('label' => '<span>' . Yii::t('trans', 'Report') . '</span>', 'visible' => Yii::app()->util->is_authorized('site.config'), 'url' => '#', 'items' => array(
+                                array('label' => '<span>' . Yii::t('trans', 'Report') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => '#', 'items' => array(
                                         array('label' => Yii::t('trans', 'User Log'), 'visible' => Yii::app()->util->is_authorized('report.userLog'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/report/userLog')),
                                         array('label' => Yii::t('trans', 'User List'), 'visible' => Yii::app()->util->is_authorized('jReport.userList'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jReport/userList')),
                                         array('label' => Yii::t('trans', 'User Actvity'), 'visible' => Yii::app()->util->is_authorized('jReport.userActivityList'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jReport/userActivityList')),
+                                    )
+                                ),
+                                array('label' => '<span>' . Yii::t('trans', 'Data Master') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => '#', 'items' => array(
+                                        array('label' => Yii::t('trans', 'Bidang Usaha'), 'visible' => Yii::app()->util->is_authorized('bidangUsaha.index'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/bidangUsaha/index')),
+                                        array('label' => Yii::t('trans', 'Golongan'), 'visible' => Yii::app()->util->is_authorized('golongan.index'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/golongan/index')),
+                                        array('label' => Yii::t('trans', 'Jabatan'), 'visible' => Yii::app()->util->is_authorized('jabatan.index'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jabatan/index')),
+                                        array('label' => Yii::t('trans', 'Jenis Surat'), 'visible' => Yii::app()->util->is_authorized('jenisSurat.index'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jenisSurat/index')),
+                                        array('label' => Yii::t('trans', 'Kecamatan'), 'visible' => Yii::app()->util->is_authorized('kecamatan.index'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/kecamatan/index')),
+                                        array('label' => Yii::t('trans', 'Kelurahan'), 'visible' => Yii::app()->util->is_authorized('kelurahan.index'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/kelurahan/index')),
+                                        array('label' => Yii::t('trans', 'Kode Rekening'), 'visible' => Yii::app()->util->is_authorized('kodeRekening.index'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/kodeRekening/index')),
+                                        array('label' => Yii::t('trans', 'Pangkat'), 'visible' => Yii::app()->util->is_authorized('pangkat.index'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/pangkat/index')),
+                                        array('label' => Yii::t('trans', 'Pejabat'), 'visible' => Yii::app()->util->is_authorized('pejabat.index'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/pejabat/index')),
+                                        array('label' => Yii::t('trans', 'Wajib Pajak'), 'visible' => Yii::app()->util->is_authorized('wajibPajak.index'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/wajibPajak/index')),
                                     )
                                 ),
                             ),

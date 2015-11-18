@@ -13,11 +13,11 @@
 echo "<?php\n";
 $label = $this->pluralize($this->class2name($this->modelClass));
 echo "\$this->breadcrumbs=array(
-	Yii::t('".$this->tableSchema->name."', '$label')=>array('index'),
+	Yii::t('trans', '$label')=>array('index'),
 	Yii::t('trans', 'Create'),
 );\n";
 ?>
-$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Create') . ' ' . <?php echo "Yii::t('".$this->tableSchema->name."', '$label')"; ?>;
+$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Create') . ' ' . <?php echo "Yii::t('trans', '$label')"; ?>;
 $this->menu=array(
 	array('label'=>Yii::t('trans', 'Manage'), 'url'=>array('index'), 'icon' => 'list-alt', 'visible' => (Yii::app()->util->is_authorized('<?php echo lcfirst($this->modelClass); ?>.index')) ? true : false),
 );
@@ -26,7 +26,7 @@ $this->menu=array(
 <div class="widget ">
     <div class="widget-header">
         <i class="icon-file"></i>
-        <h3><?php echo "<?php echo Yii::t('trans', 'Create') . ' ' . Yii::t('".$this->tableSchema->name."', '".$this->pluralize($this->class2name($this->modelClass))."'); ?>"; ?></h3>
+        <h3><?php echo "<?php echo Yii::t('trans', 'Create') . ' ' . Yii::t('trans', '".$this->pluralize($this->class2name($this->modelClass))."'); ?>"; ?></h3>
     </div> <!-- /widget-header -->
     <div class="widget-content">
         <?php echo "<?php \$this->renderPartial('_form', array('model'=>\$model)); ?>"; ?>
