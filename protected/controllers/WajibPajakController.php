@@ -6,7 +6,7 @@ class WajibPajakController extends Controller {
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
-    public $layout = '//layouts/column2';
+    public $layout = '//layouts/column1';
 
     /**
      * @return array action filters
@@ -32,8 +32,10 @@ class WajibPajakController extends Controller {
      * Creates a new model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
-    public function actionCreate() {
+    public function actionCreate($type = 1) {
         $model = new WajibPajak;
+        $model->kabupaten = 'MUARA ENIM';
+        $model->golongan = $type;
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
@@ -43,8 +45,16 @@ class WajibPajakController extends Controller {
             if ($model->validate()) {
                 if (!empty($model->tanggal_lahir) && $model->tanggal_lahir != '0000-00-00')
                     $model->tanggal_lahir = date_format(date_create_from_format('d/m/Y', $model->tanggal_lahir), "Y-m-d");
+                else
+                    $model->tanggal_lahir = new CDbExpression('null');
                 if (!empty($model->tanggal_tutup) && $model->tanggal_tutup != '0000-00-00')
                     $model->tanggal_tutup = date_format(date_create_from_format('d/m/Y', $model->tanggal_tutup), "Y-m-d");
+                else
+                    $model->tanggal_tutup = new CDbExpression('null');
+                if (!empty($model->kk_tanggal) && $model->kk_tanggal != '0000-00-00')
+                    $model->kk_tanggal = date_format(date_create_from_format('d/m/Y', $model->kk_tanggal), "Y-m-d");
+                else
+                    $model->kk_tanggal = new CDbExpression('null');
                 if ($model->save()) {
                     Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Create Wajib Pajak ID : ') . $model->primaryKey);
                     $this->redirect(array('view', 'id' => $model->id));
@@ -52,9 +62,15 @@ class WajibPajakController extends Controller {
             }
         }
 
-        $this->render('create', array(
-            'model' => $model,
-        ));
+        if ($type == 1) {
+            $this->render('create_pribadi', array(
+                'model' => $model,
+            ));
+        } else {
+            $this->render('create_badan_usaha', array(
+                'model' => $model,
+            ));
+        }
     }
 
     /**
@@ -66,6 +82,7 @@ class WajibPajakController extends Controller {
         $model = $this->loadModel($id);
         $model->tanggal_lahir = date('d/m/Y', strtotime($model->tanggal_lahir));
         $model->tanggal_tutup = date('d/m/Y', strtotime($model->tanggal_tutup));
+        $model->kk_tanggal = date('d/m/Y', strtotime($model->kk_tanggal));
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
@@ -75,9 +92,16 @@ class WajibPajakController extends Controller {
             if ($model->validate()) {
                 if (!empty($model->tanggal_lahir) && $model->tanggal_lahir != '0000-00-00')
                     $model->tanggal_lahir = date_format(date_create_from_format('d/m/Y', $model->tanggal_lahir), "Y-m-d");
-                if (!empty($model->tanggal_tutup) && $model->tanggal_lahir != '0000-00-00')
+                else
+                    $model->tanggal_lahir = new CDbExpression('null');
+                if (!empty($model->tanggal_tutup) && $model->tanggal_tutup != '0000-00-00')
                     $model->tanggal_tutup = date_format(date_create_from_format('d/m/Y', $model->tanggal_tutup), "Y-m-d");
-
+                else
+                    $model->tanggal_tutup = new CDbExpression('null');
+                if (!empty($model->kk_tanggal) && $model->kk_tanggal != '0000-00-00')
+                    $model->kk_tanggal = date_format(date_create_from_format('d/m/Y', $model->kk_tanggal), "Y-m-d");
+                else
+                    $model->kk_tanggal = new CDbExpression('null');
                 if ($model->save()) {
                     Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Update Wajib Pajak ID : ') . $model->id);
                     $this->redirect(array('view', 'id' => $model->id));
@@ -85,9 +109,15 @@ class WajibPajakController extends Controller {
             }
         }
 
-        $this->render('update', array(
-            'model' => $model,
-        ));
+        if ($model->golongan == 1) {
+            $this->render('update_pribadi', array(
+                'model' => $model,
+            ));
+        } else {
+            $this->render('update_badan_usaha', array(
+                'model' => $model,
+            ));
+        }
     }
 
     /**
@@ -167,4 +197,5 @@ class WajibPajakController extends Controller {
             echo CHtml::tag('option', array('value' => $value), CHtml::encode($name), true);
         }
     }
+
 }

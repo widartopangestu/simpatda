@@ -25,7 +25,8 @@ class Controller extends CController {
      * for more details on how to specify this property.
      */
     public $breadcrumbs = array();
-    public $title = "Yii App Core";
+    public $title = "Simpatda";
+    public $modulTitle = "";
 
     public function filterWAuth($filterChain) {
         Role::checkAccess(Role::getOperationName());

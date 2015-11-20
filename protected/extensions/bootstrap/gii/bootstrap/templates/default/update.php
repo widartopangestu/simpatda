@@ -21,6 +21,7 @@ echo "\$this->breadcrumbs=array(
 ?>
 
 $this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Update') . ' ' . <?php echo "Yii::t('trans', '$label')"; ?>;
+$this->modulTitle = Yii::t('trans', 'Update') . ' ' . Yii::t('trans', '<?php echo $this->class2name($this->modelClass); ?>') . ' #' . <?php echo "\$model->{$this->tableSchema->primaryKey};" ; ?>
 $this->menu=array(
 	array('label'=>Yii::t('trans', 'Manage'), 'url'=>array('index'), 'icon' => 'list-alt', 'visible' => (Yii::app()->util->is_authorized('<?php echo lcfirst($this->modelClass); ?>.index')) ? true : false),
 	array('label'=>Yii::t('trans', 'Create'), 'url'=>array('create'), 'icon'=>'file', 'visible' => (Yii::app()->util->is_authorized('<?php echo lcfirst($this->modelClass); ?>.create')) ? true : false),
@@ -28,12 +29,4 @@ $this->menu=array(
 );
 ?>
 
-<div class="widget ">
-    <div class="widget-header">
-        <i class="icon-pencil"></i>
-        <h3><?php echo "<?php echo Yii::t('trans', 'Update') . ' ' . Yii::t('trans', '".$label."'); ?>"; ?> <?php echo " <?php echo \$model->{$this->tableSchema->primaryKey}; ?>"; ?></h3>
-    </div> <!-- /widget-header -->
-    <div class="widget-content">
 <?php echo "<?php \$this->renderPartial('_form', array('model'=>\$model)); ?>"; ?>
-    </div>
-</div>

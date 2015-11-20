@@ -18,17 +18,10 @@ echo "\$this->breadcrumbs=array(
 );\n";
 ?>
 $this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Create') . ' ' . <?php echo "Yii::t('trans', '$label')"; ?>;
+$this->modulTitle = Yii::t('trans', 'Create') . ' ' . Yii::t('trans', '<?php echo $this->class2name($this->modelClass); ?>');
 $this->menu=array(
 	array('label'=>Yii::t('trans', 'Manage'), 'url'=>array('index'), 'icon' => 'list-alt', 'visible' => (Yii::app()->util->is_authorized('<?php echo lcfirst($this->modelClass); ?>.index')) ? true : false),
 );
 ?>
 
-<div class="widget ">
-    <div class="widget-header">
-        <i class="icon-file"></i>
-        <h3><?php echo "<?php echo Yii::t('trans', 'Create') . ' ' . Yii::t('trans', '".$this->pluralize($this->class2name($this->modelClass))."'); ?>"; ?></h3>
-    </div> <!-- /widget-header -->
-    <div class="widget-content">
-        <?php echo "<?php \$this->renderPartial('_form', array('model'=>\$model)); ?>"; ?>
-    </div>
-</div>
+<?php echo "<?php \$this->renderPartial('_form', array('model'=>\$model)); ?>"; ?>

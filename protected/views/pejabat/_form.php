@@ -14,6 +14,7 @@
         // There is a call to performAjaxValidation() commented in generated controller code.
         // See class documentation of CActiveForm for details on this.
         'enableAjaxValidation' => false,
+        'htmlOptions' => array('class' => 'form-horizontal'),
     ));
     ?>
 
@@ -21,25 +22,25 @@
 
     <?php echo $form->errorSummary($model); ?>
 
-    <?php echo $form->textFieldControlGroup($model, 'kode', array('span' => 5, 'maxlength' => 2)); ?>
+    <?php echo $form->textFieldControlGroup($model, 'kode', array('span' => 4, 'maxlength' => 2)); ?>
 
-    <?php echo $form->textFieldControlGroup($model, 'nama', array('span' => 5, 'maxlength' => 255)); ?>
+    <?php echo $form->textFieldControlGroup($model, 'nama', array('span' => 4, 'maxlength' => 255)); ?>
 
-    <?php echo $form->textFieldControlGroup($model, 'nip', array('span' => 5, 'maxlength' => 30)); ?>
+    <?php echo $form->textFieldControlGroup($model, 'nip', array('span' => 4, 'maxlength' => 30)); ?>
 
-    <?php echo $form->dropDownListControlGroup($model, 'status', $model->statusOptions, array('span' => 5)); ?>
+    <?php echo $form->dropDownListControlGroup($model, 'status', $model->statusOptions, array('span' => 4)); ?>
 
-    <?php echo $form->dropDownListControlGroup($model, 'golongan_id', $model->golonganOptions, array('span' => 5)); ?>
+    <?php echo $form->dropDownListControlGroup($model, 'golongan_id', $model->golonganOptions, array('span' => 4)); ?>
 
-    <?php echo $form->dropDownListControlGroup($model, 'jabatan_id', $model->jabatanOptions, array('span' => 5)); ?>
+    <?php echo $form->dropDownListControlGroup($model, 'jabatan_id', $model->jabatanOptions, array('span' => 4)); ?>
 
-    <?php echo $form->dropDownListControlGroup($model, 'pangkat_id', $model->pangkatOptions, array('span' => 5)); ?>
+    <?php echo $form->dropDownListControlGroup($model, 'pangkat_id', $model->pangkatOptions, array('span' => 4)); ?>
 
     <div class="form-actions">
         <?php
         echo TbHtml::submitButton($model->isNewRecord ? Yii::t('trans', 'Create') : Yii::t('trans', 'Save'), array(
             'color' => TbHtml::BUTTON_COLOR_PRIMARY,
-            'size' => TbHtml::BUTTON_SIZE_LARGE,
+            'size' => TbHtml::BUTTON_SIZE_DEFAULT,
         ));
         ?>
     </div>

@@ -20,6 +20,7 @@ echo "\$this->breadcrumbs=array(
 ?>
 
 $this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Manage') . ' ' . <?php echo "Yii::t('trans', '$label')"; ?>;
+$this->modulTitle = Yii::t('trans', 'View') . ' ' . Yii::t('trans', '<?php echo $this->class2name($this->modelClass); ?>') . ' #' . <?php echo "\$model->{$this->tableSchema->primaryKey};" ; ?>
 $this->menu=array(
 array('label'=>Yii::t('trans', 'Manage'), 'url'=>array('index'), 'icon' => 'list-alt', 'visible' => (Yii::app()->util->is_authorized('<?php echo lcfirst($this->modelClass); ?>.index')) ? true : false),
 	array('label'=>Yii::t('trans', 'Create'), 'url'=>array('create'), 'icon'=>'file', 'visible' => (Yii::app()->util->is_authorized('<?php echo lcfirst($this->modelClass); ?>.create')) ? true : false),
@@ -28,12 +29,6 @@ array('label'=>Yii::t('trans', 'Manage'), 'url'=>array('index'), 'icon' => 'list
 );
 ?>
 
-<div class="widget ">
-    <div class="widget-header">
-        <i class="icon-eye-open"></i>
-        <h3><?php echo "<?php echo Yii::t('trans', 'View') . ' ' . Yii::t('trans', '".$this->modelClass."'); ?>"; ?> <?php echo  " #<?php echo \$model->{$this->tableSchema->primaryKey}; ?>"; ?></h3>
-    </div> <!-- /widget-header -->
-    <div class="widget-content">
 <?php echo "<?php"; ?> $this->widget('zii.widgets.CDetailView',array(
     'htmlOptions' => array(
         'class' => 'table table-striped table-condensed table-hover',
@@ -47,5 +42,3 @@ foreach ($this->tableSchema->columns as $column) {
 ?>
 	),
 )); ?>
-    </div>
-</div>

@@ -13,7 +13,7 @@
         // controller action is handling ajax validation correctly.
         // There is a call to performAjaxValidation() commented in generated controller code.
         // See class documentation of CActiveForm for details on this.
-        'enableAjaxValidation' => false,
+        'enableAjaxValidation' => false,'htmlOptions' => array('class' => 'form-horizontal'),
     ));
     ?>
 
@@ -32,7 +32,7 @@
         <?php
         echo TbHtml::submitButton($model->isNewRecord ? Yii::t('trans', 'Create') : Yii::t('trans', 'Save'), array(
             'color' => TbHtml::BUTTON_COLOR_PRIMARY,
-            'size' => TbHtml::BUTTON_SIZE_LARGE,
+            'size' => TbHtml::BUTTON_SIZE_DEFAULT,
         ));
         ?>
     </div>

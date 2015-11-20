@@ -1,23 +1,36 @@
 <?php
 $this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Home');
+$this->modulTitle = Yii::t('trans', 'Dashboard');
+$this->breadcrumbs = array(
+    Yii::t('trans', 'Dashboard')
+);
 ?>
+<link href="<?php echo Yii::app()->request->baseUrl; ?>/css/pages/dashboard.css" rel="stylesheet"> 
 <div class="row">
-    <div class="span12">
-        <div class="widget widget-nopad">
-            <div class="widget-header"> <i class="icon-list-alt"></i>
+    <div class="span7">
+        <div class="widget">
+            <div class="widget-header"> <i class="icon-bookmark"></i>
                 <h3>About <?php echo Yii::app()->name; ?></h3>
             </div>
             <!-- /widget-header -->
             <div class="widget-content">
-                <div class="well-small">
-                    <p><b><?php echo Yii::app()->name; ?></b></p>
-                </div>
+                <div class="shortcuts"> 
+                    <a href="#" class="shortcut"><i class="shortcut-icon icon-list-alt"></i><span class="shortcut-label">Apps</span> </a>
+                    <a href="#" class="shortcut"><i class="shortcut-icon icon-bookmark"></i><span class="shortcut-label">Bookmarks</span> </a>
+                    <a href="#" class="shortcut"><i class="shortcut-icon icon-signal"></i> <span class="shortcut-label">Reports</span> </a>
+                    <a href="#" class="shortcut"> <i class="shortcut-icon icon-comment"></i><span class="shortcut-label">Comments</span> </a>
+                    <a href="#" class="shortcut"><i class="shortcut-icon icon-user"></i><span class="shortcut-label">Users</span> </a>
+                    <a href="#" class="shortcut"><i class="shortcut-icon icon-file"></i><span class="shortcut-label">Notes</span> </a>
+                    <a href="#" class="shortcut"><i class="shortcut-icon icon-picture"></i> <span class="shortcut-label">Photos</span> </a>
+                    <a href="#" class="shortcut"> <i class="shortcut-icon icon-tag"></i><span class="shortcut-label">Tags</span> </a> </div>
+                <!-- /shortcuts --> 
             </div>
             <!-- /widget-content --> 
         </div>
+        <!-- /widget --> 
     </div>
-
-    <div class="span7">
+    <!-- /span6 -->
+    <div class="span4">        
         <div class="widget widget-nopad">
             <div class="widget-header"> <i class="icon-list-alt"></i>
                 <h3>User Information</h3>
@@ -55,39 +68,10 @@ $this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Home')
                     ));
                     ?>
                 </div>
-                <div class="well-small">
-                    <h3><?php echo Yii::t('trans', 'Access Log List'); ?></h3>
-                    <?php
-                    $this->widget('yiiwheels.widgets.grid.WhGridView', array(
-                        'id' => 'access-log-grid',
-                        'dataProvider' => $accessLog->search(),
-                        'responsiveTable' => true,
-                        'filter' => $accessLog,
-                        'template' => '{items}{pager}{summary}',
-                        'columns' => array(
-                            array(
-                                'header' => 'No',
-                                'value' => '$this->grid->dataProvider->getPagination()->getOffset()+$row+1'
-                            ),
-                            array(
-                                'name' => 'type',
-                                'type' => 'raw',
-                                'value' => 'CHtml::encode($data->typeText)',
-                                'filter' => $accessLog->typeOptions,
-                            ),
-                            'activity',
-                            array(
-                                'name' => 'time',
-                                'type' => 'raw',
-                                'value' => 'date("d-m-Y h:i:s A", strtotime($data->time))',
-                                'filter' => false,
-                            ),
-                        ),
-                    ));
-                    ?>
-                </div>
             </div>
             <!-- /widget-content --> 
         </div>
+        <!-- /widget -->
     </div>
+    <!-- /span6 --> 
 </div>

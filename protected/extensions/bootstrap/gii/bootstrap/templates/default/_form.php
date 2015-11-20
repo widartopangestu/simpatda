@@ -19,6 +19,7 @@
 	// There is a call to performAjaxValidation() commented in generated controller code.
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
+        'htmlOptions' => array('class' => 'form-horizontal'),
 )); ?>\n"; ?>
 
     <p class="help-block"><?php echo "<?php echo Yii::t('trans', 'Fields with'); ?>"; ?> <span class="required">*</span> <?php echo "<?php echo Yii::t('trans', 'are required.'); ?>"; ?></p>
@@ -39,7 +40,7 @@
     <div class="form-actions">
         <?php echo "<?php echo TbHtml::submitButton(\$model->isNewRecord ? Yii::t('trans', 'Create') : Yii::t('trans', 'Save'),array(
 		    'color'=>TbHtml::BUTTON_COLOR_PRIMARY,
-		    'size'=>TbHtml::BUTTON_SIZE_LARGE,
+		    'size'=>TbHtml::BUTTON_SIZE_DEFAULT,
 		)); ?>\n"; ?>
     </div>
 

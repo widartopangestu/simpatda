@@ -1,10 +1,8 @@
 <?php
-/* @var $this SiteController */
-/* @var $error array */
-
 $this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Error');
+$this->modulTitle = Yii::t('trans', 'Error');
 $this->breadcrumbs = array(
-    Yii::t('trans', 'Error'),
+    Yii::t('trans', 'Error')
 );
 ?>
 <div class="error-container">

@@ -46,21 +46,21 @@ $this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Report
                             echo TbHtml::submitButton(Yii::t('trans', 'Submit'), array(
                                 'name' => 'type_report',
                                 'color' => TbHtml::BUTTON_COLOR_PRIMARY,
-                                'size' => TbHtml::BUTTON_SIZE_LARGE,
+                                'size' => TbHtml::BUTTON_SIZE_DEFAULT,
                                 'value' => 'submit'
                             ));
                             echo '&nbsp;';
                             echo TbHtml::submitButton(Yii::t('trans', 'Export to PDF'), array(
                                 'name' => 'type_report',
                                 'color' => TbHtml::BUTTON_COLOR_DANGER,
-                                'size' => TbHtml::BUTTON_SIZE_LARGE,
+                                'size' => TbHtml::BUTTON_SIZE_DEFAULT,
                                 'value' => 'pdf'
                             ));
                             echo '&nbsp;';
                             echo TbHtml::submitButton(Yii::t('trans', 'Export to Excel'), array(
                                 'name' => 'type_report',
                                 'color' => TbHtml::BUTTON_COLOR_SUCCESS,
-                                'size' => TbHtml::BUTTON_SIZE_LARGE,
+                                'size' => TbHtml::BUTTON_SIZE_DEFAULT,
                                 'value' => 'excel'
                             ));
                             ?>

@@ -51,6 +51,11 @@ class WajibPajak extends CActiveRecord {
     const JENIS_RETRIBUSI = 'R';
     const WARGANEGARA_WNI = 'WNI';
     const WARGANEGARA_WNA = 'WNA';
+    const GOLONGAN_PRIBADI = 1;
+    const GOLONGAN_BADAN_USAHA = 2;
+    const ID_JENIS_KTP = 1;
+    const ID_JENIS_SIM = 2;
+    const ID_JENIS_PASPOR = 3;
 
     /**
      * @return string the associated database table name
@@ -235,10 +240,25 @@ class WajibPajak extends CActiveRecord {
         );
     }
 
+    public function getGolonganOptions() {
+        return array(
+            self::GOLONGAN_PRIBADI => Yii::t('trans', 'WP/WR Pribadi'),
+            self::GOLONGAN_BADAN_USAHA => Yii::t('trans', 'WP/WR Badan Usaha'),
+        );
+    }
+
     public function getWargaNegaraOptions() {
         return array(
             self::WARGANEGARA_WNI => 'WNI',
             self::WARGANEGARA_WNA => 'WNA',
+        );
+    }
+
+    public function getIdJenisOptions() {
+        return array(
+            self::ID_JENIS_KTP => 'KTP',
+            self::ID_JENIS_SIM => 'SIM',
+            self::ID_JENIS_PASPOR => 'PASPOR',
         );
     }
 
@@ -256,15 +276,32 @@ class WajibPajak extends CActiveRecord {
                 $jenisOptions[$value] : "unknown jenis ({$value})";
     }
 
+    public function getGolonganText($golongan = null) {
+        $value = ($golongan === null) ? $this->golongan : $golongan;
+        $golonganOptions = $this->getGolonganOptions();
+        return isset($golonganOptions[$value]) ?
+                $golonganOptions[$value] : "unknown golongan ({$value})";
+    }
+
     public function getWargaNegaraText($wargaNegara = null) {
         $value = ($wargaNegara === null) ? $this->wargaNegara : $wargaNegara;
         $wargaNegaraOptions = $this->getWargaNegaraOptions();
         return isset($wargaNegaraOptions[$value]) ?
-                $wargaNegaraOptions[$value] : "unknown wargaNegara ({$value})";
+                $wargaNegaraOptions[$value] : "unknown warga negara ({$value})";
+    }
+
+    public function getIdJenisText($idJenis = null) {
+        $value = ($idJenis === null) ? $this->idJenis : $idJenis;
+        $idJenisOptions = $this->getIdJenisOptions();
+        return isset($idJenisOptions[$value]) ?
+                $idJenisOptions[$value] : "unknown id jenis ({$value})";
     }
 
     public function getKelurahanOptions() {
-        return CHtml::listData(Kelurahan::model()->findAll(), 'id', 'nama');
+        if ($this->kecamatan_id)
+            return CHtml::listData(Kelurahan::model()->findAll('kecamatan_id=:kecamatan_id', array(':kecamatan_id' => $this->kecamatan_id)), 'id', 'nama');
+        else
+            return array(); //CHtml::listData(Kelurahan::model()->findAll(), 'id', 'nama');
     }
 
     public function getNamaKelurahan() {

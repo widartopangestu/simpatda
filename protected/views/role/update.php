@@ -1,5 +1,7 @@
 <?php
+
 $this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Update') . ' ' . Yii::t('trans', 'Role');
+$this->modulTitle = Yii::t('trans', 'Update') . ' ' . Yii::t('trans', 'Role') . ' ' . $model->id;
 $this->breadcrumbs = array(
     'Roles' => array('admin'),
     $model->name => array('view', 'id' => $model->id),
@@ -13,14 +15,4 @@ $this->menu = array(
 );
 ?>
 
-<div class="widget ">
-
-    <div class="widget-header">
-        <i class="icon-pencil"></i>
-        <h3><?php echo Yii::t('trans', 'Update') . ' ' . Yii::t('trans', 'Role') . ' ' . $model->id; ?></h3>
-    </div> <!-- /widget-header -->
-
-    <div class="widget-content">
-        <?php $this->renderPartial('_form', array('model' => $model, 'operations' => $operations, 'data' => $data)); ?>
-    </div>
-</div>
+<?php $this->renderPartial('_form', array('model' => $model, 'operations' => $operations, 'data' => $data)); ?>

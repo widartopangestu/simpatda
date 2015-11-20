@@ -1,5 +1,7 @@
 <?php
+
 $this->pageTitle = Yii::app()->params['title'] . ' - Assign to User';
+$this->modulTitle = Yii::t('trans', 'Assing User to Role {role_name}', array('{role_name}' => $model->name));
 $this->breadcrumbs = array(
     Yii::t('trans', 'Roles') => array('admin'),
     $model->name => array('view', 'id' => $model->id),
@@ -33,42 +35,32 @@ jQuery('#user-grid a.assign').live('click',function() {
 ");
 ?>
 
-<div class="widget ">
+<?php
 
-    <div class="widget-header">
-        <i class="icon-tags"></i>
-        <h3><?php echo Yii::t('trans', 'Assing User to Role {role_name}', array('{role_name}' => $model->name)); ?></h3>
-    </div> <!-- /widget-header -->
-
-    <div class="widget-content">
-
-        <?php
-        $this->widget('bootstrap.widgets.TbGridView', array(
-            'id' => 'user-grid',
-            'dataProvider' => $dataProvider,
-            'columns' => array(
-                'username',
-                'email',
-                'fullname',
-                array(
-                    'name' => 'status',
-                    'type' => 'raw',
-                    'value' => 'CHtml::encode($data->statusText)',
-                ),
-                array(
-                    'class' => 'bootstrap.widgets.TbButtonColumn',
-                    'template' => '{assign}',
-                    'buttons' => array(
-                        'assign' => array(
-                            'label' => Yii::t('trans', 'Assign'), //Text label of the button.
-                            'options' => array('class' => 'assign'),
-                            'url' => 'Yii::app()->createUrl("role/ajaxAssign", array("role_id"=>' . $model->id . ', "user_id"=>$data->id))',
-                            'visible' => 'true', //A PHP expression for determining whether the button is visible.
-                        ),
-                    ),
+$this->widget('bootstrap.widgets.TbGridView', array(
+    'id' => 'user-grid',
+    'dataProvider' => $dataProvider,
+    'columns' => array(
+        'username',
+        'email',
+        'fullname',
+        array(
+            'name' => 'status',
+            'type' => 'raw',
+            'value' => 'CHtml::encode($data->statusText)',
+        ),
+        array(
+            'class' => 'bootstrap.widgets.TbButtonColumn',
+            'template' => '{assign}',
+            'buttons' => array(
+                'assign' => array(
+                    'label' => Yii::t('trans', 'Assign'), //Text label of the button.
+                    'options' => array('class' => 'assign'),
+                    'url' => 'Yii::app()->createUrl("role/ajaxAssign", array("role_id"=>' . $model->id . ', "user_id"=>$data->id))',
+                    'visible' => 'true', //A PHP expression for determining whether the button is visible.
                 ),
             ),
-        ));
-        ?>
-    </div>
-</div>
+        ),
+    ),
+));
+?>
