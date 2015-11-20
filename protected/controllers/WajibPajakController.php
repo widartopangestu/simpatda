@@ -198,4 +198,25 @@ class WajibPajakController extends Controller {
         }
     }
 
+    public function actionPrintNpwpd($id, $type_report = WPJasper::FORMAT_PDF) {
+        $model = $this->loadModel($id);
+        $filename = 'KartuNPWPD_' . $model->nomor . '_' . date("d-m-Y_h:i:s-A");
+        $title = Yii::t('trans', 'Kartu NPWPD');
+        Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Print {title} To {ext} > \'filename\' : {filename}', array('{title}' => $title, '{ext}' => strtoupper($type_report), '{filename}' => $filename)));
+
+        $rep = new WPJasper();
+        $reportId = 'kartu_npwpd';
+        $params = array(
+            'NoReg' => 'ADM/' . $model->nomor . date('/m/Y'),
+            'Nama' => $model->nama,
+            'Alamat' => $model->alamat,
+            'Npwpd' => $model->npwpd,
+            'Tanggal' => date('d M Y'),
+            'NamaTtd' => 'AMRULLAH JAMALUDDIN, SE',
+            'JabatanTtd' => 'PEMBINA UTAMA MUDA',
+            'NipTtd' => '19631009 199003 1 003',
+        );
+        $rep->generateReport($reportId, $type_report, $params, $filename);
+    }
+
 }

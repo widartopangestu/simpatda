@@ -21,7 +21,7 @@
 
     <?php echo $form->errorSummary($model); ?>
 
-        <?php echo $form->textFieldControlGroup($model, 'nama', array('span' => 4, 'maxlength' => 10)); ?>
+        <?php echo $form->textFieldControlGroup($model, 'nama', array('span' => 3, 'maxlength' => 10)); ?>
 
     <div class="form-actions">
         <?php

@@ -35,13 +35,13 @@ $this->menu = array(
         <div class="span5">
             <?php echo $form->dropDownListControlGroup($model, 'jenis', $model->jenisOptions, array('span' => 2)); ?>
 
-            <?php echo $form->textFieldControlGroup($model, 'nomor', array('span' => 4, 'maxlength' => 7)); ?>
+            <?php echo $form->textFieldControlGroup($model, 'nomor', array('span' => 3, 'maxlength' => 7)); ?>
 
-            <?php echo $form->textFieldControlGroup($model, 'nama', array('span' => 4, 'maxlength' => 255)); ?>
+            <?php echo $form->textFieldControlGroup($model, 'nama', array('span' => 3, 'maxlength' => 255)); ?>
 
-            <?php echo $form->textAreaControlGroup($model, 'alamat', array('rows' => 3, 'span' => 4)); ?>
+            <?php echo $form->textAreaControlGroup($model, 'alamat', array('rows' => 3, 'span' => 3)); ?>
 
-            <?php echo $form->textFieldControlGroup($model, 'kabupaten', array('span' => 4, 'maxlength' => 255)); ?>
+            <?php echo $form->textFieldControlGroup($model, 'kabupaten', array('span' => 3, 'maxlength' => 255)); ?>
 
             <?php
             echo $form->dropDownListControlGroup($model, 'kecamatan_id', $model->kecamatanOptions, array('span' => 3, 'empty' => Yii::t('trans', '- Pilih Kecamatan -'), 'ajax' => array(
@@ -71,7 +71,7 @@ $this->menu = array(
             ?>  
         </div>
         <div class="span5">
-            <?php echo $form->textFieldControlGroup($model, 'kk_nomor', array('span' => 4, 'maxlength' => 255)); ?>
+            <?php echo $form->textFieldControlGroup($model, 'kk_nomor', array('span' => 3, 'maxlength' => 255)); ?>
 
             <?php
             echo $form->datePickerControlGroup($model, 'kk_tanggal', array('span' => 2, 'pluginOptions' => array(
@@ -80,25 +80,27 @@ $this->menu = array(
             )));
             ?>  
 
-            <?php echo $form->textFieldControlGroup($model, 'pekerjaan', array('span' => 4, 'maxlength' => 255)); ?>
+            <?php echo $form->textFieldControlGroup($model, 'pekerjaan', array('span' => 3, 'maxlength' => 255)); ?>
 
-            <?php echo $form->textAreaControlGroup($model, 'alamat_pekerjaan', array('rows' => 3, 'span' => 4)); ?>
+            <?php echo $form->textAreaControlGroup($model, 'alamat_pekerjaan', array('rows' => 3, 'span' => 3)); ?>
+            <fieldset>
+                <legend><?php echo Yii::t('trans', 'Badan Usaha'); ?></legend>
+                <?php echo $form->dropDownListControlGroup($model, 'bidang_usaha_id', $model->bidangUsahaOptions, array('span' => 3, 'empty' => Yii::t('trans', '- Pilih Bidang Usaha -'))); ?>
 
-            <?php echo $form->dropDownListControlGroup($model, 'bidang_usaha_id', $model->bidangUsahaOptions, array('span' => 3, 'empty' => Yii::t('trans', '- Pilih Bidang Usaha -'))); ?>
+                <?php echo $form->textFieldControlGroup($model, 'bu_nama', array('span' => 3, 'maxlength' => 255)); ?>
 
-            <?php echo $form->textFieldControlGroup($model, 'bu_nama', array('span' => 4, 'maxlength' => 255)); ?>
+                <?php echo $form->textAreaControlGroup($model, 'bu_alamat', array('rows' => 3, 'span' => 3)); ?>
 
-            <?php echo $form->textAreaControlGroup($model, 'bu_alamat', array('rows' => 3, 'span' => 4)); ?>
+                <?php echo $form->textFieldControlGroup($model, 'bu_kabupaten', array('span' => 3, 'maxlength' => 255)); ?>
 
-            <?php echo $form->textFieldControlGroup($model, 'bu_kabupaten', array('span' => 4, 'maxlength' => 255)); ?>
+                <?php echo $form->textFieldControlGroup($model, 'bu_kecamatan', array('span' => 3, 'maxlength' => 255)); ?>
 
-            <?php echo $form->textFieldControlGroup($model, 'bu_kecamatan', array('span' => 4, 'maxlength' => 255)); ?>
+                <?php echo $form->textFieldControlGroup($model, 'bu_kelurahan', array('span' => 3, 'maxlength' => 255)); ?>
 
-            <?php echo $form->textFieldControlGroup($model, 'bu_kelurahan', array('span' => 4, 'maxlength' => 255)); ?>
+                <?php echo $form->textFieldControlGroup($model, 'bu_telepon', array('span' => 2, 'maxlength' => 20)); ?>
 
-            <?php echo $form->textFieldControlGroup($model, 'bu_telepon', array('span' => 4, 'maxlength' => 20)); ?>
-
-            <?php echo $form->textFieldControlGroup($model, 'bu_kodepos', array('span' => 4, 'maxlength' => 5)); ?>
+                <?php echo $form->textFieldControlGroup($model, 'bu_kodepos', array('span' => 1, 'maxlength' => 5)); ?>
+            </fieldset>
         </div>
     </div>
     <div class="form-actions">

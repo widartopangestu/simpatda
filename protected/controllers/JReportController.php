@@ -14,7 +14,7 @@ class JReportController extends Controller {
     }
 
     public function actionUserList() {
-        $title = Yii::t('trans', 'MASTER USER REPORT');
+        $title = Yii::t('trans', 'Laporan Data Pengguna');
         $filename = 'masteruser_list_' . date("d-m-Y_h:i:s-A");
         $model = new JrUserForm();
         $html_report = '';
@@ -53,7 +53,7 @@ class JReportController extends Controller {
     }
 
     public function actionUserActivityList() {
-        $title = Yii::t('trans', 'USER ACTIVITIES LOG REPORT');
+        $title = Yii::t('trans', 'Laporan Aktifitas Pengguna');
         $filename = 'masteruser_activity_list_' . date("d-m-Y_h:i:s-A");
         $model = new JrUserActivityForm();
         $model->date_from = date("01/m/Y");

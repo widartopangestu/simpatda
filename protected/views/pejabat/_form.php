@@ -22,19 +22,19 @@
 
     <?php echo $form->errorSummary($model); ?>
 
-    <?php echo $form->textFieldControlGroup($model, 'kode', array('span' => 4, 'maxlength' => 2)); ?>
+    <?php echo $form->textFieldControlGroup($model, 'kode', array('span' => 3, 'maxlength' => 2)); ?>
 
-    <?php echo $form->textFieldControlGroup($model, 'nama', array('span' => 4, 'maxlength' => 255)); ?>
+    <?php echo $form->textFieldControlGroup($model, 'nama', array('span' => 3, 'maxlength' => 255)); ?>
 
-    <?php echo $form->textFieldControlGroup($model, 'nip', array('span' => 4, 'maxlength' => 30)); ?>
+    <?php echo $form->textFieldControlGroup($model, 'nip', array('span' => 3, 'maxlength' => 30)); ?>
 
-    <?php echo $form->dropDownListControlGroup($model, 'status', $model->statusOptions, array('span' => 4)); ?>
+    <?php echo $form->dropDownListControlGroup($model, 'status', $model->statusOptions, array('span' => 3)); ?>
 
-    <?php echo $form->dropDownListControlGroup($model, 'golongan_id', $model->golonganOptions, array('span' => 4)); ?>
+    <?php echo $form->dropDownListControlGroup($model, 'golongan_id', $model->golonganOptions, array('span' => 3)); ?>
 
-    <?php echo $form->dropDownListControlGroup($model, 'jabatan_id', $model->jabatanOptions, array('span' => 4)); ?>
+    <?php echo $form->dropDownListControlGroup($model, 'jabatan_id', $model->jabatanOptions, array('span' => 3)); ?>
 
-    <?php echo $form->dropDownListControlGroup($model, 'pangkat_id', $model->pangkatOptions, array('span' => 4)); ?>
+    <?php echo $form->dropDownListControlGroup($model, 'pangkat_id', $model->pangkatOptions, array('span' => 3)); ?>
 
     <div class="form-actions">
         <?php

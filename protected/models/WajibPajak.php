@@ -112,24 +112,24 @@ class WajibPajak extends CActiveRecord {
             'kabupaten' => Yii::t('trans', 'Kabupaten'),
             'kecamatan' => Yii::t('trans', 'Kecamatan'),
             'kelurahan' => Yii::t('trans', 'Kelurahan'),
-            'telepon' => Yii::t('trans', 'Telepon'),
+            'telepon' => Yii::t('trans', 'No. Telepon'),
             'status' => Yii::t('trans', 'Status'),
             'tanggal_tutup' => Yii::t('trans', 'Tanggal Tutup'),
             'kodepos' => Yii::t('trans', 'Kodepos'),
-            'id_jenis' => Yii::t('trans', 'Id Jenis'),
-            'id_nomor' => Yii::t('trans', 'Id Nomor'),
-            'tanggal_lahir' => Yii::t('trans', 'Tanggal Lahir'),
-            'kk_nomor' => Yii::t('trans', 'Kk Nomor'),
-            'kk_tanggal' => Yii::t('trans', 'Kk Tanggal'),
-            'pekerjaan' => Yii::t('trans', 'Pekerjaan'),
-            'alamat_pekerjaan' => Yii::t('trans', 'Alamat Pekerjaan'),
-            'bu_nama' => Yii::t('trans', 'Bu Nama'),
-            'bu_alamat' => Yii::t('trans', 'Bu Alamat'),
-            'bu_kabupaten' => Yii::t('trans', 'Bu Kabupaten'),
-            'bu_kecamatan' => Yii::t('trans', 'Bu Kecamatan'),
-            'bu_kelurahan' => Yii::t('trans', 'Bu Kelurahan'),
-            'bu_telepon' => Yii::t('trans', 'Bu Telepon'),
-            'bu_kodepos' => Yii::t('trans', 'Bu Kodepos'),
+            'id_jenis' => Yii::t('trans', 'Tanda Bukti Diri'),
+            'id_nomor' => Yii::t('trans', 'Nomor'),
+            'tanggal_lahir' => Yii::t('trans', 'Tgl. Lahir'),
+            'kk_nomor' => Yii::t('trans', 'Nomor Kartu Keluarga'),
+            'kk_tanggal' => Yii::t('trans', 'Tgl. Kartu Keluarga'),
+            'pekerjaan' => Yii::t('trans', 'Pekerjaan/Usaha'),
+            'alamat_pekerjaan' => Yii::t('trans', 'Alamat Instansi'),
+            'bu_nama' => Yii::t('trans', 'Nama Instansi Tempat Bekerja/Usaha'),
+            'bu_alamat' => Yii::t('trans', 'Alamat'),
+            'bu_kabupaten' => Yii::t('trans', 'Kabupaten'),
+            'bu_kecamatan' => Yii::t('trans', 'Kecamatan'),
+            'bu_kelurahan' => Yii::t('trans', 'Kelurahan'),
+            'bu_telepon' => Yii::t('trans', 'Telepon'),
+            'bu_kodepos' => Yii::t('trans', 'Kodepos'),
             'kelurahan_id' => Yii::t('trans', 'Kelurahan'),
             'kecamatan_id' => Yii::t('trans', 'Kecamatan'),
             'bidang_usaha_id' => Yii::t('trans', 'Bidang Usaha'),
@@ -322,6 +322,10 @@ class WajibPajak extends CActiveRecord {
 
     public function getNamaBidangUsaha() {
         return ($this->bidang_usaha_id !== NULL) ? $this->bidangUsaha->nama : Yii::t('trans', 'Not Set');
+    }
+
+    public function getNpwpd() {
+        return strtoupper($this->jenis) . '.' . $this->golongan . '.' . $this->nomor . '.' . $this->kecamatan0->kode . '.' . $this->kelurahan0->kode;
     }
 
 }

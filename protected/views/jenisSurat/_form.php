@@ -21,11 +21,11 @@
 
     <?php echo $form->errorSummary($model); ?>
 
-    <?php echo $form->textFieldControlGroup($model, 'kode', array('span' => 4, 'maxlength' => 1)); ?>
+    <?php echo $form->textFieldControlGroup($model, 'kode', array('span' => 3, 'maxlength' => 1)); ?>
 
-    <?php echo $form->textFieldControlGroup($model, 'nama', array('span' => 4, 'maxlength' => 255)); ?>
+    <?php echo $form->textFieldControlGroup($model, 'nama', array('span' => 3, 'maxlength' => 255)); ?>
 
-    <?php echo $form->textFieldControlGroup($model, 'singkatan', array('span' => 4, 'maxlength' => 20)); ?>
+    <?php echo $form->textFieldControlGroup($model, 'singkatan', array('span' => 3, 'maxlength' => 20)); ?>
 
     <?php echo $form->checkBoxControlGroup($model, 'is_official'); ?>
 

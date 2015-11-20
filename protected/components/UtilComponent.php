@@ -38,13 +38,22 @@ class UtilComponent extends CApplicationComponent {
         file_put_contents($file, $str);
     }
 
-    public function printButton($controller, $id) {
+    public function printDropdownButton($controller, $id, $text) {
         $rep = new WPJasper();
         $button = array();
         foreach ($rep->getTypes() as $type) {
-            $button[] = array('label' => Yii::t('trans', 'As {file_ext}', array('{file_ext}' => strtoupper($type['name']))), 'url' => Yii::app()->createUrl($controller . '/jPrint', array('id' => $id, 'type_report' => $type['name'])));
+            $button[] = array('label' => Yii::t('trans', 'As {file_ext}', array('{file_ext}' => strtoupper($type['name']))), 'url' => Yii::app()->createUrl($controller, array('id' => $id, 'type_report' => $type['name'])));
         }
-        return TbHtml::buttonDropdown(Yii::t('trans', 'Print'), $button, array('size' => TbHtml::BUTTON_SIZE_SMALL));
+        return TbHtml::buttonDropdown(Yii::t('trans', $text), $button, array('size' => TbHtml::BUTTON_SIZE_SMALL));
+    }
+
+    public function printButton($controller, $id, $text) {
+        $rep = new WPJasper();
+        $button = array();
+        foreach ($rep->getTypes() as $type) {
+            $button[] = array('label' => Yii::t('trans', 'As {file_ext}', array('{file_ext}' => strtoupper($type['name']))), 'url' => Yii::app()->createUrl($controller, array('id' => $id, 'type_report' => $type['name'])));
+        }
+        return TbHtml::linkButton(Yii::t('trans', $text), array('url' => Yii::app()->createUrl($controller, array('id' => $id)), 'size' => TbHtml::BUTTON_SIZE_MINI));
     }
 
     public function _ini_set_timeout() {

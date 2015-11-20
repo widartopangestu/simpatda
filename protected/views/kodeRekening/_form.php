@@ -22,13 +22,13 @@
 
     <?php echo $form->errorSummary($model); ?>
 
-    <?php echo $form->textFieldControlGroup($model, 'kode', array('span' => 4, 'maxlength' => 255)); ?>
+    <?php echo $form->textFieldControlGroup($model, 'kode', array('span' => 3, 'maxlength' => 255)); ?>
 
-    <?php echo $form->textFieldControlGroup($model, 'nama', array('span' => 4, 'maxlength' => 255)); ?>
+    <?php echo $form->textFieldControlGroup($model, 'nama', array('span' => 3, 'maxlength' => 255)); ?>
 
-    <?php echo $form->textFieldControlGroup($model, 'tarif_persen', array('span' => 4)); ?>
+    <?php echo $form->textFieldControlGroup($model, 'tarif_persen', array('span' => 3)); ?>
 
-    <?php echo $form->textFieldControlGroup($model, 'tarif_dasar', array('span' => 4)); ?>
+    <?php echo $form->textFieldControlGroup($model, 'tarif_dasar', array('span' => 3)); ?>
 
         <?php echo $form->dropdownListControlGroup($model, 'parent_id', $model->parentTreeOptions, array('span' => 3, 'empty' => 'Root')); ?>
 

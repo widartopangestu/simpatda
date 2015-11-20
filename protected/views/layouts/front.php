@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <?php
-        isset(Yii::app()->params['favicon']) ? $favicon = Yii::app()->params['favicon'] : $favicon = 'favicon.png';
+        isset(Yii::app()->params['favicon']) ? $favicon = Yii::app()->params['favicon'] : $favicon = 'favicon.ico';
         ?>
         <link rel="icon" href="<?php echo Yii::app()->request->baseUrl . '/images/' . $favicon ?>" type="image/x-icon" />
         <link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl . '/images/' . $favicon; ?>" type="image/x-icon" />

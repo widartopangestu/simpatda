@@ -30,38 +30,32 @@ $pageSize = Yii::app()->user->getState('pageSize' . $model->tableName(), Yii::ap
 $visible_view = (Yii::app()->util->is_authorized('wajibPajak.view')) ? 'true' : 'false';
 $visible_update = (Yii::app()->util->is_authorized('wajibPajak.update')) ? 'true' : 'false';
 $visible_delete = (Yii::app()->util->is_authorized('wajibPajak.delete')) ? 'true' : 'false';
-$this->widget('yiiwheels.widgets.grid.WhGridView', array(
-    'id' => 'wajib-pajak-grid',
-    'dataProvider' => $model->search(),
-    'responsiveTable' => true,
-    'filter' => $model,
-    'template' => '{items}{pager}{summary}',
-    'columns' => array(
-        array(
-            'header' => 'No',
-            'value' => '$this->grid->dataProvider->getPagination()->getOffset()+$row+1'
-        ),
-        array(
-            'name' => 'jenis',
-            'type' => 'raw',
-            'value' => 'CHtml::encode($data->jenisText)',
-            'filter' => $model->jenisOptions,
-        ),
-        array(
-            'name' => 'golongan',
-            'type' => 'raw',
-            'value' => 'CHtml::encode($data->golonganText)',
-            'filter' => $model->golonganOptions,
-        ),
-        'nomor',
-        'nama',
-        'alamat',
-        array(
-            'name' => 'status',
-            'type' => 'raw',
-            'value' => 'CHtml::encode($data->statusText)',
-            'filter' => $model->statusOptions,
-        ),
+$columns = array(
+    array(
+        'header' => 'No',
+        'value' => '$this->grid->dataProvider->getPagination()->getOffset()+$row+1'
+    ),
+    array(
+        'name' => 'jenis',
+        'type' => 'raw',
+        'value' => 'CHtml::encode($data->jenisText)',
+        'filter' => $model->jenisOptions,
+    ),
+    array(
+        'name' => 'golongan',
+        'type' => 'raw',
+        'value' => 'CHtml::encode($data->golonganText)',
+        'filter' => $model->golonganOptions,
+    ),
+    'nomor',
+    'nama',
+    'alamat',
+    array(
+        'name' => 'status',
+        'type' => 'raw',
+        'value' => 'CHtml::encode($data->statusText)',
+        'filter' => $model->statusOptions,
+    ),
         /*
           'kabupaten',
           'kecamatan',
@@ -97,22 +91,37 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
           'name' => 'updated',
           'value' => '$data->updated !== NULL ? date("d-M-Y H:i:s", strtotime($data->updated)) : \'\'',
           ),
-         */
-        array(
-            'class' => 'bootstrap.widgets.TbButtonColumn',
-            'buttons' => array(
-                'view' => array(
-                    'visible' => $visible_view,
-                ),
-                'update' => array(
-                    'visible' => $visible_update,
-                ),
-                'delete' => array(
-                    'visible' => $visible_delete,
-                ),
-            ),
+         */        );
+
+$button = array(
+    'class' => 'bootstrap.widgets.TbButtonColumn',
+    'buttons' => array(
+        'view' => array(
+            'visible' => $visible_view,
+        ),
+        'update' => array(
+            'visible' => $visible_update,
+        ),
+        'delete' => array(
+            'visible' => $visible_delete,
         ),
     ),
+);
+array_push($columns, $button);
+if (Yii::app()->util->is_authorized('wajibPajak.printNpwpd') && Yii::app()->params['jasper']) {
+    array_push($columns, array(
+        'value' => 'Yii::app()->util->printButton(\'wajibPajak/printNpwpd\', $data->id, \'Cetak NPWPD\')',
+        'type' => 'raw'
+            )
+    );
+}
+$this->widget('yiiwheels.widgets.grid.WhGridView', array(
+    'id' => 'wajib-pajak-grid',
+    'dataProvider' => $model->search(),
+    'responsiveTable' => true,
+    'filter' => $model,
+    'template' => '{items}{pager}{summary}',
+    'columns' => $columns
 ));
 ?>
 <div class="grid-view">
