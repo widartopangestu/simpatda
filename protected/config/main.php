@@ -148,7 +148,7 @@ return array(
             ),
         ),
         'db' => array(
-            'connectionString' => 'pgsql:host=localhost;port=5432;dbname=simpatda',
+            'connectionString' => 'pgsql:host=localhost;port=5432;dbname=simpatdayii',
             'emulatePrepare' => true,
             'username' => 'simpatdadb',
             'password' => 'simpatdadb',

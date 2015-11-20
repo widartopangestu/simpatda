@@ -42,16 +42,16 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
         ),
         'kode',
         'nama',
-        array(
-            'filter' => false,
-            'name' => 'created',
-            'value' => '$data->created !== NULL ? date("d-M-Y H:i:s", strtotime($data->created)) : \'\'',
-        ),
-        array(
-            'filter' => false,
-            'name' => 'updated',
-            'value' => '$data->updated !== NULL ? date("d-M-Y H:i:s", strtotime($data->updated)) : \'\'',
-        ),
+//        array(
+//            'filter' => false,
+//            'name' => 'created',
+//            'value' => '$data->created !== NULL ? date("d-M-Y H:i:s", strtotime($data->created)) : \'\'',
+//        ),
+//        array(
+//            'filter' => false,
+//            'name' => 'updated',
+//            'value' => '$data->updated !== NULL ? date("d-M-Y H:i:s", strtotime($data->updated)) : \'\'',
+//        ),
         array(
             'class' => 'bootstrap.widgets.TbButtonColumn',
             'buttons' => array(

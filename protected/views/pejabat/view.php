@@ -52,14 +52,14 @@ $this->widget('zii.widgets.CDetailView', array(
             'type' => 'raw',
             'value' => $model->namaPangkat,
         ),
-        array(
-            'name' => 'created',
-            'value' => $model->created !== NULL ? date("d-M-Y H:i:s", strtotime($model->created)) : '',
-        ),
-        array(
-            'name' => 'updated',
-            'value' => $model->updated !== NULL ? date("d-M-Y H:i:s", strtotime($model->updated)) : '',
-        ),
+//        array(
+//            'name' => 'created',
+//            'value' => $model->created !== NULL ? date("d-M-Y H:i:s", strtotime($model->created)) : '',
+//        ),
+//        array(
+//            'name' => 'updated',
+//            'value' => $model->updated !== NULL ? date("d-M-Y H:i:s", strtotime($model->updated)) : '',
+//        ),
     ),
 ));
 ?>

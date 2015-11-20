@@ -7,11 +7,11 @@
 <?php
 
 $this->breadcrumbs = array(
-    Yii::t('trans', 'Kode Rekenings') => array('index'),
+    Yii::t('trans', 'Kode Rekening') => array('index'),
     $model->id,
 );
 
-$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Manage') . ' ' . Yii::t('trans', 'Kode Rekenings');
+$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Manage') . ' ' . Yii::t('trans', 'Kode Rekening');
 $this->modulTitle = Yii::t('trans', 'View') . ' ' . Yii::t('trans', 'Kode Rekening') . ' #' . $model->id;
 $this->menu = array(
     array('label' => Yii::t('trans', 'Manage'), 'url' => array('index'), 'icon' => 'list-alt', 'visible' => (Yii::app()->util->is_authorized('kodeRekening.index')) ? true : false),
@@ -35,14 +35,14 @@ $this->widget('zii.widgets.CDetailView', array(
         'tarif_persen',
         'tarif_dasar',
         'parent_id',
-        array(
-            'name' => 'created',
-            'value' => $model->created !== NULL ? date("d-M-Y H:i:s", strtotime($model->created)) : '',
-        ),
-        array(
-            'name' => 'updated',
-            'value' => $model->updated !== NULL ? date("d-M-Y H:i:s", strtotime($model->updated)) : '',
-        ),
+//        array(
+//            'name' => 'created',
+//            'value' => $model->created !== NULL ? date("d-M-Y H:i:s", strtotime($model->created)) : '',
+//        ),
+//        array(
+//            'name' => 'updated',
+//            'value' => $model->updated !== NULL ? date("d-M-Y H:i:s", strtotime($model->updated)) : '',
+//        ),
     ),
 ));
 ?>

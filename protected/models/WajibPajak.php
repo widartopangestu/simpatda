@@ -47,8 +47,8 @@ class WajibPajak extends CActiveRecord {
 
     const STATUS_NOACTIVE = 0;
     const STATUS_ACTIVE = 1;
-    const JENIS_PAJAK = 'P';
-    const JENIS_RETRIBUSI = 'R';
+    const JENIS_PAJAK = 'p';
+    const JENIS_RETRIBUSI = 'r';
     const WARGANEGARA_WNI = 'WNI';
     const WARGANEGARA_WNA = 'WNA';
     const GOLONGAN_PRIBADI = 1;

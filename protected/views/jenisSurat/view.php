@@ -33,14 +33,14 @@ $this->widget('zii.widgets.CDetailView', array(
         'singkatan',
         'is_official',
         'is_self',
-        array(
-            'name' => 'created',
-            'value' => $model->created !== NULL ? $model->created !== NULL ? date("d-M-Y H:i:s", strtotime($model->created)) : '' : '',
-        ),
-        array(
-            'name' => 'updated',
-            'value' => $model->updated !== NULL ? $model->updated !== NULL ? date("d-M-Y H:i:s", strtotime($model->updated)) : '' : '',
-        ),
+//        array(
+//            'name' => 'created',
+//            'value' => $model->created !== NULL ? $model->created !== NULL ? date("d-M-Y H:i:s", strtotime($model->created)) : '' : '',
+//        ),
+//        array(
+//            'name' => 'updated',
+//            'value' => $model->updated !== NULL ? $model->updated !== NULL ? date("d-M-Y H:i:s", strtotime($model->updated)) : '' : '',
+//        ),
     ),
 ));
 ?>

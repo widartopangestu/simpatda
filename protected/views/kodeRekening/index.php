@@ -4,11 +4,11 @@
 
 
 $this->breadcrumbs = array(
-    Yii::t('trans', 'Kode Rekenings') => array('index'),
+    Yii::t('trans', 'Kode Rekening') => array('index'),
     Yii::t('trans', 'Manage'),
 );
 
-$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Manage') . ' ' . Yii::t('trans', 'Kode Rekenings');
+$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Manage') . ' ' . Yii::t('trans', 'Kode Rekening');
 $this->modulTitle = Yii::t('trans', 'Manage') . ' ' . Yii::t('trans', 'Kode Rekening');
 $this->menu = array(
     array('label' => Yii::t('trans', 'Create'), 'url' => array('create'), 'icon' => 'file', 'visible' => (Yii::app()->util->is_authorized('kodeRekening.create')) ? true : false),
@@ -45,16 +45,16 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
         'tarif_persen',
         'tarif_dasar',
         'parent_id',
-        array(
-            'filter' => false,
-            'name' => 'created',
-            'value' => '$data->created !== NULL ? date("d-M-Y H:i:s", strtotime($data->created)) : \'\'',
-        ),
-        array(
-            'filter' => false,
-            'name' => 'updated',
-            'value' => '$data->updated !== NULL ? date("d-M-Y H:i:s", strtotime($data->updated)) : \'\'',
-        ),
+//        array(
+//            'filter' => false,
+//            'name' => 'created',
+//            'value' => '$data->created !== NULL ? date("d-M-Y H:i:s", strtotime($data->created)) : \'\'',
+//        ),
+//        array(
+//            'filter' => false,
+//            'name' => 'updated',
+//            'value' => '$data->updated !== NULL ? date("d-M-Y H:i:s", strtotime($data->updated)) : \'\'',
+//        ),
         array(
             'class' => 'bootstrap.widgets.TbButtonColumn',
             'buttons' => array(

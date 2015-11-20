@@ -1,6 +1,5 @@
 <?php
 $this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Home');
-$this->modulTitle = Yii::t('trans', 'Dashboard');
 $this->breadcrumbs = array(
     Yii::t('trans', 'Dashboard')
 );

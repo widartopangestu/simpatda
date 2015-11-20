@@ -41,8 +41,18 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
             'header' => 'No',
             'value' => '$this->grid->dataProvider->getPagination()->getOffset()+$row+1'
         ),
-        'jenis',
-        'golongan',
+        array(
+            'name' => 'jenis',
+            'type' => 'raw',
+            'value' => 'CHtml::encode($data->jenisText)',
+            'filter' => $model->jenisOptions,
+        ),
+        array(
+            'name' => 'golongan',
+            'type' => 'raw',
+            'value' => 'CHtml::encode($data->golonganText)',
+            'filter' => $model->golonganOptions,
+        ),
         'nomor',
         'nama',
         'alamat',

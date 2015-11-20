@@ -51,7 +51,7 @@ class KodeRekening extends CActiveRecord {
         // class name for the relations automatically generated below.
         return array(
             'parent' => array(self::BELONGS_TO, 'KodeRekening', 'parent_id'),
-            'kodeRekenings' => array(self::HAS_MANY, 'KodeRekening', 'parent_id'),
+            'kodeRekenings' => array(self::HAS_MANY, 'KodeRekening', 'parent_id', 'order' => 'kode ASC'),
         );
     }
 
@@ -102,6 +102,9 @@ class KodeRekening extends CActiveRecord {
             'pagination' => array(
                 'pageSize' => Yii::app()->user->getState('pageSize' . $this->tableName(), Yii::app()->params['defaultPageSize']),
             ),
+            'sort' => array(
+                'defaultOrder' => 'kode ASC',
+            ),
         ));
     }
 
@@ -125,6 +128,42 @@ class KodeRekening extends CActiveRecord {
                 'setUpdateOnCreate' => true,
             ),
         );
+    }
+
+    public function getData($root = null, $pre = '') {
+        $data[] = array('id' => $root->id, 'name' => $pre . ' ' . $root->kodeNama);
+        $pre .= '--';
+        foreach ($root->kodeRekenings as $cm) {
+            $data = array_merge($data, $this->getData($cm, $pre));
+        }
+        return $data;
+    }
+
+    public function getParentTreeOptions() {
+        $roots = self::model()->findAllByAttributes(array('parent_id' => null));
+        $result = array();
+        foreach ($roots as $root) {
+            foreach ($this->getData($root, '--') as $data) {
+                $result[$data['id']] = $data['name'];
+            }
+        }
+        return $result;
+    }
+
+    public function getChildAkun() {
+        return CHtml::listData(Akun::model()->findAll('id not in (SELECT distinct(parent_id) FROM `kode_rekening` where parent_id IS NOT NULL) order by kode'), 'id', 'kodeNama');
+    }
+
+    public function getNamaParent() {
+        return ($this->parent) ? $this->parent->nama : 'Root';
+    }
+
+    public function getKodeParent() {
+        return ($this->parent) ? $this->parent->kode : 'Root';
+    }
+
+    public function getKodeNama() {
+        return $this->kode . ' - ' . $this->nama;
     }
 
 }

@@ -1312,3 +1312,10 @@ table.fc-border-separate {
     /*text-transform: uppercase;*/
 }
 
+.logo {
+    max-width:140px; 
+    max-height:40px; 
+    height:40px; 
+    margin-top: -15px; 
+    margin-bottom: -10px;
+}
