@@ -77,7 +77,7 @@ class WPJasper extends CApplicationComponent {
         $defaultControls = array(
             'CompanyName' => Yii::app()->params['company_name_report'],
             'CompanyAddress' => Yii::app()->params['company_address_report'],
-            'CompanySlogan' => Yii::app()->params['company_slogan_report']
+            'CompanySlogan' => Yii::app()->params['company_description_report']
         );
         $inputControls = array_merge($defaultControls, $inputControls);
 

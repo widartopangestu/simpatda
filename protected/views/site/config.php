@@ -24,6 +24,7 @@ $this->widget('bootstrap.widgets.TbTabs', array(
         array('label' => Yii::t('trans', 'System'), 'content' => $this->renderPartial('_sistem', array('model' => $model, 'form' => $form), true), 'active' => true),
         array('label' => Yii::t('trans', 'Company'), 'content' => $this->renderPartial('_perusahaan', array('model' => $model, 'form' => $form), true)),
         array('label' => Yii::t('trans', 'Reports'), 'content' => $this->renderPartial('_report', array('model' => $model, 'form' => $form), true)),
+        array('label' => Yii::t('trans', 'TTD'), 'content' => $this->renderPartial('_ttd', array('model' => $model, 'form' => $form), true)),
     ),
 ));
 ?>

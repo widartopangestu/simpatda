@@ -6,6 +6,7 @@ class ConfigForm extends CFormModel {
     public $adminEmail;
     public $nama_perusahaan;
     public $alamat_perusahaan;
+    public $kota_perusahaan;
     public $email_perusahaan;
     public $member;
     public $general_user_role;
@@ -17,12 +18,13 @@ class ConfigForm extends CFormModel {
     public $currency_precision;
     public $qty_precision;
     public $display_logo_perusahaan;
+    public $ttd_kartu_npwpd_pejabat;
 
     public function rules() {
         return array(
-            array('title, adminEmail, nama_perusahaan, member, general_user_role, language, defaultPageSize', 'required'),
+            array('title, adminEmail, nama_perusahaan, kota_perusahaan, member, general_user_role, language, defaultPageSize, ttd_kartu_npwpd_pejabat', 'required'),
             array('title, adminEmail, nama_perusahaan', 'length', 'max' => 225),
-            array('company_name_report, email_perusahaan, alamat_perusahaan, company_description_report, company_address_report, language, defaultPageSize, currency_precision, qty_precision', 'safe'),
+            array('company_name_report, email_perusahaan, alamat_perusahaan, kota_perusahaan, company_description_report, company_address_report, language, defaultPageSize, currency_precision, qty_precision, ttd_kartu_npwpd_pejabat', 'safe'),
         );
     }
 
@@ -32,6 +34,7 @@ class ConfigForm extends CFormModel {
             'adminEmail' => Yii::t('trans', 'Admin Email'),
             'nama_perusahaan' => Yii::t('trans', 'Company Name'),
             'alamat_perusahaan' => Yii::t('trans', 'Company Address'),
+            'kota_perusahaan' => Yii::t('trans', 'Company City'),
             'email_perusahaan' => Yii::t('trans', 'Company Email'),
             'member' => Yii::t('trans', 'Allow user registration?'),
             'general_user_role' => Yii::t('trans', 'New User Default Role'),
@@ -43,11 +46,15 @@ class ConfigForm extends CFormModel {
             'currency_precision' => Yii::t('trans', 'Currency Precision'),
             'qty_precision' => Yii::t('trans', 'Quantity Precision'),
             'display_logo_perusahaan' => Yii::t('trans', 'Display Company Logo'),
+            'ttd_kartu_npwpd_pejabat' => Yii::t('trans', 'Pejabat yg TTD di Kartu NPWPD'),
         );
     }
 
     public function getRoleOptions() {
         return CHtml::listData(Role::model()->findAll(), 'id', 'name');
+    }
+    public function getPejabatOptions() {
+        return CHtml::listData(Pejabat::model()->findAll(), 'id', 'nipNama');
     }
 
     public function getLanguageOptions() {

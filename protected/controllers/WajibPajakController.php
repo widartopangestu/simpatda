@@ -200,6 +200,7 @@ class WajibPajakController extends Controller {
 
     public function actionPrintNpwpd($id, $type_report = WPJasper::FORMAT_PDF) {
         $model = $this->loadModel($id);
+        $pejabat = Pejabat::model()->findByPk(Yii::app()->params['ttd_kartu_npwpd_pejabat']);
         $filename = 'KartuNPWPD_' . $model->nomor . '_' . date("d-m-Y_h:i:s-A");
         $title = Yii::t('trans', 'Kartu NPWPD');
         Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Print {title} To {ext} > \'filename\' : {filename}', array('{title}' => $title, '{ext}' => strtoupper($type_report), '{filename}' => $filename)));
@@ -207,14 +208,14 @@ class WajibPajakController extends Controller {
         $rep = new WPJasper();
         $reportId = 'kartu_npwpd';
         $params = array(
-            'NoReg' => 'ADM/' . $model->nomor . date('/m/Y'),
-            'Nama' => $model->nama,
-            'Alamat' => $model->alamat,
-            'Npwpd' => $model->npwpd,
-            'Tanggal' => date('d M Y'),
-            'NamaTtd' => 'AMRULLAH JAMALUDDIN, SE',
-            'JabatanTtd' => 'PEMBINA UTAMA MUDA',
-            'NipTtd' => '19631009 199003 1 003',
+            'JudulLaporan' => 'KARTU PENGENAL NPWPD',
+            'SubJudulLaporan' => 'No Reg. : ADM/' . $model->nomor . date('/m/Y'),
+            'ParSQL' => 'select * from v_wajib_pajak where id = ' . $model->id,
+            'JudulTtd' => 'a.n Bupati Muara Enim Kepala DISPENDA',
+            'KetTtd' => Yii::app()->params['kota_perusahaan'].", " . date('d F Y'),
+            'NamaTtd' => $pejabat->nama,
+            'JabatanTtd' => $pejabat->jabatan->nama,
+            'NipTtd' => $pejabat->nip,
         );
         $rep->generateReport($reportId, $type_report, $params, $filename);
     }

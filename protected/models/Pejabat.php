@@ -140,6 +140,10 @@ class Pejabat extends CActiveRecord {
         );
     }
 
+    public function getNipNama() {
+        return $this->nip . ' ' . $this->nama;
+    }
+
     public function getStatusOptions() {
         return array(
             self::STATUS_ACTIVE => Yii::t('trans', 'Active'),

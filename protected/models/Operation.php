@@ -19,6 +19,7 @@ class Operation extends CActiveRecord {
 
     const GRUP_SISTEM = 1;
     const GRUP_MASTER = 2;
+    const GRUP_REPORT = 3;
 
     /**
      * @return string the associated database table name
@@ -120,6 +121,7 @@ class Operation extends CActiveRecord {
         return array(
             self::GRUP_SISTEM => Yii::t('trans', 'Sistem'),
             self::GRUP_MASTER => Yii::t('trans', 'Master'),
+            self::GRUP_REPORT => Yii::t('trans', 'Report'),
         );
     }
 

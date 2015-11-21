@@ -242,8 +242,8 @@ class WajibPajak extends CActiveRecord {
 
     public function getGolonganOptions() {
         return array(
-            self::GOLONGAN_PRIBADI => Yii::t('trans', 'WP/WR Pribadi'),
-            self::GOLONGAN_BADAN_USAHA => Yii::t('trans', 'WP/WR Badan Usaha'),
+            self::GOLONGAN_PRIBADI => Yii::t('trans', 'Pribadi'),
+            self::GOLONGAN_BADAN_USAHA => Yii::t('trans', 'Badan Usaha'),
         );
     }
 
