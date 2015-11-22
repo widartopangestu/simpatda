@@ -209,8 +209,10 @@ class WajibPajak extends CActiveRecord {
     }
 
     public function beforeSave() {
-        $this->kecamatan = $this->namaKecamatan;
-        $this->kelurahan = $this->namaKelurahan;
+        if (empty($this->kecamatan))
+            $this->kecamatan = $this->namaKecamatan;
+        if (empty($this->kelurahan))
+            $this->kelurahan = $this->namaKelurahan;
         return parent::beforeSave();
     }
 

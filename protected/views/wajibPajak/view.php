@@ -49,18 +49,18 @@ $this->menu = array(
                     'nama',
                     'alamat',
                     'kabupaten',
-                    array(
-                        'name' => 'kelurahan_id',
-                        'type' => 'raw',
-                        'value' => $model->namaKelurahan,
-                    ),
-                    array(
-                        'name' => 'kecamatan_id',
-                        'type' => 'raw',
-                        'value' => $model->namaKecamatan,
-                    ),
-//                'kecamatan',
-//                'kelurahan',
+//                    array(
+//                        'name' => 'kecamatan_id',
+//                        'type' => 'raw',
+//                        'value' => $model->namaKecamatan,
+//                    ),
+                    'kecamatan',
+//                    array(
+//                        'name' => 'kelurahan_id',
+//                        'type' => 'raw',
+//                        'value' => $model->namaKelurahan,
+//                    ),
+                    'kelurahan',
                     'telepon',
                     array(
                         'name' => 'status',

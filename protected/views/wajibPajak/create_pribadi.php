@@ -51,7 +51,11 @@ $this->menu = array(
             )));
             ?>
 
+            <?php echo $form->textFieldControlGroup($model, 'kecamatan', array('span' => 3, 'maxlength' => 255, 'groupOptions' => array('id' => 'GWajibPajak_kecamatan', 'style' => 'display:none;'))); ?>
+
             <?php echo $form->dropDownListControlGroup($model, 'kelurahan_id', $model->kelurahanOptions, array('span' => 3, 'empty' => Yii::t('trans', '- Pilih Kelurahan -'))); ?>
+
+            <?php echo $form->textFieldControlGroup($model, 'kelurahan', array('span' => 3, 'maxlength' => 255, 'groupOptions' => array('id' => 'GWajibPajak_kelurahan', 'style' => 'display:none;'))); ?>
 
             <?php echo $form->textFieldControlGroup($model, 'telepon', array('span' => 2, 'maxlength' => 20)); ?>
 
@@ -97,3 +101,32 @@ $this->menu = array(
     <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        if (jQuery('#WajibPajak_kelurahan_id option:selected').val() > 0 || jQuery('#WajibPajak_kelurahan_id option:selected').val() == '') {
+            jQuery('#GWajibPajak_kelurahan').hide();
+        } else {
+            jQuery('#GWajibPajak_kelurahan').show();
+        }
+        if (jQuery('#WajibPajak_kecamatan_id option:selected').val() > 0 || jQuery('#WajibPajak_kecamatan_id option:selected').val() == '') {
+            jQuery('#GWajibPajak_kecamatan').hide();
+        } else {
+            jQuery('#GWajibPajak_kecamatan').show();
+        }
+        jQuery('#WajibPajak_kelurahan_id').change(function () {
+            if (this.value > 0 || this.value == '') {
+                jQuery('#GWajibPajak_kelurahan').hide();
+            } else {
+                jQuery('#GWajibPajak_kelurahan').show();
+            }
+        });
+        jQuery('#WajibPajak_kecamatan_id').change(function () {
+            if (this.value > 0 || this.value == '') {
+                jQuery('#GWajibPajak_kecamatan').hide();
+            } else {
+                jQuery('#GWajibPajak_kecamatan').show();
+            }
+        });
+    });
+</script>
