@@ -13,7 +13,7 @@ class WajibPajakController extends Controller {
      */
     public function filters() {
         return array(
-            'WAuth - dynamicKelurahan',
+            'WAuth - dynamicKelurahan, jsonNpwpd, jsonGetData',
         );
     }
 
@@ -212,12 +212,67 @@ class WajibPajakController extends Controller {
             'SubJudulLaporan' => 'No Reg. : ADM/' . $model->nomor . date('/m/Y'),
             'ParSQL' => 'select * from v_wajib_pajak where id = ' . $model->id,
             'JudulTtd' => 'a.n Bupati Muara Enim Kepala DISPENDA',
-            'KetTtd' => Yii::app()->params['kota_perusahaan'].", " . date('d F Y'),
+            'KetTtd' => Yii::app()->params['kota_perusahaan'] . ", " . date('d F Y'),
             'NamaTtd' => $pejabat->nama,
             'JabatanTtd' => $pejabat->jabatan->nama,
             'NipTtd' => $pejabat->nip,
         );
         $rep->generateReport($reportId, $type_report, $params, $filename);
+    }
+
+    public function actionTutup() {
+        $model = new TutupWajibPajakForm();
+        $model->tanggal_tutup = date('d/m/Y');
+
+        if (isset($_POST['TutupWajibPajakForm'])) {
+            $model->attributes = $_POST['TutupWajibPajakForm'];
+            if ($model->validate()) {
+                if (!empty($model->tanggal_tutup) && $model->tanggal_tutup != '0000-00-00')
+                    $model->tanggal_tutup = date_format(date_create_from_format('d/m/Y', $model->tanggal_tutup), "Y-m-d");
+                else
+                    $model->tanggal_tutup = new CDbExpression('null');
+                $wp = $this->loadModel($model->wajib_pajak_id);
+                $wp->nomer_berita_acara = $model->no_ba;
+                $wp->isi_berita_acara = $model->isi_ba;
+                $wp->tanggal_tutup = $model->tanggal_tutup;
+                $wp->status = WajibPajak::STATUS_NOACTIVE;
+                if ($wp->save(false)) {
+                    Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Tutup Wajib Pajak ID : ') . $model->wajib_pajak_id);
+                    $this->redirect(array('view', 'id' => $model->wajib_pajak_id));
+                }
+            }
+        }
+        $this->render('tutup', array(
+            'model' => $model,
+        ));
+    }
+
+    public function actionJsonNpwpd() {
+        $q = isset($_REQUEST['q']) ? $_REQUEST['q'] : '';
+        //query not in akan memakan waktu lama jika data banyak
+        $where = '';
+        if ($q !== '') {
+            $where .= "AND npwpd LIKE '%$q%'";
+        }
+        $sql = "SELECT id, npwpd FROM v_wajib_pajak WHERE status=TRUE $where LIMIT 20";
+        $result = Yii::app()->db->createCommand($sql)->queryAll();
+        $data = array();
+        foreach ($result as $item) {
+            $data[] = array(
+                'id' => $item['id'],
+                'text' => $item['npwpd']
+            );
+        }
+        echo CJSON::encode($data);
+    }
+
+    public function actionJsonGetData($id = null) {
+        if ($id != null) {
+            $sql = "SELECT id, nama, alamat, kabupaten, kecamatan, kelurahan FROM v_wajib_pajak WHERE id=$id";
+            $result = Yii::app()->db->createCommand($sql)->queryRow();
+            echo CJSON::encode($result);
+        } else
+            echo CJSON::encode(array());
     }
 
 }

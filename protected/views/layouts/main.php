@@ -77,6 +77,7 @@
                                 array('label' => '<span>' . Yii::t('trans', 'Pendaftaran') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => '#', 'items' => array(
                                         array('label' => Yii::t('trans', 'WP/WR Pribadi'), 'visible' => Yii::app()->util->is_authorized('wajibPajak.create'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/wajibPajak/create')),
                                         array('label' => Yii::t('trans', 'WP/WR Badan Usaha'), 'visible' => Yii::app()->util->is_authorized('wajibPajak.create'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/wajibPajak/create?type=2')),
+                                        array('label' => Yii::t('trans', 'Penutupan WP/WR'), 'visible' => Yii::app()->util->is_authorized('wajibPajak.tutup'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/wajibPajak/tutup')),
                                     )
                                 ),
                                 array('label' => '<span>' . Yii::t('trans', 'Pendataan') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => '#', 'items' => array(

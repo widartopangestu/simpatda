@@ -104,6 +104,9 @@ class JReportController extends Controller {
             $model->attributes = $_POST['JrWajibPajakForm'];
             if ($model->validate()) {
                 $filter = array();
+                $judul_laporan = 'DAFTAR INDUK WAJIB PAJAK';
+                $kecamatan = '';
+                $kelurahan = '';
                 $where = '';
                 if (isset($model->status) && trim($model->status) != "")
                     $filter[] = 'status=' . $model->status;
@@ -111,12 +114,19 @@ class JReportController extends Controller {
                     $filter[] = 'jenis=\'' . $model->jenis . '\'';
                 if (isset($model->golongan) && trim($model->golongan) != "")
                     $filter[] = 'golongan=' . $model->golongan;
-                if (isset($model->kecamatan) && trim($model->kecamatan) != "")
+                if (isset($model->kecamatan) && trim($model->kecamatan) != "") {
                     $filter[] = 'kecamatan_id=' . $model->kecamatan;
-                if (isset($model->kelurahan) && trim($model->kelurahan) != "")
+                    $kecamatan = 'Kecamatan : ' . Kecamatan::model()->findByPk($model->kecamatan)->nama;
+                }
+                if (isset($model->kelurahan) && trim($model->kelurahan) != "") {
                     $filter[] = 'kelurahan_id=' . $model->kelurahan;
-//                if (isset($model->kode_rekening) && trim($model->kode_rekening) != "")
-//                    $filter[] = 'kode_rekening=' . $model->kode_rekening;
+                    $kelurahan = 'Kelurahan : ' . Kelurahan::model()->findByPk($model->kelurahan)->nama;
+                }
+                if (isset($model->kode_rekening) && trim($model->kode_rekening) != "") {
+                    $filter[] = 'kode_rekening_id=' . $model->kode_rekening;
+                    $judul_laporan .= '<br>' . KodeRekening::model()->findByPk($model->kode_rekening)->nama;
+                } else
+                    $judul_laporan .= ' SE-KABUPATEN MUARA ENIM';
 
                 if (count($filter)) {
                     $where = ' where ' . implode(' AND ', $filter);
@@ -125,7 +135,6 @@ class JReportController extends Controller {
                 $reportId = 'wajib_pajak';
                 $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
                 $diperiksa = Pejabat::model()->findByPk($model->diperiksa);
-                $judul_laporan = 'DAFTAR INDUK WAJIB PAJAK';
                 $params = array(
                     'JudulLaporan' => $judul_laporan,
                     'SubJudulLaporan' => Yii::t('trans', 'Keadaan s/d tanggal') . ' ' . date('d F Y'),
@@ -139,6 +148,8 @@ class JReportController extends Controller {
                     'NamaTtd1' => $diperiksa->nama,
                     'JabatanTtd1' => $diperiksa->jabatan->nama,
                     'NipTtd1' => $diperiksa->nip,
+                    'Kecamatan' => $kecamatan,
+                    'Kelurahan' => $kelurahan,
                     'Par_SQL' => 'select * from v_wajib_pajak' . $where,
                 );
                 if (isset($_POST['type_report'])) {
@@ -162,4 +173,5 @@ class JReportController extends Controller {
             echo CHtml::tag('option', array('value' => $value), CHtml::encode($name), true);
         }
     }
+
 }

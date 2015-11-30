@@ -12,7 +12,7 @@ $this->breadcrumbs = array(
 );
 
 $this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Manage') . ' ' . Yii::t('trans', 'Jenis Surat');
-$this->modulTitle = Yii::t('trans', 'View') . ' ' . Yii::t('trans', 'Jenis Surat') . ' #' . $model->name;
+$this->modulTitle = Yii::t('trans', 'View') . ' ' . Yii::t('trans', 'Jenis Surat') . ' #' . $model->nama;
 $this->menu = array(
     array('label' => Yii::t('trans', 'Manage'), 'url' => array('index'), 'icon' => 'list-alt', 'visible' => (Yii::app()->util->is_authorized('jenisSurat.index')) ? true : false),
     array('label' => Yii::t('trans', 'Create'), 'url' => array('create'), 'icon' => 'file', 'visible' => (Yii::app()->util->is_authorized('jenisSurat.create')) ? true : false),

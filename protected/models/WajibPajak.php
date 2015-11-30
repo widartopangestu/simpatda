@@ -17,7 +17,6 @@
  * @property boolean $status
  * @property string $tanggal_tutup
  * @property string $kodepos
- * @property integer $id_jenis
  * @property string $id_nomor
  * @property string $tanggal_lahir
  * @property string $kk_nomor
@@ -37,8 +36,15 @@
  * @property string $warga_negara
  * @property string $created
  * @property string $updated
+ * @property string $instansi_nama
+ * @property string $instansi_alamat
+ * @property string $id_jenis
+ * @property string $nomer_berita_acara
+ * @property string $isi_berita_acara
  *
  * The followings are the available model relations:
+ * @property Pemeriksaan[] $pemeriksaans
+ * @property Spt[] $spts
  * @property Kecamatan $kecamatan0
  * @property Kelurahan $kelurahan0
  * @property BidangUsaha $bidangUsaha
@@ -71,17 +77,18 @@ class WajibPajak extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('jenis, nomor, nama, kabupaten, kecamatan_id, kelurahan_id, telepon, kodepos', 'required'),
-            array('golongan, id_jenis, kelurahan_id, kecamatan_id, bidang_usaha_id', 'numerical', 'integerOnly' => true),
+            array('jenis, nomor, nama, kabupaten, kecamatan, kelurahan, telepon', 'required'),
+            array('golongan, kelurahan_id, kecamatan_id, bidang_usaha_id', 'numerical', 'integerOnly' => true),
             array('jenis', 'length', 'max' => 1),
             array('nomor', 'length', 'max' => 7),
-            array('nama, kabupaten, kecamatan, kelurahan, id_nomor, kk_nomor, pekerjaan, bu_nama, bu_kabupaten, bu_kecamatan, bu_kelurahan', 'length', 'max' => 255),
+            array('nama, kabupaten, kecamatan, kelurahan, id_nomor, kk_nomor, pekerjaan, bu_nama, bu_kabupaten, bu_kecamatan, bu_kelurahan, instansi_nama, nomer_berita_acara', 'length', 'max' => 255),
             array('telepon, bu_telepon', 'length', 'max' => 20),
             array('kodepos, bu_kodepos, warga_negara', 'length', 'max' => 5),
-            array('alamat, status, tanggal_tutup, tanggal_lahir, kk_tanggal, alamat_pekerjaan, bu_alamat', 'safe'),
+            array('id_jenis', 'length', 'max' => 10),
+            array('alamat, status, tanggal_tutup, tanggal_lahir, kk_tanggal, alamat_pekerjaan, bu_alamat, created, updated, instansi_alamat, isi_berita_acara', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, jenis, golongan, nomor, nama, alamat, kabupaten, kecamatan, kelurahan, telepon, status, tanggal_tutup, kodepos, id_jenis, id_nomor, tanggal_lahir, kk_nomor, kk_tanggal, pekerjaan, alamat_pekerjaan, bu_nama, bu_alamat, bu_kabupaten, bu_kecamatan, bu_kelurahan, bu_telepon, bu_kodepos, kelurahan_id, kecamatan_id, bidang_usaha_id, warga_negara, created, updated', 'safe', 'on' => 'search'),
+            array('id, jenis, golongan, nomor, nama, alamat, kabupaten, kecamatan, kelurahan, telepon, status, tanggal_tutup, kodepos, id_nomor, tanggal_lahir, kk_nomor, kk_tanggal, pekerjaan, alamat_pekerjaan, bu_nama, bu_alamat, bu_kabupaten, bu_kecamatan, bu_kelurahan, bu_telepon, bu_kodepos, kelurahan_id, kecamatan_id, bidang_usaha_id, warga_negara, created, updated, instansi_nama, instansi_alamat, id_jenis, nomer_berita_acara, isi_berita_acara', 'safe', 'on' => 'search'),
         );
     }
 
@@ -92,6 +99,8 @@ class WajibPajak extends CActiveRecord {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
+            'pemeriksaans' => array(self::HAS_MANY, 'Pemeriksaan', 'wajib_pajak_id'),
+            'spts' => array(self::HAS_MANY, 'Spt', 'wajib_pajak_id'),
             'kecamatan0' => array(self::BELONGS_TO, 'Kecamatan', 'kecamatan_id'),
             'kelurahan0' => array(self::BELONGS_TO, 'Kelurahan', 'kelurahan_id'),
             'bidangUsaha' => array(self::BELONGS_TO, 'BidangUsaha', 'bidang_usaha_id'),
@@ -136,6 +145,10 @@ class WajibPajak extends CActiveRecord {
             'warga_negara' => Yii::t('trans', 'Warga Negara'),
             'created' => Yii::t('trans', 'Created'),
             'updated' => Yii::t('trans', 'Updated'),
+            'instansi_nama' => Yii::t('trans', 'Instansi Nama'),
+            'instansi_alamat' => Yii::t('trans', 'Instansi Alamat'),
+            'nomer_berita_acara' => Yii::t('trans', 'Nomer Berita Acara'),
+            'isi_berita_acara' => Yii::t('trans', 'Isi Berita Acara'),
         );
     }
 
@@ -189,6 +202,10 @@ class WajibPajak extends CActiveRecord {
         $criteria->compare('warga_negara', $this->warga_negara, true);
         $criteria->compare('created', $this->created, true);
         $criteria->compare('updated', $this->updated, true);
+        $criteria->compare('instansi_nama', $this->instansi_nama, true);
+        $criteria->compare('instansi_alamat', $this->instansi_alamat, true);
+        $criteria->compare('nomer_berita_acara', $this->nomer_berita_acara, true);
+        $criteria->compare('isi_berita_acara', $this->isi_berita_acara, true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
