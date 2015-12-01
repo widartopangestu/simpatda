@@ -30,7 +30,7 @@
 
     <?php echo $form->textFieldControlGroup($model, 'tarif_dasar', array('span' => 3)); ?>
 
-        <?php echo $form->dropdownListControlGroup($model, 'parent_id', $model->parentTreeOptions, array('span' => 3, 'empty' => 'Root')); ?>
+    <?php echo $form->dropdownListControlGroup($model, 'parent_id', $model->parentTreeOptions, array('span' => 3, 'empty' => 'Root')); ?>
 
     <div class="form-actions">
         <?php
@@ -41,6 +41,6 @@
         ?>
     </div>
 
-<?php $this->endWidget(); ?>
+    <?php $this->endWidget(); ?>
 
 </div><!-- form -->

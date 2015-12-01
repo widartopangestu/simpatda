@@ -139,8 +139,8 @@ class KodeRekening extends CActiveRecord {
         return $data;
     }
 
-    public function getParentTreeOptions() {
-        $roots = self::model()->findAllByAttributes(array('parent_id' => null));
+    public function getParentTreeOptions($parent = null) {
+        $roots = self::model()->findAllByAttributes(array('parent_id' => $parent));
         $result = array();
         foreach ($roots as $root) {
             foreach ($this->getData($root, '--') as $data) {

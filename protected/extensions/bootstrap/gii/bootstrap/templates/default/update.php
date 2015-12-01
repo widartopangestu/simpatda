@@ -12,7 +12,7 @@
 <?php
 echo "<?php\n";
 $nameColumn = $this->guessNameColumn($this->tableSchema->columns);
-$label = $this->pluralize($this->class2name($this->modelClass));
+$label = $this->class2name($this->modelClass);
 echo "\$this->breadcrumbs=array(
 	Yii::t('trans', '$label')=>array('index'),
 	\$model->{$nameColumn}=>array('view','id'=>\$model->{$this->tableSchema->primaryKey}),

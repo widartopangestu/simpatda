@@ -10,7 +10,7 @@
 
 <?php
 echo "\n";
-$label = $this->pluralize($this->class2name($this->modelClass));
+$label = $this->class2name($this->modelClass);
 echo "\$this->breadcrumbs=array(
 	Yii::t('trans', '$label')=>array('index'),
 	Yii::t('trans', 'Manage'),

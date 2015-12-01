@@ -77,6 +77,9 @@
                                 array('label' => '<span>' . Yii::t('trans', 'Pendaftaran') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => '#', 'items' => array(
                                         array('label' => Yii::t('trans', 'WP/WR Pribadi'), 'visible' => Yii::app()->util->is_authorized('wajibPajak.create'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/wajibPajak/create')),
                                         array('label' => Yii::t('trans', 'WP/WR Badan Usaha'), 'visible' => Yii::app()->util->is_authorized('wajibPajak.create'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/wajibPajak/create?type=2')),
+                                        TbHtml::menuDivider(),
+                                        array('label' => Yii::t('trans', 'Rekam Data Objek Pajak & Retribusi'), 'visible' => (Yii::app()->util->is_authorized('spt.createHotel') || Yii::app()->util->is_authorized('spt.createRestoran') || Yii::app()->util->is_authorized('spt.createHiburan') || Yii::app()->util->is_authorized('spt.createReklame') || Yii::app()->util->is_authorized('spt.createElectric') || Yii::app()->util->is_authorized('spt.createGalian') || Yii::app()->util->is_authorized('spt.createAir') || Yii::app()->util->is_authorized('spt.createWalet') || Yii::app()->util->is_authorized('spt.createRetribusi') || Yii::app()->util->is_authorized('spt.createBphtb') || Yii::app()->util->is_authorized('spt.createReklameBaru')), 'icon' => TbHtml::ICON_LIST, 'url' => array('/spt/menu')),
+                                        TbHtml::menuDivider(),
                                         array('label' => Yii::t('trans', 'Penutupan WP/WR'), 'visible' => Yii::app()->util->is_authorized('wajibPajak.tutup'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/wajibPajak/tutup')),
                                     )
                                 ),
