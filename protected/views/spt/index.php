@@ -88,14 +88,13 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
         array(
             'name' => 'npwpd',
             'type' => 'raw',
-            'value' => 'CHtml::encode($data->wajibPajak->npwpd)',
+            'value' => 'CHtml::encode($data->wajibpajak->npwpd)',
             'filter' => false,
         ),
         array(
-            'name' => 'wajib_pajak_id',
+            'name' => 'wp_search',
             'type' => 'raw',
-            'value' => 'CHtml::encode($data->wajibPajak->nama)',
-            'filter' => false,
+            'value' => 'CHtml::encode($data->wajibpajak->nama)',
         ),
         /*
           'periode_awal',

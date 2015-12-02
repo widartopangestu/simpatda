@@ -44,6 +44,7 @@ class Spt extends CActiveRecord {
     public $kelurahan;
     public $kabupaten;
     public $nama_kode_rekening;
+    public $wp_search;
 
     const PUNGUTAN_SELF = 1;
     const PUNGUTAN_OFFICE = 2;
@@ -89,7 +90,7 @@ class Spt extends CActiveRecord {
             array('uraian, nama, alamat, kabupaten, kecamatan, kelurahan, nama_kode_rekening', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, periode, nomor, periode_awal, periode_akhir, pajak, nilai, jenis_pemungutan, tarif_dasar, tarif_persen, tanggal_proses, tanggal_entry, uraian, jenis_pajak, wajib_pajak_id, kode_rekening_id, jenis_surat_id, updated, created', 'safe', 'on' => 'search'),
+            array('id, periode, nomor, periode_awal, periode_akhir, pajak, nilai, jenis_pemungutan, tarif_dasar, tarif_persen, tanggal_proses, tanggal_entry, uraian, jenis_pajak, wajib_pajak_id, kode_rekening_id, jenis_surat_id, updated, created, wp_search', 'safe', 'on' => 'search'),
         );
     }
 
@@ -101,7 +102,7 @@ class Spt extends CActiveRecord {
         // class name for the relations automatically generated below.
         return array(
             'pemeriksaanItems' => array(self::HAS_MANY, 'PemeriksaanItem', 'spt_id'),
-            'wajibPajak' => array(self::BELONGS_TO, 'WajibPajak', 'wajib_pajak_id'),
+            'wajibpajak' => array(self::BELONGS_TO, 'WajibPajak', 'wajib_pajak_id'),
             'kodeRekening' => array(self::BELONGS_TO, 'KodeRekening', 'kode_rekening_id'),
             'jenisSurat' => array(self::BELONGS_TO, 'JenisSurat', 'jenis_surat_id'),
             'sptReklame' => array(self::HAS_ONE, 'SptReklame', 'spt_id'),
@@ -132,6 +133,7 @@ class Spt extends CActiveRecord {
             'uraian' => Yii::t('trans', 'Uraian'),
             'jenis_pajak' => Yii::t('trans', 'Jenis Pajak'),
             'wajib_pajak_id' => Yii::t('trans', 'Wajib Pajak'),
+            'wp_search' => Yii::t('trans', 'Wajib Pajak'),
             'kode_rekening_id' => Yii::t('trans', 'Kode Rekening'),
             'jenis_surat_id' => Yii::t('trans', 'Jenis Surat'),
             'updated' => Yii::t('trans', 'Updated'),
@@ -163,6 +165,7 @@ class Spt extends CActiveRecord {
 
         $criteria = new CDbCriteria;
 
+        $criteria->with = array('wajibpajak');
         $criteria->compare('id', $this->id, true);
         $criteria->compare('periode', $this->periode);
         $criteria->compare('nomor', $this->nomor, true);
@@ -178,6 +181,7 @@ class Spt extends CActiveRecord {
         $criteria->compare('uraian', $this->uraian, true);
         $criteria->compare('jenis_pajak', $this->jenis_pajak);
         $criteria->compare('wajib_pajak_id', $this->wajib_pajak_id);
+        $criteria->compare('wajibpajak.nama', $this->wp_search, true);
         $criteria->compare('kode_rekening_id', $this->kode_rekening_id);
         $criteria->compare('jenis_surat_id', $this->jenis_surat_id);
         $criteria->compare('updated', $this->updated, true);
@@ -185,6 +189,16 @@ class Spt extends CActiveRecord {
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
+            'sort' => array(
+                'defaultOrder' => 't.created DESC',
+                'attributes' => array(
+                    'wpr_search' => array(
+                        'asc' => 'wajibpajak.nama ASC',
+                        'desc' => 'wajibpajak.nama DESC',
+                    ),
+                    '*',
+                ),
+            ),
             'pagination' => array(
                 'pageSize' => Yii::app()->user->getState('pageSize' . $this->tableName(), Yii::app()->params['defaultPageSize']),
             ),

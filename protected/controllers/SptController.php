@@ -223,7 +223,7 @@ class SptController extends Controller {
         $model->tanggal_entry = date('d/m/Y', strtotime($model->tanggal_entry));
         $model->periode_awal = date('d/m/Y', strtotime($model->periode_awal));
         $model->periode_akhir = date('d/m/Y', strtotime($model->periode_akhir));
-        $model->npwpd = $model->wajibPajak->npwpd;
+        $model->npwpd = $model->wajibpajak->npwpd;
         $model_item = SptItem::model()->findByAttributes(array('spt_id' => $model->id));
         $model->kode_rekening_id = $model_item->kode_rekening_id;
         if (isset($_POST['Spt'])) {
@@ -337,7 +337,7 @@ class SptController extends Controller {
         $model->tanggal_entry = date('d/m/Y', strtotime($model->tanggal_entry));
         $model->periode_awal = date('d/m/Y', strtotime($model->periode_awal));
         $model->periode_akhir = date('d/m/Y', strtotime($model->periode_akhir));
-        $model->npwpd = $model->wajibPajak->npwpd;
+        $model->npwpd = $model->wajibpajak->npwpd;
         $model_item = SptItem::model()->findByAttributes(array('spt_id' => $model->id));
         $model->kode_rekening_id = $model_item->kode_rekening_id;
 

@@ -252,15 +252,15 @@ class WajibPajakController extends Controller {
         //query not in akan memakan waktu lama jika data banyak
         $where = '';
         if ($q !== '') {
-            $where .= "AND npwpd LIKE '%$q%'";
+            $where .= "AND (npwpd ILIKE '%$q%' OR nama ILIKE '%$q%')";
         }
-        $sql = "SELECT id, npwpd FROM v_wajib_pajak WHERE status=TRUE $where LIMIT 20";
+        $sql = "SELECT id, npwpd, nama FROM v_wajib_pajak WHERE status=TRUE $where LIMIT 20";
         $result = Yii::app()->db->createCommand($sql)->queryAll();
         $data = array();
         foreach ($result as $item) {
             $data[] = array(
                 'id' => $item['id'],
-                'text' => $item['npwpd']
+                'text' => $item['npwpd'] . ' ' . $item['nama']
             );
         }
         echo CJSON::encode($data);
