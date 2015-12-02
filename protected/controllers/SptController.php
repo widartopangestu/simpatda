@@ -37,6 +37,7 @@ class SptController extends Controller {
             'nilai' => number_format($model->nilai, Yii::app()->params['currency_precision'])
         ));
     }
+
     public function actionAjaxGetValueRestoran($id = null) {
         $model = new Spt;
         if (isset($_POST['Spt'])) {
@@ -49,6 +50,7 @@ class SptController extends Controller {
             'nilai' => number_format($model->nilai, Yii::app()->params['currency_precision'])
         ));
     }
+
     public function actionAjaxGetValueHiburan($id = null) {
         $model = new Spt;
         if (isset($_POST['Spt'])) {
@@ -61,6 +63,7 @@ class SptController extends Controller {
             'nilai' => number_format($model->nilai, Yii::app()->params['currency_precision'])
         ));
     }
+
     public function actionAjaxGetValueReklame($id = null) {
         $model = new Spt;
         if (isset($_POST['Spt'])) {
@@ -73,6 +76,7 @@ class SptController extends Controller {
             'nilai' => number_format($model->nilai, Yii::app()->params['currency_precision'])
         ));
     }
+
     public function actionAjaxGetValueElectric($id = null) {
         $model = new Spt;
         if (isset($_POST['Spt'])) {
@@ -85,6 +89,7 @@ class SptController extends Controller {
             'nilai' => number_format($model->nilai, Yii::app()->params['currency_precision'])
         ));
     }
+
     public function actionAjaxGetValueAir($id = null) {
         $model = new Spt;
         if (isset($_POST['Spt'])) {
@@ -97,6 +102,7 @@ class SptController extends Controller {
             'nilai' => number_format($model->nilai, Yii::app()->params['currency_precision'])
         ));
     }
+
     public function actionAjaxGetValueWalet($id = null) {
         $model = new Spt;
         if (isset($_POST['Spt'])) {
@@ -109,6 +115,7 @@ class SptController extends Controller {
             'nilai' => number_format($model->nilai, Yii::app()->params['currency_precision'])
         ));
     }
+
     public function actionAjaxGetValueGalian($id = null) {
         $model = new Spt;
         if (isset($_POST['Spt'])) {
@@ -121,6 +128,7 @@ class SptController extends Controller {
             'nilai' => number_format($model->nilai, Yii::app()->params['currency_precision'])
         ));
     }
+
     public function actionAjaxGetValueRetribusi($id = null) {
         $model = new Spt;
         if (isset($_POST['Spt'])) {
@@ -133,6 +141,7 @@ class SptController extends Controller {
             'nilai' => number_format($model->nilai, Yii::app()->params['currency_precision'])
         ));
     }
+
     public function actionAjaxGetValueBphtb($id = null) {
         $model = new Spt;
         if (isset($_POST['Spt'])) {
@@ -160,6 +169,8 @@ class SptController extends Controller {
         $model->tanggal_entry = date('d/m/Y');
 
         if (isset($_POST['Spt'])) {
+            $transaction = Yii::app()->db->beginTransaction();
+            $flag = true;
             $model->attributes = $_POST['Spt'];
             $model->nilai = str_replace(',', '', $model->nilai);
             $model->pajak = str_replace(',', '', $model->pajak);
@@ -181,10 +192,23 @@ class SptController extends Controller {
                 else
                     $model->periode_akhir = new CDbExpression('null');
 
-                if ($model->save()) {
-                    Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Create SPTPD Pajak Hotel ID : ') . $model->primaryKey);
-                    $this->redirect(array('createHotel'));
-                }
+                $model_item = new SptItem;
+                $model_item->pajak = $model->pajak;
+                $model_item->nilai = $model->nilai;
+                $model_item->tarif_dasar = $model->tarif_dasar;
+                $model_item->tarif_persen = $model->tarif_persen;
+                $model_item->kode_rekening_id = $model->kode_rekening_id;
+                $model->kode_rekening_id = Spt::PARENT_HOTEL;
+                $flag = $model->save() && $flag;
+                $model_item->spt_id = $model->primaryKey;
+                $flag = $model_item->save() && $flag;
+            } else {
+                $flag = false;
+            }
+            if ($flag) {
+                $transaction->commit();
+                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Create SPTPD Pajak Hotel ID : ') . $model->primaryKey);
+                $this->redirect(array('createHotel'));
             }
         }
 
@@ -200,8 +224,11 @@ class SptController extends Controller {
         $model->periode_awal = date('d/m/Y', strtotime($model->periode_awal));
         $model->periode_akhir = date('d/m/Y', strtotime($model->periode_akhir));
         $model->npwpd = $model->wajibPajak->npwpd;
-
+        $model_item = SptItem::model()->findByAttributes(array('spt_id' => $model->id));
+        $model->kode_rekening_id = $model_item->kode_rekening_id;
         if (isset($_POST['Spt'])) {
+            $transaction = Yii::app()->db->beginTransaction();
+            $flag = true;
             $model->attributes = $_POST['Spt'];
             $model->nilai = str_replace(',', '', $model->nilai);
             $model->pajak = str_replace(',', '', $model->pajak);
@@ -223,10 +250,21 @@ class SptController extends Controller {
                 else
                     $model->periode_akhir = new CDbExpression('null');
 
-                if ($model->save()) {
-                    Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Create SPTPD Pajak Hotel ID : ') . $model->primaryKey);
-                    $this->redirect(array('createHotel'));
-                }
+                $model_item->pajak = $model->pajak;
+                $model_item->nilai = $model->nilai;
+                $model_item->tarif_dasar = $model->tarif_dasar;
+                $model_item->tarif_persen = $model->tarif_persen;
+                $model_item->kode_rekening_id = $model->kode_rekening_id;
+                $model->kode_rekening_id = Spt::PARENT_HOTEL;
+                $flag = $model->save() && $flag;
+                $flag = $model_item->save() && $flag;
+            } else {
+                $flag = false;
+            }
+            if ($flag) {
+                $transaction->commit();
+                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Update SPTPD Pajak Hotel ID : ') . $model->id);
+                $this->redirect(array('index', 'jenis' => Spt::JENIS_PAJAK_HOTEL));
             }
         }
 
@@ -245,6 +283,8 @@ class SptController extends Controller {
         $model->tanggal_entry = date('d/m/Y');
 
         if (isset($_POST['Spt'])) {
+            $transaction = Yii::app()->db->beginTransaction();
+            $flag = true;
             $model->attributes = $_POST['Spt'];
             $model->nilai = str_replace(',', '', $model->nilai);
             $model->pajak = str_replace(',', '', $model->pajak);
@@ -266,10 +306,23 @@ class SptController extends Controller {
                 else
                     $model->periode_akhir = new CDbExpression('null');
 
-                if ($model->save()) {
-                    Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Create SPTPD Pajak Restoran ID : ') . $model->primaryKey);
-                    $this->redirect(array('createRestoran'));
-                }
+                $model_item = new SptItem;
+                $model_item->pajak = $model->pajak;
+                $model_item->nilai = $model->nilai;
+                $model_item->tarif_dasar = $model->tarif_dasar;
+                $model_item->tarif_persen = $model->tarif_persen;
+                $model_item->kode_rekening_id = $model->kode_rekening_id;
+                $model->kode_rekening_id = Spt::PARENT_HOTEL;
+                $flag = $model->save() && $flag;
+                $model_item->spt_id = $model->primaryKey;
+                $flag = $model_item->save() && $flag;
+            } else {
+                $flag = false;
+            }
+            if ($flag) {
+                $transaction->commit();
+                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Create SPTPD Pajak Restoran ID : ') . $model->primaryKey);
+                $this->redirect(array('createRestoran'));
             }
         }
 
@@ -285,8 +338,12 @@ class SptController extends Controller {
         $model->periode_awal = date('d/m/Y', strtotime($model->periode_awal));
         $model->periode_akhir = date('d/m/Y', strtotime($model->periode_akhir));
         $model->npwpd = $model->wajibPajak->npwpd;
+        $model_item = SptItem::model()->findByAttributes(array('spt_id' => $model->id));
+        $model->kode_rekening_id = $model_item->kode_rekening_id;
 
         if (isset($_POST['Spt'])) {
+            $transaction = Yii::app()->db->beginTransaction();
+            $flag = true;
             $model->attributes = $_POST['Spt'];
             $model->nilai = str_replace(',', '', $model->nilai);
             $model->pajak = str_replace(',', '', $model->pajak);
@@ -308,10 +365,21 @@ class SptController extends Controller {
                 else
                     $model->periode_akhir = new CDbExpression('null');
 
-                if ($model->save()) {
-                    Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Create SPTPD Pajak Restoran ID : ') . $model->primaryKey);
-                    $this->redirect(array('createRestoran'));
-                }
+                $model_item->pajak = $model->pajak;
+                $model_item->nilai = $model->nilai;
+                $model_item->tarif_dasar = $model->tarif_dasar;
+                $model_item->tarif_persen = $model->tarif_persen;
+                $model_item->kode_rekening_id = $model->kode_rekening_id;
+                $model->kode_rekening_id = Spt::PARENT_HOTEL;
+                $flag = $model->save() && $flag;
+                $flag = $model_item->save() && $flag;
+            } else {
+                $flag = false;
+            }
+            if ($flag) {
+                $transaction->commit();
+                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Update SPTPD Pajak Restoran ID : ') . $model->id);
+                $this->redirect(array('index', 'jenis' => Spt::JENIS_PAJAK_RESTORAN));
             }
         }
 
