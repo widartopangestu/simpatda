@@ -53,15 +53,27 @@ class SptController extends Controller {
 
     public function actionAjaxGetValueHiburan($id = null) {
         $model = new Spt;
-        if (isset($_POST['Spt'])) {
+        if (isset($_POST['Spt']) && isset($_POST['items'])) {
             $model->attributes = $_POST['Spt'];
             $model->nilai = ($model->nilai != '') ? doubleval(str_replace(',', '', $model->nilai)) : 0;
-            $model->pajak = $model->nilai * ($model->tarif_persen / 100);
+            $items = $_POST['items'];
+            $data = array();
+            $sum_pajak = 0;
+            foreach ($items as $key => $item) {
+                $dasar_pengenaan = (int) $item['dasar_pengenaan'];
+                $tarif_persen = (int) $item['tarif_persen'];
+                $pajak = $dasar_pengenaan * ($tarif_persen / 100);
+                $data['items_' . $key . 'xpajak'] = number_format($pajak, Yii::app()->params['currency_precision']);
+                $sum_pajak += $pajak;
+            }
+            $model->pajak = $sum_pajak;
         }
-        echo CJSON::encode(array(
-            'pajak' => number_format($model->pajak, Yii::app()->params['currency_precision']),
-            'nilai' => number_format($model->nilai, Yii::app()->params['currency_precision'])
+        $rest = CMap::mergeArray(
+                        $data, array(
+                    'pajak' => number_format($model->pajak, Yii::app()->params['currency_precision']),
+                    'nilai' => number_format($model->nilai, Yii::app()->params['currency_precision'])
         ));
+        echo CJSON::encode($rest);
     }
 
     public function actionAjaxGetValueReklame($id = null) {
@@ -389,11 +401,125 @@ class SptController extends Controller {
     }
 
     public function actionCreateHiburan() {
-        
+        $model = new Spt;
+        $model->nomor = 'AUTO';
+        $model->jenis_surat_id = Spt::JENIS_SURAT;
+        $model->jenis_pajak = Spt::JENIS_PAJAK_HIBURAN;
+        $model->periode = date('Y');
+        $model->tanggal_proses = date('d/m/Y');
+        $model->tanggal_entry = date('d/m/Y');
+        $model->kode_rekening_id = Spt::PARENT_HIBURAN;
+
+        if (isset($_POST['Spt']) && isset($_POST['items'])) {
+            $transaction = Yii::app()->db->beginTransaction();
+            $flag = true;
+            $model->attributes = $_POST['Spt'];
+            $model->nilai = str_replace(',', '', $model->nilai);
+            $model->pajak = str_replace(',', '', $model->pajak);
+            if ($model->validate()) {
+                if (!empty($model->tanggal_proses) && $model->tanggal_proses != '0000-00-00')
+                    $model->tanggal_proses = date_format(date_create_from_format('d/m/Y', $model->tanggal_proses), "Y-m-d");
+                else
+                    $model->tanggal_proses = new CDbExpression('null');
+                if (!empty($model->tanggal_entry) && $model->tanggal_entry != '0000-00-00')
+                    $model->tanggal_entry = date_format(date_create_from_format('d/m/Y', $model->tanggal_entry), "Y-m-d");
+                else
+                    $model->tanggal_entry = new CDbExpression('null');
+                if (!empty($model->periode_awal) && $model->periode_awal != '0000-00-00')
+                    $model->periode_awal = date_format(date_create_from_format('d/m/Y', $model->periode_awal), "Y-m-d");
+                else
+                    $model->periode_awal = new CDbExpression('null');
+                if (!empty($model->periode_akhir) && $model->periode_akhir != '0000-00-00')
+                    $model->periode_akhir = date_format(date_create_from_format('d/m/Y', $model->periode_akhir), "Y-m-d");
+                else
+                    $model->periode_akhir = new CDbExpression('null');
+                $flag = $model->save() && $flag;
+                foreach ($_POST['items'] as $item) {
+                    $model_item = new SptItem;
+                    $model_item->pajak = str_replace(',', '', $item['pajak']);
+                    $model_item->nilai = str_replace(',', '', $item['dasar_pengenaan']);
+                    $model_item->tarif_persen = $item['tarif_persen'];
+                    $model_item->kode_rekening_id = $item['kode_rekening_id'];
+                    $model_item->spt_id = $model->primaryKey;
+                    $flag = $model_item->save() && $flag;
+                }
+            } else {
+                $flag = false;
+            }
+            if ($flag) {
+                $transaction->commit();
+                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Create SPTPD Pajak Hiburan ID : ') . $model->primaryKey);
+                $this->redirect(array('createHiburan'));
+            }
+        }
+
+        $this->render('form_hiburan', array(
+            'model' => $model,
+        ));
     }
 
     public function actionUpdateHiburan($id) {
-        
+        $model = $this->loadModel($id);
+        $model->tanggal_proses = date('d/m/Y', strtotime($model->tanggal_proses));
+        $model->tanggal_entry = date('d/m/Y', strtotime($model->tanggal_entry));
+        $model->periode_awal = date('d/m/Y', strtotime($model->periode_awal));
+        $model->periode_akhir = date('d/m/Y', strtotime($model->periode_akhir));
+        $model->npwpd = $model->wajibpajak->npwpd;
+        if (isset($_POST['Spt']) && isset($_POST['items'])) {
+            $transaction = Yii::app()->db->beginTransaction();
+            $flag = true;
+            $model->attributes = $_POST['Spt'];
+            $model->nilai = str_replace(',', '', $model->nilai);
+            $model->pajak = str_replace(',', '', $model->pajak);
+            if ($model->validate()) {
+                if (!empty($model->tanggal_proses) && $model->tanggal_proses != '0000-00-00')
+                    $model->tanggal_proses = date_format(date_create_from_format('d/m/Y', $model->tanggal_proses), "Y-m-d");
+                else
+                    $model->tanggal_proses = new CDbExpression('null');
+                if (!empty($model->tanggal_entry) && $model->tanggal_entry != '0000-00-00')
+                    $model->tanggal_entry = date_format(date_create_from_format('d/m/Y', $model->tanggal_entry), "Y-m-d");
+                else
+                    $model->tanggal_entry = new CDbExpression('null');
+                if (!empty($model->periode_awal) && $model->periode_awal != '0000-00-00')
+                    $model->periode_awal = date_format(date_create_from_format('d/m/Y', $model->periode_awal), "Y-m-d");
+                else
+                    $model->periode_awal = new CDbExpression('null');
+                if (!empty($model->periode_akhir) && $model->periode_akhir != '0000-00-00')
+                    $model->periode_akhir = date_format(date_create_from_format('d/m/Y', $model->periode_akhir), "Y-m-d");
+                else
+                    $model->periode_akhir = new CDbExpression('null');
+                $flag = $model->save() && $flag;
+                foreach ($_POST['items'] as $item) {
+                    if (!empty($item['items_id']))
+                        $model_item = SptItem::model()->findByPk($item['items_id']);
+                    else {
+                        $model_item = new SptItem;
+                        $model_item->spt_id = $model->id;
+                    }
+                    $model_item->pajak = str_replace(',', '', $item['pajak']);
+                    $model_item->nilai = str_replace(',', '', $item['dasar_pengenaan']);
+                    $model_item->tarif_persen = $item['tarif_persen'];
+                    $model_item->kode_rekening_id = $item['kode_rekening_id'];
+                    $flag = $model_item->save() && $flag;
+                }
+                if ($_POST['deletedItem']) {
+                    $criteria = new CDbCriteria();
+                    $criteria->condition = "id IN (" . $_POST['deletedItem'] . ")";
+                    $flag = SptItem::model()->deleteAll($criteria) && $flag;
+                }
+            } else {
+                $flag = false;
+            }
+            if ($flag) {
+                $transaction->commit();
+                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Update SPTPD Pajak Hiburan ID : ') . $model->id);
+                $this->redirect(array('index', 'jenis' => Spt::JENIS_PAJAK_HIBURAN));
+            }
+        }
+
+        $this->render('form_hiburan', array(
+            'model' => $model,
+        ));
     }
 
     public function actionCreateReklame() {

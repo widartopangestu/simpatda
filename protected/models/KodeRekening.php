@@ -140,7 +140,10 @@ class KodeRekening extends CActiveRecord {
     }
 
     public function getParentTreeOptions($parent = null) {
-        $roots = self::model()->findAllByAttributes(array('parent_id' => $parent));
+        $criteria = new CDbCriteria();
+        $criteria->condition = 'parent_id='. $parent;
+        $criteria->order ='kode';
+        $roots = self::model()->findAll($criteria);
         $result = array();
         foreach ($roots as $root) {
             foreach ($this->getData($root, '--') as $data) {

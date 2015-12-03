@@ -33,9 +33,9 @@ $this->menu = array(
     <?php echo $form->errorSummary($model); ?>
     <div class="row">
         <div class="span5">
-            <?php echo $form->textFieldControlGroup($model, 'periode', array('span' => 1, 'maxlength' => 4)); ?>
-
             <?php echo $form->textFieldControlGroup($model, 'nomor', array('span' => 3)); ?>
+
+            <?php echo $form->textFieldControlGroup($model, 'periode', array('span' => 1, 'maxlength' => 4)); ?>
 
             <?php
             echo $form->datePickerControlGroup($model, 'tanggal_proses', array('span' => 2, 'pluginOptions' => array(
@@ -145,7 +145,6 @@ $this->menu = array(
     function getNamaRekening(id) {
         jQuery.ajax({'type': 'POST', 'url': '<?php echo $this->createUrl('spt/jsonGetKodeRekening'); ?>/?id=' + id, 'cache': false, dataType: 'json', 'data': null}).done(function (data) {
             jQuery("#Spt_nama_kode_rekening").val(data.nama);
-            jQuery("#Spt_tarif_dasar").val(data.tarif_dasar);
             jQuery("#Spt_tarif_persen").val(data.tarif_persen);
             getValueHotel();
         });

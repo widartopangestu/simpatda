@@ -150,7 +150,7 @@ class JReportController extends Controller {
                     'NipTtd1' => $diperiksa->nip,
                     'Kecamatan' => $kecamatan,
                     'Kelurahan' => $kelurahan,
-                    'Par_SQL' => 'select * from v_wajib_pajak' . $where,
+                    'Par_SQL' => 'select * from v_spt_wajib_pajak' . $where,
                 );
                 if (isset($_POST['type_report'])) {
                     $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);

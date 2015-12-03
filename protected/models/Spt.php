@@ -109,6 +109,7 @@ class Spt extends CActiveRecord {
             'sptGalian' => array(self::HAS_ONE, 'SptGalian', 'spt_id'),
             'sptBphtb' => array(self::HAS_ONE, 'SptBphtb', 'spt_id'),
             'sptItems' => array(self::HAS_MANY, 'SptItem', 'spt_id'),
+            'sptItemCount' => array(self::STAT, 'SptItem', 'spt_id'),
             'penetapans' => array(self::HAS_MANY, 'Penetapan', 'spt_id'),
         );
     }
