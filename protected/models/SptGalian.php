@@ -58,7 +58,7 @@ class SptGalian extends CActiveRecord {
         return array(
             'spt_id' => Yii::t('trans', 'Spt'),
             'nama' => Yii::t('trans', 'Nama'),
-            'jml_rab' => Yii::t('trans', 'Jml Rab'),
+            'jml_rab' => Yii::t('trans', 'Jumlah  RAB'),
             'no_kontrak' => Yii::t('trans', 'No Kontrak'),
             'created' => Yii::t('trans', 'Created'),
             'updated' => Yii::t('trans', 'Updated'),

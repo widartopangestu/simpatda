@@ -6,12 +6,12 @@
 <?php
 $this->breadcrumbs = array(
     Yii::t('trans', 'SPTPD') => array('index'),
-    Yii::t('trans', 'Create') . ' ' . Yii::t('trans', 'SPTPD Pajak Restoran'),
+    Yii::t('trans', 'Create') . ' ' . Yii::t('trans', 'SPTPD PPJ / Genset'),
 );
-$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Create') . ' ' . Yii::t('trans', 'SPTPD Pajak Restoran');
-$this->modulTitle = Yii::t('trans', 'Create') . ' ' . Yii::t('trans', 'SPTPD Pajak Restoran');
+$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Create') . ' ' . Yii::t('trans', 'SPTPD PPJ / Genset');
+$this->modulTitle = Yii::t('trans', 'Create') . ' ' . Yii::t('trans', 'SPTPD PPJ / Genset');
 $this->menu = array(
-    array('label' => Yii::t('trans', 'Manage'), 'url' => array('index', 'jenis' => Spt::JENIS_PAJAK_RESTORAN), 'icon' => 'list-alt', 'visible' => (Yii::app()->util->is_authorized('spt.index')) ? true : false),
+    array('label' => Yii::t('trans', 'Manage'), 'url' => array('index', 'jenis' => Spt::JENIS_PAJAK_ELECTRIC), 'icon' => 'list-alt', 'visible' => (Yii::app()->util->is_authorized('spt.index')) ? true : false),
 );
 ?>
 <div class="form">
@@ -111,13 +111,15 @@ $this->menu = array(
 
             <?php // echo $form->textFieldControlGroup($model, 'jenis_pajak', array('span' => 3)); ?>
 
-            <?php echo $form->dropdownListControlGroup($model, 'kode_rekening_id', KodeRekening::model()->getParentTreeOptions(Spt::PARENT_RESTORAN), array('span' => 3, 'empty' => Yii::t('trans', '-- Pilih Kode Rekening --'), 'onchange' => 'getNamaRekening($(this).val())')); ?>
+            <?php echo $form->dropdownListControlGroup($model, 'kode_rekening_id', KodeRekening::model()->getParentTreeOptions(Spt::PARENT_ELECTRIC), array('span' => 3, 'empty' => Yii::t('trans', '-- Pilih Kode Rekening --'), 'onchange' => 'getNamaRekening($(this).val())')); ?>
 
             <?php echo $form->textFieldControlGroup($model, 'nama_kode_rekening', array('span' => 3, 'maxlength' => 255, 'readonly' => true)); ?>
 
-            <?php echo $form->maskMoneyControlGroup($model, 'nilai', array('span' => 3, 'style' => "text-align: right")); ?>
+            <?php echo $form->maskMoneyControlGroup($model, 'nilai', array('label' => Yii::t('trans', 'Pemakaian (Kwh)'), 'span' => 3, 'style' => "text-align: right")); ?>
 
-            <?php // echo $form->textFieldControlGroup($model, 'tarif_dasar', array('span' => 3)); ?>
+            <?php echo $form->textFieldControlGroup($model, 'tarif_dasar', array('span' => 3, 'readonly' => 'readonly', 'style' => "text-align: right;")); ?>
+
+            <?php echo $form->textFieldControlGroup($model, 'dasar_pengenaan', array('span' => 3, 'readonly' => 'readonly', 'style' => "text-align: right;")); ?>
 
             <?php echo $form->textFieldControlGroup($model, 'tarif_persen', array('span' => 1, 'readonly' => 'readonly')); ?>
 
@@ -149,8 +151,9 @@ $this->menu = array(
     function getNamaRekening(id) {
         jQuery.ajax({'type': 'POST', 'url': '<?php echo $this->createUrl('spt/jsonGetKodeRekening'); ?>/?id=' + id, 'cache': false, dataType: 'json', 'data': null}).done(function (data) {
             jQuery("#Spt_nama_kode_rekening").val(data.nama);
+            jQuery("#Spt_tarif_dasar").val(data.tarif_dasar);
             jQuery("#Spt_tarif_persen").val(data.tarif_persen);
-            getValueRestoran();
+            getValueElectric();
         });
     }
     function fillData(id) {
@@ -167,13 +170,14 @@ $this->menu = array(
     jQuery('#Spt_nilai').keyup(function (e) {
         clearInterval(timer);  //clear any interval on key up
         timer = setTimeout(function () { //then give it a second to see if the user is finished
-            getValueRestoran();
+            getValueElectric();
         }, 1000);
     });
-    function getValueRestoran() {
-        jQuery.ajax({'type': 'POST', 'url': '<?php echo $this->createUrl('spt/ajaxGetValueRestoran'); ?>', 'cache': false, dataType: 'json', 'data': $('#spt-form').serialize()}).done(function (data) {
+    function getValueElectric() {
+        jQuery.ajax({'type': 'POST', 'url': '<?php echo $this->createUrl('spt/ajaxGetValueElectric'); ?>', 'cache': false, dataType: 'json', 'data': $('#spt-form').serialize()}).done(function (data) {
             jQuery("#Spt_pajak").val(data.pajak);
             jQuery("#Spt_nilai").val(data.nilai);
+            jQuery("#Spt_dasar_pengenaan").val(data.dasar_pengenaan);
         });
     }
 </script>

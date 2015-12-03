@@ -21,6 +21,8 @@
  */
 class SptItem extends CActiveRecord {
 
+    public $dasar_pengenaan;
+
     /**
      * @return string the associated database table name
      */
@@ -41,7 +43,7 @@ class SptItem extends CActiveRecord {
             array('lokasi', 'length', 'max' => 255),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, pajak, nilai, tarif_dasar, tarif_persen, lokasi, kode_rekening_id, spt_id, created, updated', 'safe', 'on' => 'search'),
+            array('id, pajak, nilai, tarif_dasar, tarif_persen, lokasi, kode_rekening_id, spt_id, created, updated, dasar_pengenaan', 'safe', 'on' => 'search'),
         );
     }
 
@@ -70,6 +72,7 @@ class SptItem extends CActiveRecord {
             'lokasi' => Yii::t('trans', 'Lokasi'),
             'kode_rekening_id' => Yii::t('trans', 'Kode Rekening'),
             'spt_id' => Yii::t('trans', 'Spt'),
+            'dasar_pengenaan' => Yii::t('trans', 'Dasar Pengenaan'),
             'created' => Yii::t('trans', 'Created'),
             'updated' => Yii::t('trans', 'Updated'),
         );

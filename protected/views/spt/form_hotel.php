@@ -52,6 +52,10 @@ $this->menu = array(
             ?>  
 
             <?php
+            if (!empty($model->wajib_pajak_id)) {
+                $wp = WajibPajak::model()->findByPk($model->wajib_pajak_id);
+                $model->npwpd = $wp->npwpd . ' ' . $wp->nama;
+            }
             echo $form->select2ActiveTextFieldControlGroup($model, 'npwpd', array(
                 'style' => 'width:300px',
                 'onChange' => 'fillData($(this).val());',
@@ -71,7 +75,7 @@ $this->menu = array(
                         }',
                         'results' => 'js:function(data,page) { var more = (page * 10) < data.total; return {results: data, more:more }; }',
                     ),
-                    'initSelection' => $model->isNewRecord ? null : 'js:function(element,callback){
+                    'initSelection' => empty($model->wajib_pajak_id) ? null : 'js:function(element,callback){
                         callback({id:' . $model->wajib_pajak_id . ',text:"' . $model->npwpd . '"});
                     }',
                 )

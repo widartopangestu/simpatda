@@ -45,6 +45,7 @@ class Spt extends CActiveRecord {
     public $kabupaten;
     public $nama_kode_rekening;
     public $wp_search;
+    public $dasar_pengenaan;
 
     const PUNGUTAN_SELF = 1;
     const PUNGUTAN_OFFICE = 2;
@@ -57,7 +58,7 @@ class Spt extends CActiveRecord {
     const PARENT_GALIAN = 444; //58
     const PARENT_AIR = 77;
     const PARENT_WALET = 329;
-    const PARENT_RETRIBUSI = 392;
+    const PARENT_RETRIBUSI = 124;//392;
     const PARENT_BPHTB = 256;
     const JENIS_PAJAK_HOTEL = 1;
     const JENIS_PAJAK_RESTORAN = 2;
@@ -90,7 +91,7 @@ class Spt extends CActiveRecord {
             array('uraian, nama, alamat, kabupaten, kecamatan, kelurahan, nama_kode_rekening', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, periode, nomor, periode_awal, periode_akhir, pajak, nilai, jenis_pemungutan, tarif_dasar, tarif_persen, tanggal_proses, tanggal_entry, uraian, jenis_pajak, wajib_pajak_id, kode_rekening_id, jenis_surat_id, updated, created, wp_search', 'safe', 'on' => 'search'),
+            array('id, periode, nomor, periode_awal, periode_akhir, pajak, nilai, jenis_pemungutan, tarif_dasar, tarif_persen, tanggal_proses, tanggal_entry, uraian, jenis_pajak, wajib_pajak_id, kode_rekening_id, jenis_surat_id, updated, created, wp_search, dasar_pengenaan', 'safe', 'on' => 'search'),
         );
     }
 
@@ -125,7 +126,7 @@ class Spt extends CActiveRecord {
             'periode_awal' => Yii::t('trans', 'Periode Awal'),
             'periode_akhir' => Yii::t('trans', 'Periode Akhir'),
             'pajak' => Yii::t('trans', 'Pajak'),
-            'nilai' => Yii::t('trans', 'Nilai'),
+            'nilai' => Yii::t('trans', 'Dasar Pengenaan'),
             'jenis_pemungutan' => Yii::t('trans', 'Jenis Pemungutan'),
             'tarif_dasar' => Yii::t('trans', 'Tarif Dasar'),
             'tarif_persen' => Yii::t('trans', 'Tarif Persen'),
@@ -146,6 +147,7 @@ class Spt extends CActiveRecord {
             'kelurahan' => Yii::t('trans', 'Kelurahan'),
             'kabupaten' => Yii::t('trans', 'Kabupaten'),
             'nama_kode_rekening' => Yii::t('trans', 'Nama Rekening'),
+            'dasar_pengenaan' => Yii::t('trans', 'Dasar Pengenaan'),
         );
     }
 

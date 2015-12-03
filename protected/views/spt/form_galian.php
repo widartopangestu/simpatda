@@ -6,12 +6,12 @@
 <?php
 $this->breadcrumbs = array(
     Yii::t('trans', 'SPTPD') => array('index'),
-    Yii::t('trans', 'Create') . ' ' . Yii::t('trans', 'SPTPD Pajak Hiburan'),
+    Yii::t('trans', 'Create') . ' ' . Yii::t('trans', 'SPTPD Mineral Bkn. Logam & Batuan'),
 );
-$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Create') . ' ' . Yii::t('trans', 'SPTPD Pajak Hiburan');
-$this->modulTitle = Yii::t('trans', 'Create') . ' ' . Yii::t('trans', 'SPTPD Pajak Hiburan');
+$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Create') . ' ' . Yii::t('trans', 'SPTPD Mineral Bkn. Logam & Batuan');
+$this->modulTitle = Yii::t('trans', 'Create') . ' ' . Yii::t('trans', 'SPTPD Mineral Bkn. Logam & Batuan');
 $this->menu = array(
-    array('label' => Yii::t('trans', 'Manage'), 'url' => array('index', 'jenis' => Spt::JENIS_PAJAK_HIBURAN), 'icon' => 'list-alt', 'visible' => (Yii::app()->util->is_authorized('spt.index')) ? true : false),
+    array('label' => Yii::t('trans', 'Manage'), 'url' => array('index', 'jenis' => Spt::JENIS_PAJAK_GALIAN), 'icon' => 'list-alt', 'visible' => (Yii::app()->util->is_authorized('spt.index')) ? true : false),
 );
 ?>
 <div class="form">
@@ -109,11 +109,13 @@ $this->menu = array(
             )));
             ?>  
 
+            <?php echo $form->textFieldControlGroup($model_galian, 'nama', array('span' => 3)); ?>
+            <?php echo $form->textFieldControlGroup($model_galian, 'no_kontrak', array('span' => 3)); ?>
+            <?php echo $form->maskMoneyControlGroup($model_galian, 'jml_rab', array('span' => 3, 'style' => "text-align: right")); ?>
+
             <?php echo $form->textAreaControlGroup($model, 'uraian', array('rows' => 3, 'span' => 4)); ?>
 
-            <?php // echo $form->textFieldControlGroup($model, 'jenis_pajak', array('span' => 3)); ?>
-
-            <?php // echo $form->dropdownListControlGroup($model, 'kode_rekening_id', KodeRekening::model()->getParentTreeOptions(Spt::PARENT_HIBURAN), array('span' => 3, 'empty' => Yii::t('trans', '-- Pilih Kode Rekening --'), 'onchange' => 'getNamaRekening($(this).val())')); ?>
+            <?php // echo $form->dropdownListControlGroup($model, 'kode_rekening_id', KodeRekening::model()->getParentTreeOptions(Spt::PARENT_GALIAN), array('span' => 3, 'empty' => Yii::t('trans', '-- Pilih Kode Rekening --'), 'onchange' => 'getNamaRekening($(this).val())')); ?>
 
             <?php // echo $form->textFieldControlGroup($model, 'nama_kode_rekening', array('span' => 3, 'maxlength' => 255, 'readonly' => true)); ?>
 
@@ -125,14 +127,16 @@ $this->menu = array(
 
         </div>
         <div class="span-12">
-            <fieldset><legend><?php echo Yii::t('trans', 'Detail Hiburan'); ?></legend>
+            <fieldset><legend><?php echo Yii::t('trans', 'Detail Galian'); ?></legend>
                 <table class="table table-striped table-bordered items-list">
                     <thead>
                         <tr>
                             <th><?php echo Yii::t('trans', 'Kode Rekening'); ?></th>
-                            <th><?php echo Yii::t('trans', 'Dasar Pengenaan (Rp.)'); ?><br/>(a)</th>
-                            <th><?php echo Yii::t('trans', 'Tarip (%)'); ?><br/>(b)</th>
-                            <th><?php echo Yii::t('trans', 'Pajak (Rp.)'); ?><br/>(c = (a x b))</th>
+                            <th><?php echo Yii::t('trans', 'Jumlah (M<sup>3</sup>)'); ?><br/>(a)</th>
+                            <th><?php echo Yii::t('trans', 'Tarip Dasar'); ?><br/>(b)</th>
+                            <th><?php echo Yii::t('trans', 'Dasar Pengenaan (Rp.)'); ?><br/>(c = (a x b))</th>
+                            <th><?php echo Yii::t('trans', 'Tarip (%)'); ?><br/>(d)</th>
+                            <th><?php echo Yii::t('trans', 'Pajak (Rp.)'); ?><br/>(c x d)</th>
                             <th>#</th>
                         </tr>
                     </thead>
@@ -141,36 +145,40 @@ $this->menu = array(
                             <tr class="template" style="display: none;">
                                 <td>
                                     <input type="hidden" class="items-id" name="items[x][items_id]" value="" id="items_xxitems.id" />
-                                    <select class="span5 required" name="items[x][kode_rekening_id]" id="items_xxkode_rekening_id" onchange="getNamaRekening($(this).val(), $(this).attr('id').split('x'));">
+                                    <select class="span3 required" name="items[x][kode_rekening_id]" id="items_xxkode_rekening_id" onchange="getNamaRekening($(this).val(), $(this).attr('id').split('x'));">
                                         <?php
                                         echo '<option value="">' . Yii::t('trans', '-- Pilih Kode Rekening --') . '</option>';
-                                        foreach (KodeRekening::model()->getParentTreeOptions(Spt::PARENT_HIBURAN) as $id => $val) {
+                                        foreach (KodeRekening::model()->getParentTreeOptions(Spt::PARENT_GALIAN) as $id => $val) {
                                             echo '<option value=' . $id . '>' . $val . '</option>';
                                         }
                                         ?>
                                     </select>
                                 </td>
-                                <td><input name="items[x][nilai]" id="items_xxnilai" class="span3 required" type="text" onkeyup="getValueHiburan();" style="text-align: right;"></td>
+                                <td><input name="items[x][nilai]" id="items_xxnilai" class="span1 required" type="text" onkeyup="getValueGalian();" style="text-align: right;"></td>
+                                <td><input readonly="readonly" name="items[x][tarif_dasar]" id="items_xxtarif_dasar" class="span2" type="text" style="text-align: right;"></td>
+                                <td><input readonly="readonly" name="items[x][dasar_pengenaan]" id="items_xxdasar_pengenaan" class="span2" type="text" style="text-align: right;"></td>
                                 <td><input readonly="readonly" name="items[x][tarif_persen]" id="items_xxtarif_persen" class="span1" type="text" style="text-align: right;"></td>
-                                <td><input readonly="readonly" name="items[x][pajak]" id="items_xxpajak" class="span3" type="text" style="text-align: right;"></td>
+                                <td><input readonly="readonly" name="items[x][pajak]" id="items_xxpajak" class="span2" type="text" style="text-align: right;"></td>
                                 <td><a href="#" class="delete remove-items" rel="tooltip" data-original-title="<?php echo Yii::t('trans', 'Delete'); ?>"><i class="icon-trash"></i></a></td>
                             </tr>
                         <?php else : ?>         
                             <tr class="template" style="display: none;">
                                 <td>
                                     <input type="hidden" class="items-id" name="items[x][items_id]" value="" id="items_xxitems.id" />
-                                    <select class="span5 required" name="items[x][kode_rekening_id]" id="items_xxkode_rekening_id" onchange="getNamaRekening($(this).val(), $(this).attr('id').split('x'));">
+                                    <select class="span3 required" name="items[x][kode_rekening_id]" id="items_xxkode_rekening_id" onchange="getNamaRekening($(this).val(), $(this).attr('id').split('x'));">
                                         <?php
                                         echo '<option value="">' . Yii::t('trans', '-- Pilih Kode Rekening --') . '</option>';
-                                        foreach (KodeRekening::model()->getParentTreeOptions(Spt::PARENT_HIBURAN) as $id => $val) {
+                                        foreach (KodeRekening::model()->getParentTreeOptions(Spt::PARENT_GALIAN) as $id => $val) {
                                             echo '<option value=' . $id . '>' . $val . '</option>';
                                         }
                                         ?>
                                     </select>
                                 </td>
-                                <td><input name="items[x][nilai]" id="items_xxnilai" class="span3 required" type="text" onkeyup="getValueHiburan();" style="text-align: right;"></td>
+                                <td><input name="items[x][nilai]" id="items_xxnilai" class="span1 required" type="text" onkeyup="getValueGalian();" style="text-align: right;"></td>
+                                <td><input readonly="readonly" name="items[x][tarif_dasar]" id="items_xxtarif_dasar" class="span2" type="text" style="text-align: right;"></td>
+                                <td><input readonly="readonly" name="items[x][dasar_pengenaan]" id="items_xxdasar_pengenaan" class="span2" type="text" style="text-align: right;"></td>
                                 <td><input readonly="readonly" name="items[x][tarif_persen]" id="items_xxtarif_persen" class="span1" type="text" style="text-align: right;"></td>
-                                <td><input readonly="readonly" name="items[x][pajak]" id="items_xxpajak" class="span3" type="text" style="text-align: right;"></td>
+                                <td><input readonly="readonly" name="items[x][pajak]" id="items_xxpajak" class="span2" type="text" style="text-align: right;"></td>
                                 <td><a href="#" class="delete remove-items" rel="tooltip" data-original-title="<?php echo Yii::t('trans', 'Delete'); ?>"><i class="icon-trash"></i></a></td>
                             </tr>
                             <?php
@@ -180,19 +188,21 @@ $this->menu = array(
                                 <tr class="new">
                                     <td>
                                         <input type="hidden" class="items-id" name="items[<?php echo $index; ?>][items_id]" value="<?php echo $item->id; ?>" id="items_<?php echo $index; ?>xitems.id" />
-                                        <select class="span5 required" name="items[<?php echo $index; ?>][kode_rekening_id]" id="items_<?php echo $index; ?>xkode_rekening_id" onchange="getNamaRekening($(this).val(), $(this).attr('id').split('x'));">
+                                        <select class="span3 required" name="items[<?php echo $index; ?>][kode_rekening_id]" id="items_<?php echo $index; ?>xkode_rekening_id" onchange="getNamaRekening($(this).val(), $(this).attr('id').split('x'));">
                                             <?php
                                             echo '<option value="">' . Yii::t('trans', '-- Pilih Kode Rekening --') . '</option>';
-                                            foreach (KodeRekening::model()->getParentTreeOptions(Spt::PARENT_HIBURAN) as $id => $val) {
+                                            foreach (KodeRekening::model()->getParentTreeOptions(Spt::PARENT_GALIAN) as $id => $val) {
                                                 $selected = $item->kode_rekening_id == $id ? 'selected="selected"' : '';
                                                 echo '<option value=' . $id . ' ' . $selected . '>' . $val . '</option>';
                                             }
                                             ?>
                                         </select>
                                     </td>
-                                    <td><input value="<?php echo $item->nilai; ?>" name="items[<?php echo $index; ?>][nilai]" id="items_<?php echo $index; ?>xnilai" class="span3 required" type="text" onkeyup="getValueHiburan();" style="text-align: right;"></td>
+                                    <td><input value="<?php echo $item->nilai; ?>" name="items[<?php echo $index; ?>][nilai]" id="items_<?php echo $index; ?>xnilai" class="span1 required" type="text" onkeyup="getValueGalian();" style="text-align: right;"></td>
+                                    <td><input value="<?php echo number_format($item->tarif_dasar, Yii::app()->params['currency_precision']); ?>" readonly="readonly" name="items[<?php echo $index; ?>][tarif_dasar]" id="items_<?php echo $index; ?>xtarif_dasar" class="span2" type="text" style="text-align: right;"></td>
+                                    <td><input value="<?php echo $item->dasar_pengenaan; ?>" readonly="readonly" name="items[<?php echo $index; ?>][dasar_pengenaan]" id="items_<?php echo $index; ?>xdasar_pengenaan" class="span2" type="text" style="text-align: right;"></td>
                                     <td><input value="<?php echo $item->tarif_persen; ?>" readonly="readonly" name="items[<?php echo $index; ?>][tarif_persen]" id="items_<?php echo $index; ?>xtarif_persen" class="span1" type="text" style="text-align: right;"></td>
-                                    <td><input value="<?php echo $item->pajak; ?>" readonly="readonly" name="items[<?php echo $index; ?>][pajak]" id="items_<?php echo $index; ?>xpajak" class="span3" type="text" style="text-align: right;"></td>
+                                    <td><input value="<?php echo $item->pajak; ?>" readonly="readonly" name="items[<?php echo $index; ?>][pajak]" id="items_<?php echo $index; ?>xpajak" class="span2" type="text" style="text-align: right;"></td>
                                     <td><a href="#" class="delete remove-items" rel="tooltip" data-original-title="<?php echo Yii::t('trans', 'Delete'); ?>" id="<?php echo $item->id; ?>"><i class="icon-trash"></i></a></td>
                                 </tr>
                                 <?php
@@ -201,11 +211,11 @@ $this->menu = array(
                             ?>
                         <?php endif; ?>
                         <tr>
-                            <td colspan="2"><a href="#" class="btn btn-primary add-items">
+                            <td colspan="4"><a href="#" class="btn btn-primary add-items">
                                     <?php echo Yii::t('trans', 'Add Item'); ?>
                                 </a></td>
                             <td><?php echo Yii::t('trans', 'Jumlah'); ?></td>
-                            <td><?php echo $form->textField($model, 'pajak', array('span' => 3, 'readonly' => 'readonly', 'style' => "text-align: right;font-size: 20px;font-weight: bold;")); ?></td>
+                            <td><?php echo $form->textField($model, 'pajak', array('span' => 2, 'readonly' => 'readonly', 'style' => "text-align: right;font-size: 20px;font-weight: bold;")); ?></td>
                             <td></td>
                         </tr>
                     </tbody>
@@ -229,14 +239,15 @@ $this->menu = array(
 <script type="text/javascript">
     var timer;
     jQuery(document).ready(function () {
-        getValueHiburan();
+        getValueGalian();
         if (jQuery("#Spt_wajib_pajak_id").val())
             fillData(jQuery("#Spt_wajib_pajak_id").val());
     });
     function getNamaRekening(id, idx) {
         jQuery.ajax({'type': 'POST', 'url': '<?php echo $this->createUrl('spt/jsonGetKodeRekening'); ?>/?id=' + id, 'cache': false, dataType: 'json', 'data': null}).done(function (data) {
             jQuery("#" + idx[0] + "xtarif_persen").val(data.tarif_persen);
-            getValueHiburan();
+            jQuery("#" + idx[0] + "xtarif_dasar").val(data.tarif_dasar);
+            getValueGalian();
         });
     }
     function fillData(id) {
@@ -250,10 +261,10 @@ $this->menu = array(
             console.log(data);
         });
     }
-    function getValueHiburan() {
+    function getValueGalian() {
         clearInterval(timer);  //clear any interval on key up
         timer = setTimeout(function () { //then give it a second to see if the user is finished
-            jQuery.ajax({'type': 'POST', 'url': '<?php echo $this->createUrl('spt/ajaxGetValueHiburan'); ?>', 'cache': false, dataType: 'json', 'data': $('#spt-form').serialize()}).done(function (data) {
+            jQuery.ajax({'type': 'POST', 'url': '<?php echo $this->createUrl('spt/ajaxGetValueGalian'); ?>', 'cache': false, dataType: 'json', 'data': $('#spt-form').serialize()}).done(function (data) {
                 $.each(data, function (key, value) {
                     jQuery("#" + key).val(value);
                 });
@@ -268,7 +279,7 @@ $this->menu = array(
             e.preventDefault();
             var row = $(this).closest("tr");
             row.find("input[type='hidden'][value=false]").val(true);
-            (row.attr('class') == 'new') ? row.remove() : row.hide();            
+            (row.attr('class') == 'new') ? row.remove() : row.hide();
             if ($(this).attr('id') !== undefined) {
                 if (deletedId == '')
                     deletedId += $(this).attr('id');
@@ -276,7 +287,7 @@ $this->menu = array(
                     deletedId += ',' + $(this).attr('id');
                 jQuery("#deletedItem").val(deletedId);
             }
-            getValueHiburan();
+            getValueGalian();
         });
 
         $(".add-items").on("click", function (e) {
