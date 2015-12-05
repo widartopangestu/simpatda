@@ -6,10 +6,10 @@
 <?php
 $this->breadcrumbs = array(
     Yii::t('trans', 'Penetapan') => array('index'),
-    Yii::t('trans', 'Form Penetapan Pajak/Retribusi'),
+    Yii::t('trans', 'Form Penetapan Pajak'),
 );
-$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Form Penetapan Pajak/Retribusi');
-$this->modulTitle = Yii::t('trans', 'Form Penetapan Pajak/Retribusi');
+$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Form Penetapan Pajak');
+$this->modulTitle = Yii::t('trans', 'Form Penetapan Pajak');
 $this->menu = array(
     array('label' => Yii::t('trans', 'Manage'), 'url' => array('index'), 'icon' => 'list-alt', 'visible' => (Yii::app()->util->is_authorized('penetapan.index')) ? true : false),
 );

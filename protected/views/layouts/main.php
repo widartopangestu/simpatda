@@ -75,21 +75,21 @@
                             'items' => array(
                                 array('label' => '<span>' . Yii::t('trans', 'Dashboard') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => array('/site/index')),
                                 array('label' => '<span>' . Yii::t('trans', 'Pendaftaran') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => '#', 'items' => array(
-                                        array('label' => Yii::t('trans', 'WP/WR Pribadi'), 'visible' => Yii::app()->util->is_authorized('wajibPajak.create'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/wajibPajak/create')),
-                                        array('label' => Yii::t('trans', 'WP/WR Badan Usaha'), 'visible' => Yii::app()->util->is_authorized('wajibPajak.create'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/wajibPajak/create?type=2')),
+                                        array('label' => Yii::t('trans', 'WP Pribadi'), 'visible' => Yii::app()->util->is_authorized('wajibPajak.create'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/wajibPajak/create')),
+                                        array('label' => Yii::t('trans', 'WP Badan Usaha'), 'visible' => Yii::app()->util->is_authorized('wajibPajak.create'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/wajibPajak/create?type=2')),
                                         TbHtml::menuDivider(),
                                         array('label' => Yii::t('trans', 'Rekam Data Objek Pajak & Retribusi'), 'visible' => (Yii::app()->util->is_authorized('spt.createHotel') || Yii::app()->util->is_authorized('spt.createRestoran') || Yii::app()->util->is_authorized('spt.createHiburan') || Yii::app()->util->is_authorized('spt.createReklame') || Yii::app()->util->is_authorized('spt.createElectric') || Yii::app()->util->is_authorized('spt.createGalian') || Yii::app()->util->is_authorized('spt.createAir') || Yii::app()->util->is_authorized('spt.createWalet') || Yii::app()->util->is_authorized('spt.createRetribusi') || Yii::app()->util->is_authorized('spt.createBphtb') || Yii::app()->util->is_authorized('spt.createReklameBaru')), 'icon' => TbHtml::ICON_LIST, 'url' => array('/spt/menu')),
                                         TbHtml::menuDivider(),
-                                        array('label' => Yii::t('trans', 'Penutupan WP/WR'), 'visible' => Yii::app()->util->is_authorized('wajibPajak.tutup'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/wajibPajak/tutup')),
+                                        array('label' => Yii::t('trans', 'Penutupan WP'), 'visible' => Yii::app()->util->is_authorized('wajibPajak.tutup'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/wajibPajak/tutup')),
                                     )
                                 ),
                                 array('label' => '<span>' . Yii::t('trans', 'Penetapan') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => '#', 'items' => array(
-                                        array('label' => Yii::t('trans', 'Proses Penetapan Pajak/Retribusi'), 'visible' => Yii::app()->util->is_authorized('penetapan.pajak'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/penetapan/pajak')),
+                                        array('label' => Yii::t('trans', 'Proses Penetapan Pajak'), 'visible' => Yii::app()->util->is_authorized('penetapan.pajak'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/penetapan/pajak')),
                                         array('label' => Yii::t('trans', 'Proses Penetapan Sanksi/Bunga'), 'visible' => Yii::app()->util->is_authorized('penetapan.pajak'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/penetapan/sanksi')),
                                     )
                                 ),
                                 array('label' => '<span>' . Yii::t('trans', 'BKP') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => '#', 'items' => array(
-                                        array('label' => Yii::t('trans', 'Rekam Penerimaan Pajak/Retribusi'), 'visible' => Yii::app()->util->is_authorized('setoranPajak.create'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/setoranPajak/create')),
+                                        array('label' => Yii::t('trans', 'Rekam Penerimaan Pajak'), 'visible' => Yii::app()->util->is_authorized('setoranPajak.create'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/setoranPajak/create')),
                                     )
                                 ),
                                 array('label' => '<span>' . Yii::t('trans', 'Pembukuan Pelaporan') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => '#', 'items' => array(
