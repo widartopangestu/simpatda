@@ -214,19 +214,6 @@ class SptController extends Controller {
         echo CJSON::encode($rest);
     }
 
-    public function actionAjaxGetValueBphtb($id = null) {
-        $model = new Spt;
-        if (isset($_POST['Spt'])) {
-            $model->attributes = $_POST['Spt'];
-            $model->nilai = ($model->nilai != '') ? doubleval(str_replace(',', '', $model->nilai)) : 0;
-            $model->pajak = $model->nilai * ($model->tarif_persen / 100);
-        }
-        echo CJSON::encode(array(
-            'pajak' => number_format($model->pajak, Yii::app()->params['currency_precision']),
-            'nilai' => number_format($model->nilai, Yii::app()->params['currency_precision'])
-        ));
-    }
-
     /**
      * Creates a new model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -234,7 +221,6 @@ class SptController extends Controller {
     public function actionCreateHotel() {
         $model = new Spt;
         $model->nomor = 'AUTO';
-        $model->jenis_surat_id = Spt::JENIS_SURAT;
         $model->jenis_pajak = Spt::JENIS_PAJAK_HOTEL;
         $model->periode = date('Y');
         $model->tanggal_proses = date('d/m/Y');
@@ -347,7 +333,6 @@ class SptController extends Controller {
     public function actionCreateRestoran() {
         $model = new Spt;
         $model->nomor = 'AUTO';
-        $model->jenis_surat_id = Spt::JENIS_SURAT;
         $model->jenis_pajak = Spt::JENIS_PAJAK_RESTORAN;
         $model->periode = date('Y');
         $model->tanggal_proses = date('d/m/Y');
@@ -461,7 +446,6 @@ class SptController extends Controller {
     public function actionCreateHiburan() {
         $model = new Spt;
         $model->nomor = 'AUTO';
-        $model->jenis_surat_id = Spt::JENIS_SURAT;
         $model->jenis_pajak = Spt::JENIS_PAJAK_HIBURAN;
         $model->periode = date('Y');
         $model->tanggal_proses = date('d/m/Y');
@@ -590,7 +574,6 @@ class SptController extends Controller {
     public function actionCreateElectric() {
         $model = new Spt;
         $model->nomor = 'AUTO';
-        $model->jenis_surat_id = Spt::JENIS_SURAT;
         $model->jenis_pajak = Spt::JENIS_PAJAK_ELECTRIC;
         $model->periode = date('Y');
         $model->tanggal_proses = date('d/m/Y');
@@ -708,7 +691,6 @@ class SptController extends Controller {
         $model = new Spt;
         $model_galian = new SptGalian;
         $model->nomor = 'AUTO';
-        $model->jenis_surat_id = Spt::JENIS_SURAT;
         $model->jenis_pajak = Spt::JENIS_PAJAK_GALIAN;
         $model->periode = date('Y');
         $model->tanggal_proses = date('d/m/Y');
@@ -847,7 +829,6 @@ class SptController extends Controller {
     public function actionCreateAir() {
         $model = new Spt;
         $model->nomor = 'AUTO';
-        $model->jenis_surat_id = Spt::JENIS_SURAT;
         $model->jenis_pajak = Spt::JENIS_PAJAK_AIR;
         $model->periode = date('Y');
         $model->tanggal_proses = date('d/m/Y');
@@ -976,7 +957,6 @@ class SptController extends Controller {
     public function actionCreateWalet() {
         $model = new Spt;
         $model->nomor = 'AUTO';
-        $model->jenis_surat_id = Spt::JENIS_SURAT;
         $model->jenis_pajak = Spt::JENIS_PAJAK_WALET;
         $model->periode = date('Y');
         $model->tanggal_proses = date('d/m/Y');
@@ -1103,7 +1083,6 @@ class SptController extends Controller {
     public function actionCreateRetribusi() {
         $model = new Spt;
         $model->nomor = 'AUTO';
-        $model->jenis_surat_id = Spt::JENIS_SURAT;
         $model->jenis_pajak = Spt::JENIS_PAJAK_RETRIBUSI;
         $model->periode = date('Y');
         $model->tanggal_proses = date('d/m/Y');
@@ -1219,22 +1198,6 @@ class SptController extends Controller {
         $this->render('form_retribusi', array(
             'model' => $model,
         ));
-    }
-
-    public function actionCreateBphtb() {
-        
-    }
-
-    public function actionUpdateBphtb($id) {
-        
-    }
-
-    public function actionCreateReklameBaru() {
-        
-    }
-
-    public function actionUpdateReklameBaru($id) {
-        
     }
 
     public function actionJsonGetKodeRekening($id = null) {

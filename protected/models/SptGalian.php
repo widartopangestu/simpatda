@@ -86,8 +86,6 @@ class SptGalian extends CActiveRecord {
         $criteria->compare('nama', $this->nama, true);
         $criteria->compare('jml_rab', $this->jml_rab);
         $criteria->compare('no_kontrak', $this->no_kontrak, true);
-        $criteria->compare('created', $this->created, true);
-        $criteria->compare('updated', $this->updated, true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

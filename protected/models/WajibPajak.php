@@ -200,8 +200,6 @@ class WajibPajak extends CActiveRecord {
         $criteria->compare('kecamatan_id', $this->kecamatan_id);
         $criteria->compare('bidang_usaha_id', $this->bidang_usaha_id);
         $criteria->compare('warga_negara', $this->warga_negara, true);
-        $criteria->compare('created', $this->created, true);
-        $criteria->compare('updated', $this->updated, true);
         $criteria->compare('instansi_nama', $this->instansi_nama, true);
         $criteria->compare('instansi_alamat', $this->instansi_alamat, true);
         $criteria->compare('nomer_berita_acara', $this->nomer_berita_acara, true);

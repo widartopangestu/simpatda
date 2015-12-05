@@ -145,8 +145,6 @@ class SptBphtb extends CActiveRecord {
         $criteria->compare('pbb_alamat', $this->pbb_alamat, true);
         $criteria->compare('pbb_nama_wp', $this->pbb_nama_wp, true);
         $criteria->compare('tindak_lanjut', $this->tindak_lanjut, true);
-        $criteria->compare('created', $this->created, true);
-        $criteria->compare('updated', $this->updated, true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

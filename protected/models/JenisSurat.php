@@ -89,8 +89,6 @@ class JenisSurat extends CActiveRecord {
         $criteria->compare('singkatan', $this->singkatan, true);
         $criteria->compare('is_official', $this->is_official);
         $criteria->compare('is_self', $this->is_self);
-        $criteria->compare('created', $this->created, true);
-        $criteria->compare('updated', $this->updated, true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

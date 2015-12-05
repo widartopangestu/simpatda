@@ -49,7 +49,6 @@ class Spt extends CActiveRecord {
 
     const PUNGUTAN_SELF = 1;
     const PUNGUTAN_OFFICE = 2;
-    const JENIS_SURAT = 8;
     const PARENT_HOTEL = 2;
     const PARENT_RESTORAN = 7;
     const PARENT_HIBURAN = 15;
@@ -58,7 +57,7 @@ class Spt extends CActiveRecord {
     const PARENT_GALIAN = 444; //58
     const PARENT_AIR = 77;
     const PARENT_WALET = 329;
-    const PARENT_RETRIBUSI = 124;//392;
+    const PARENT_RETRIBUSI = 124; //392;
     const PARENT_BPHTB = 256;
     const JENIS_PAJAK_HOTEL = 1;
     const JENIS_PAJAK_RESTORAN = 2;
@@ -187,8 +186,6 @@ class Spt extends CActiveRecord {
         $criteria->compare('wajibpajak.nama', $this->wp_search, true);
         $criteria->compare('kode_rekening_id', $this->kode_rekening_id);
         $criteria->compare('jenis_surat_id', $this->jenis_surat_id);
-        $criteria->compare('updated', $this->updated, true);
-        $criteria->compare('created', $this->created, true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
@@ -274,6 +271,14 @@ class Spt extends CActiveRecord {
                 $new_code = $this->preventUniqueKode($result['maxnomor'] + 1);
                 $this->nomor = $new_code;
             }
+        }
+        if ($this->jenis_pajak == self::JENIS_PAJAK_RETRIBUSI) {
+            $this->jenis_surat_id = 9;
+        } else {
+            if ($this->jenis_pemungutan == self::PUNGUTAN_SELF)
+                $this->jenis_surat_id = 8;
+            else
+                $this->jenis_surat_id = 1;
         }
         return parent::beforeSave();
     }

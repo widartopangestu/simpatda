@@ -116,8 +116,6 @@ class SptReklame extends CActiveRecord {
         $criteria->compare('njopr', $this->njopr);
         $criteria->compare('nspr', $this->nspr);
         $criteria->compare('pajak', $this->pajak);
-        $criteria->compare('created', $this->created, true);
-        $criteria->compare('updated', $this->updated, true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

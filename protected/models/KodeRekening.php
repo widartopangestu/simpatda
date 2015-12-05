@@ -93,8 +93,6 @@ class KodeRekening extends CActiveRecord {
         $criteria->compare('nama', $this->nama, true);
         $criteria->compare('tarif_persen', $this->tarif_persen);
         $criteria->compare('tarif_dasar', $this->tarif_dasar);
-        $criteria->compare('created', $this->created, true);
-        $criteria->compare('updated', $this->updated, true);
         $criteria->compare('parent_id', $this->parent_id);
 
         return new CActiveDataProvider($this, array(

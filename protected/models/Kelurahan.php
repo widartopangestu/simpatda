@@ -87,8 +87,6 @@ class Kelurahan extends CActiveRecord {
         $criteria->compare('id', $this->id);
         $criteria->compare('kode', $this->kode, true);
         $criteria->compare('nama', $this->nama, true);
-        $criteria->compare('created', $this->created, true);
-        $criteria->compare('updated', $this->updated, true);
         $criteria->compare('kecamatan_id', $this->kecamatan_id);
 
         return new CActiveDataProvider($this, array(

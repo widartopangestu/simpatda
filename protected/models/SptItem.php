@@ -103,8 +103,6 @@ class SptItem extends CActiveRecord {
         $criteria->compare('lokasi', $this->lokasi, true);
         $criteria->compare('kode_rekening_id', $this->kode_rekening_id);
         $criteria->compare('spt_id', $this->spt_id, true);
-        $criteria->compare('created', $this->created, true);
-        $criteria->compare('updated', $this->updated, true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

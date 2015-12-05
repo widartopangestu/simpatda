@@ -32,7 +32,7 @@
         <?php
         if (isset($this->mainNav)):
             $this->widget('bootstrap.widgets.TbNavbar', array(
-                'brandLabel' => Yii::t('trans', Yii::app()->name) . ' - ' . Yii::app()->params['nama_perusahaan'],
+                'brandLabel' => '<img class="logo" src="' . Yii::app()->request->baseUrl . '/images/logo.png"> ' . Yii::t('trans', Yii::app()->name) . ' - ' . Yii::app()->params['nama_perusahaan'],
                 'collapse' => true,
                 'items' => array(
                     array(

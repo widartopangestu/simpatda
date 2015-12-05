@@ -20,8 +20,8 @@ $this->breadcrumbs = array(
                     <?php if (Yii::app()->util->is_authorized('spt.createHotel')): ?>
                         <a href="<?php echo Yii::app()->request->baseUrl ?>/spt/createHotel" class="shortcut"><img src="<?php echo Yii::app()->baseUrl; ?>/images/shortcut-icons/icon-48-lhp.png" /><span class="shortcut-label"><?php echo Yii::t('trans', 'LHP'); ?></span> </a>
                     <?php endif; ?>
-                    <?php if (Yii::app()->util->is_authorized('spt.createHotel')): ?>
-                        <a href="<?php echo Yii::app()->request->baseUrl ?>/spt/createHotel" class="shortcut"><img src="<?php echo Yii::app()->baseUrl; ?>/images/shortcut-icons/icon-48-penetapan.png" /><span class="shortcut-label"><?php echo Yii::t('trans', 'Penetapan Pajak/Retribusi'); ?></span> </a>
+                    <?php if (Yii::app()->util->is_authorized('penetapan.pajak')): ?>
+                        <a href="<?php echo Yii::app()->request->baseUrl ?>/penetapan/pajak" class="shortcut"><img src="<?php echo Yii::app()->baseUrl; ?>/images/shortcut-icons/icon-48-penetapan.png" /><span class="shortcut-label"><?php echo Yii::t('trans', 'Penetapan Pajak/Retribusi'); ?></span> </a>
                     <?php endif; ?>
                     <?php if (Yii::app()->util->is_authorized('spt.createHotel')): ?>
                         <a href="<?php echo Yii::app()->request->baseUrl ?>/spt/createHotel" class="shortcut"><img src="<?php echo Yii::app()->baseUrl; ?>/images/shortcut-icons/icon-48-penetapan_stprd.png" /><span class="shortcut-label"><?php echo Yii::t('trans', 'Penetapan STPD/STRD'); ?></span> </a>

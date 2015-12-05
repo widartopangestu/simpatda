@@ -78,8 +78,6 @@ class Golongan extends CActiveRecord {
 
         $criteria->compare('id', $this->id);
         $criteria->compare('nama', $this->nama, true);
-        $criteria->compare('created', $this->created, true);
-        $criteria->compare('updated', $this->updated, true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

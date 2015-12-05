@@ -104,8 +104,6 @@ class Pejabat extends CActiveRecord {
         $criteria->compare('nama', $this->nama, true);
         $criteria->compare('nip', $this->nip, true);
         $criteria->compare('status', $this->status);
-        $criteria->compare('created', $this->created, true);
-        $criteria->compare('updated', $this->updated, true);
         $criteria->compare('golongan_id', $this->golongan_id);
         $criteria->compare('jabatan_id', $this->jabatan_id);
         $criteria->compare('pangkat_id', $this->pangkat_id);

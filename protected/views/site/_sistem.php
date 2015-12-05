@@ -4,3 +4,4 @@
 <?php echo $form->dropDownListControlGroup($model, 'language', $model->languageOptions, array('span' => 2)); ?>
 <?php echo $form->textFieldControlGroup($model, 'currency_precision', array('span' => 2, 'maxlength' => 2)); ?>
 <?php echo $form->textFieldControlGroup($model, 'qty_precision', array('span' => 2, 'maxlength' => 2)); ?>      
+<?php echo $form->textFieldControlGroup($model, 'hari_jatuh_tempo', array('span' => 2, 'maxlength' => 2)); ?>      

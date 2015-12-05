@@ -83,16 +83,9 @@
                                         array('label' => Yii::t('trans', 'Penutupan WP/WR'), 'visible' => Yii::app()->util->is_authorized('wajibPajak.tutup'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/wajibPajak/tutup')),
                                     )
                                 ),
-                                array('label' => '<span>' . Yii::t('trans', 'Pendataan') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => '#', 'items' => array(
-                                        array('label' => Yii::t('trans', 'User Log'), 'visible' => Yii::app()->util->is_authorized('report.userLog'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/report/userLog')),
-                                        array('label' => Yii::t('trans', 'User List'), 'visible' => Yii::app()->util->is_authorized('jReport.userList'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jReport/userList')),
-                                        array('label' => Yii::t('trans', 'User Actvity'), 'visible' => Yii::app()->util->is_authorized('jReport.userActivityList'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jReport/userActivityList')),
-                                    )
-                                ),
                                 array('label' => '<span>' . Yii::t('trans', 'Penetapan') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => '#', 'items' => array(
-                                        array('label' => Yii::t('trans', 'User Log'), 'visible' => Yii::app()->util->is_authorized('report.userLog'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/report/userLog')),
-                                        array('label' => Yii::t('trans', 'User List'), 'visible' => Yii::app()->util->is_authorized('jReport.userList'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jReport/userList')),
-                                        array('label' => Yii::t('trans', 'User Actvity'), 'visible' => Yii::app()->util->is_authorized('jReport.userActivityList'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jReport/userActivityList')),
+                                        array('label' => Yii::t('trans', 'Proses Penetapan Pajak/Retribusi'), 'visible' => Yii::app()->util->is_authorized('penetapan.pajak'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/penetapan/pajak')),
+                                        array('label' => Yii::t('trans', 'Proses Penetapan Sanksi/Bunga'), 'visible' => Yii::app()->util->is_authorized('penetapan.pajak'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/penetapan/sanksi')),
                                     )
                                 ),
                                 array('label' => '<span>' . Yii::t('trans', 'BKP') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => '#', 'items' => array(

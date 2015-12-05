@@ -19,10 +19,12 @@ class ConfigForm extends CFormModel {
     public $qty_precision;
     public $display_logo_perusahaan;
     public $ttd_kartu_npwpd_pejabat;
+    public $hari_jatuh_tempo;
 
     public function rules() {
         return array(
-            array('title, adminEmail, nama_perusahaan, kota_perusahaan, member, general_user_role, language, defaultPageSize, ttd_kartu_npwpd_pejabat', 'required'),
+            array('title, adminEmail, nama_perusahaan, kota_perusahaan, member, general_user_role, language, defaultPageSize, ttd_kartu_npwpd_pejabat, hari_jatuh_tempo', 'required'),
+            array('defaultPageSize, currency_precision, qty_precision, hari_jatuh_tempo', 'numerical'),
             array('title, adminEmail, nama_perusahaan', 'length', 'max' => 225),
             array('company_name_report, email_perusahaan, alamat_perusahaan, kota_perusahaan, company_description_report, company_address_report, language, defaultPageSize, currency_precision, qty_precision, ttd_kartu_npwpd_pejabat', 'safe'),
         );
@@ -47,6 +49,7 @@ class ConfigForm extends CFormModel {
             'qty_precision' => Yii::t('trans', 'Quantity Precision'),
             'display_logo_perusahaan' => Yii::t('trans', 'Display Company Logo'),
             'ttd_kartu_npwpd_pejabat' => Yii::t('trans', 'Pejabat yg TTD di Kartu NPWPD'),
+            'hari_jatuh_tempo' => Yii::t('trans', 'Jatuh Tempo (hari)'),
         );
     }
 
