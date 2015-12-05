@@ -89,9 +89,7 @@
                                     )
                                 ),
                                 array('label' => '<span>' . Yii::t('trans', 'BKP') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => '#', 'items' => array(
-                                        array('label' => Yii::t('trans', 'User Log'), 'visible' => Yii::app()->util->is_authorized('report.userLog'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/report/userLog')),
-                                        array('label' => Yii::t('trans', 'User List'), 'visible' => Yii::app()->util->is_authorized('jReport.userList'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jReport/userList')),
-                                        array('label' => Yii::t('trans', 'User Actvity'), 'visible' => Yii::app()->util->is_authorized('jReport.userActivityList'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jReport/userActivityList')),
+                                        array('label' => Yii::t('trans', 'Rekam Penerimaan Pajak/Retribusi'), 'visible' => Yii::app()->util->is_authorized('setoranPajak.create'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/setoranPajak/create')),
                                     )
                                 ),
                                 array('label' => '<span>' . Yii::t('trans', 'Pembukuan Pelaporan') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => '#', 'items' => array(

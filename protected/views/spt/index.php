@@ -96,6 +96,11 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
             'type' => 'raw',
             'value' => 'CHtml::encode($data->wajibpajak->nama)',
         ),
+        array(
+            'name' => 'kode_rekening_id',
+            'type' => 'raw',
+            'value' => 'CHtml::encode($data->kodeRekening->nama)',
+        ),
         /*
           'periode_awal',
           'periode_akhir',

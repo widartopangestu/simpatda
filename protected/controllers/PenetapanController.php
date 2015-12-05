@@ -13,7 +13,7 @@ class PenetapanController extends Controller {
      */
     public function filters() {
         return array(
-            'WAuth',
+            'WAuth - jsonKohir',
         );
     }
 
@@ -131,6 +131,25 @@ class PenetapanController extends Controller {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }
+    }
+
+    public function actionJsonKohir($jenis = 'p') {
+        $q = isset($_REQUEST['q']) ? $_REQUEST['q'] : '';
+        //query not in akan memakan waktu lama jika data banyak
+        $where = '';
+        if ($q !== '') {
+            $where .= "WHERE kohir::text ILIKE '%$q%'";
+        }
+        $sql = "SELECT id, periode, kohir, singkatan_jenis_surat, nama, npwpd FROM v_penetapan_spt $where LIMIT 10";
+        $result = Yii::app()->db->createCommand($sql)->queryAll();
+        $data = array();
+        foreach ($result as $item) {
+            $data[] = array(
+                'id' => $item['id'],
+                'text' => $item['kohir'] . ' [' . $item['periode'] . ' - ' . $item['singkatan_jenis_surat'] . '] ' . $item['npwpd'] . ' ' . $item['nama']
+            );
+        }
+        echo CJSON::encode($data);
     }
 
 }

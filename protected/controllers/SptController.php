@@ -25,7 +25,7 @@ class SptController extends Controller {
         }
     }
 
-    public function actionAjaxGetValueHotel($id = null) {
+    public function actionAjaxGetValueHotel() {
         $model = new Spt;
         if (isset($_POST['Spt'])) {
             $model->attributes = $_POST['Spt'];
@@ -38,7 +38,7 @@ class SptController extends Controller {
         ));
     }
 
-    public function actionAjaxGetValueRestoran($id = null) {
+    public function actionAjaxGetValueRestoran() {
         $model = new Spt;
         if (isset($_POST['Spt'])) {
             $model->attributes = $_POST['Spt'];
@@ -51,7 +51,7 @@ class SptController extends Controller {
         ));
     }
 
-    public function actionAjaxGetValueHiburan($id = null) {
+    public function actionAjaxGetValueHiburan() {
         $model = new Spt;
         if (isset($_POST['Spt']) && isset($_POST['items'])) {
             $model->attributes = $_POST['Spt'];
@@ -76,7 +76,7 @@ class SptController extends Controller {
         echo CJSON::encode($rest);
     }
 
-    public function actionAjaxGetValueReklame($id = null) {
+    public function actionAjaxGetValueReklame() {
         $model = new Spt;
         if (isset($_POST['Spt'])) {
             $model->attributes = $_POST['Spt'];
@@ -89,7 +89,7 @@ class SptController extends Controller {
         ));
     }
 
-    public function actionAjaxGetValueElectric($id = null) {
+    public function actionAjaxGetValueElectric() {
         $model = new Spt;
         if (isset($_POST['Spt'])) {
             $model->attributes = $_POST['Spt'];
@@ -105,7 +105,7 @@ class SptController extends Controller {
         ));
     }
 
-    public function actionAjaxGetValueAir($id = null) {
+    public function actionAjaxGetValueAir() {
         $model = new Spt;
         if (isset($_POST['Spt']) && isset($_POST['items'])) {
             $model->attributes = $_POST['Spt'];
@@ -133,7 +133,7 @@ class SptController extends Controller {
         echo CJSON::encode($rest);
     }
 
-    public function actionAjaxGetValueWalet($id = null) {
+    public function actionAjaxGetValueWalet() {
         $model = new Spt;
         if (isset($_POST['Spt']) && isset($_POST['items'])) {
             $model->attributes = $_POST['Spt'];
@@ -161,7 +161,7 @@ class SptController extends Controller {
         echo CJSON::encode($rest);
     }
 
-    public function actionAjaxGetValueGalian($id = null) {
+    public function actionAjaxGetValueGalian() {
         $model = new Spt;
         if (isset($_POST['Spt']) && isset($_POST['items'])) {
             $model->attributes = $_POST['Spt'];
@@ -189,7 +189,7 @@ class SptController extends Controller {
         echo CJSON::encode($rest);
     }
 
-    public function actionAjaxGetValueRetribusi($id = null) {
+    public function actionAjaxGetValueRetribusi() {
         $model = new Spt;
         if (isset($_POST['Spt']) && isset($_POST['items'])) {
             $model->attributes = $_POST['Spt'];

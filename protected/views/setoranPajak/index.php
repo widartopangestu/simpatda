@@ -1,18 +1,17 @@
 <?php
-/* @var $this PenetapanController */
-/* @var $model Penetapan */
+/* @var $this SetoranPajakController */
+/* @var $model SetoranPajak */
 
 
 $this->breadcrumbs = array(
-    Yii::t('trans', 'Penetapan') => array('index'),
+    Yii::t('trans', 'Setoran Pajak') => array('index'),
     Yii::t('trans', 'Manage'),
 );
 
-$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Manage') . ' ' . Yii::t('trans', 'Penetapan');
-$this->modulTitle = Yii::t('trans', 'Manage') . ' ' . Yii::t('trans', 'Penetapan');
+$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Manage') . ' ' . Yii::t('trans', 'Setoran Pajak');
+$this->modulTitle = Yii::t('trans', 'Manage') . ' ' . Yii::t('trans', 'Setoran Pajak');
 $this->menu = array(
-    array('label' => Yii::t('trans', 'Penetapan Pajak'), 'url' => array('pajak'), 'icon' => 'file', 'visible' => (Yii::app()->util->is_authorized('penetapan.pajak')) ? true : false),
-    array('label' => Yii::t('trans', 'Penetapan Sanksi/Bunga'), 'url' => array('sanksi'), 'icon' => 'file', 'visible' => (Yii::app()->util->is_authorized('penetapan.sanksi')) ? true : false),
+    array('label' => Yii::t('trans', 'Create'), 'url' => array('create'), 'icon' => 'file', 'visible' => (Yii::app()->util->is_authorized('setoranPajak.create')) ? true : false),
 );
 $pageSize = Yii::app()->user->getState('pageSize' . $model->tableName(), Yii::app()->params['defaultPageSize']);
 ?>
@@ -21,17 +20,17 @@ $pageSize = Yii::app()->user->getState('pageSize' . $model->tableName(), Yii::ap
     <div class="filter-container">
         <?php
         echo Yii::t('trans', 'Tampil') . ' : ' . CHtml::dropDownList('pageSizeTop', $pageSize, Yii::app()->params['optionsPage'], array(
-            'onchange' => '$.fn.yiiGridView.update(\'penetapan-grid\',{ data:{pageSize: $(this).val() }})',
+            'onchange' => '$.fn.yiiGridView.update(\'setoran-pajak-grid\',{ data:{pageSize: $(this).val() }})',
             'style' => 'width:70px;'
         ));
         ?>    </div>
 </div>
 <?php
-$visible_view = (Yii::app()->util->is_authorized('penetapan.view')) ? 'true' : 'false';
-$visible_update = (Yii::app()->util->is_authorized('penetapan.update')) ? 'true' : 'false';
-$visible_delete = (Yii::app()->util->is_authorized('penetapan.delete')) ? 'true' : 'false';
+$visible_view = (Yii::app()->util->is_authorized('setoranPajak.view')) ? 'true' : 'false';
+$visible_update = (Yii::app()->util->is_authorized('setoranPajak.update')) ? 'true' : 'false';
+$visible_delete = (Yii::app()->util->is_authorized('setoranPajak.delete')) ? 'true' : 'false';
 $this->widget('yiiwheels.widgets.grid.WhGridView', array(
-    'id' => 'penetapan-grid',
+    'id' => 'setoran-pajak-grid',
     'dataProvider' => $model->search(),
     'responsiveTable' => true,
     'filter' => $model,
@@ -41,59 +40,62 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
             'header' => 'No',
             'value' => '$this->grid->dataProvider->getPagination()->getOffset()+$row+1'
         ),
-        'kohir',
+        'nomor',
         array(
             'name' => 'periode',
             'type' => 'raw',
-            'value' => 'CHtml::encode($data->spt->periode)',
+            'value' => 'CHtml::encode($data->penetapan->spt->periode)',
             'filter' => false,
         ),
         array(
-            'name' => 'no_sptpd',
+            'name' => 'kohir',
             'type' => 'raw',
-            'value' => 'CHtml::encode($data->spt->nomor)',
+            'value' => 'CHtml::encode($data->penetapan->kohir)',
             'filter' => false,
         ),
         array(
-            'name' => 'tanggal_penetapan',
-            'value' => 'date("d/m/Y",strtotime($data->tanggal_penetapan))'
-        ),
-        array(
-            'name' => 'jenis_surat_id',
+            'name' => 'jenis_surat',
             'type' => 'raw',
             'value' => 'CHtml::encode($data->namaJenisSurat)',
             'filter' => $model->jenisSuratOptions,
         ),
         array(
-            'name' => 'tanggal_jatuh_tempo',
-            'value' => 'date("d/m/Y",strtotime($data->tanggal_jatuh_tempo))'
+            'name' => 'tanggal_bayar',
+            'value' => 'date("d/m/Y",strtotime($data->tanggal_bayar))'
         ),
         array(
             'name' => 'nama_rekening',
             'type' => 'raw',
-            'value' => 'CHtml::encode($data->spt->kodeRekening->nama)',
+            'value' => 'CHtml::encode($data->penetapan->spt->kodeRekening->nama)',
             'filter' => false,
         ),
         array(
             'name' => 'npwpd',
             'type' => 'raw',
-            'value' => 'CHtml::encode($data->spt->wajibpajak->npwpd)',
+            'value' => 'CHtml::encode($data->penetapan->spt->wajibpajak->npwpd)',
             'filter' => false,
         ),
         array(
             'name' => 'nama_wajib_pajak',
             'type' => 'raw',
-            'value' => 'CHtml::encode($data->spt->wajibpajak->nama)',
+            'value' => 'CHtml::encode($data->penetapan->spt->wajibpajak->nama)',
             'filter' => false,
         ),
+        array(
+            'name' => 'via_bayar',
+            'type' => 'raw',
+            'value' => 'CHtml::encode($data->viaBayarText)',
+            'filter' => $model->viaBayarOptions,
+        ),
+        'nama_penyetor',
         array(
             'class' => 'bootstrap.widgets.TbButtonColumn',
             'buttons' => array(
                 'view' => array(
-                    'visible' => false,
+                    'visible' => $visible_view,
                 ),
                 'update' => array(
-                    'visible' => false,
+                    'visible' => $visible_update,
                 ),
                 'delete' => array(
                     'visible' => $visible_delete,
@@ -107,7 +109,7 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
     <div class="summary">
         <?php
         echo Yii::t('trans', 'Tampil') . ' : ' . CHtml::dropDownList('pageSize', $pageSize, Yii::app()->params['optionsPage'], array(
-            'onchange' => '$.fn.yiiGridView.update(\'penetapan-grid\',{ data:{pageSize: $(this).val() }})',
+            'onchange' => '$.fn.yiiGridView.update(\'setoran-pajak-grid\',{ data:{pageSize: $(this).val() }})',
             'style' => 'width:70px;'
         ));
         ?>    </div>
