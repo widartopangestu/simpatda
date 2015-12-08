@@ -29,7 +29,7 @@ class SetoranBank extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('tanggal, nomor, created, updated', 'required'),
+            array('tanggal, nomor', 'required'),
             array('nomor', 'numerical', 'integerOnly' => true),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
@@ -100,6 +100,30 @@ class SetoranBank extends CActiveRecord {
      */
     public static function model($className = __CLASS__) {
         return parent::model($className);
+    }
+
+    public function beforeValidate() {
+        if ($this->isNewRecord) {
+            if (empty($this->nomor)) {
+                $periode = date('Y', strtotime($this->tanggal));
+                $sql = "SELECT MAX(nomor) AS maxnomor FROM setoran_bank WHERE date_part('year', tanggal)='$periode'";
+                $result = Yii::app()->db->createCommand($sql)->queryRow();
+                $new_code = $this->preventUniqueKode($result['maxnomor'] + 1);
+                $this->nomor = $new_code;
+            }
+        }
+        return parent::beforeValidate();
+    }
+
+    public function preventUniqueKode($count) {
+        $form = (int) $count;
+        $periode = date('Y', strtotime($this->tanggal));
+        $flag = self::model()->find("nomor = '$form' AND date_part('year', tanggal)='$periode'");
+        if ($flag) {
+            $count++;
+            $form = $this->preventUniqueNumber($count);
+        }
+        return $form;
     }
 
     public function behaviors() {

@@ -9,10 +9,10 @@ $this->breadcrumbs = array(
     <div class="span8">
                 <div class="shortcuts"> 
                     <?php if (Yii::app()->util->is_authorized('wajibPajak.create')): ?>
-                        <a href="<?php echo Yii::app()->request->baseUrl ?>/wajibPajak/create" class="shortcut"><img src="<?php echo Yii::app()->baseUrl; ?>/images/shortcut-icons/icon-48-pend_p.png" /><span class="shortcut-label"><?php echo Yii::t('trans', 'Pendaftaran WPWR Pribadi'); ?></span> </a>
+                        <a href="<?php echo Yii::app()->request->baseUrl ?>/wajibPajak/create" class="shortcut"><img src="<?php echo Yii::app()->baseUrl; ?>/images/shortcut-icons/icon-48-pend_p.png" /><span class="shortcut-label"><?php echo Yii::t('trans', 'Pendaftaran WP Pribadi'); ?></span> </a>
                     <?php endif; ?>
                     <?php if (Yii::app()->util->is_authorized('wajibPajak.create')): ?>
-                        <a href="<?php echo Yii::app()->request->baseUrl ?>/wajibPajak/create?type=2" class="shortcut"><img src="<?php echo Yii::app()->baseUrl; ?>/images/shortcut-icons/icon-48-pend_bu.png" /><span class="shortcut-label"><?php echo Yii::t('trans', 'Pendaftaran WPWR BU'); ?></span> </a>
+                        <a href="<?php echo Yii::app()->request->baseUrl ?>/wajibPajak/create?type=2" class="shortcut"><img src="<?php echo Yii::app()->baseUrl; ?>/images/shortcut-icons/icon-48-pend_bu.png" /><span class="shortcut-label"><?php echo Yii::t('trans', 'Pendaftaran WP BU'); ?></span> </a>
                     <?php endif; ?>
                     <?php if (Yii::app()->util->is_authorized('spt.createHotel') || Yii::app()->util->is_authorized('spt.createRestoran') || Yii::app()->util->is_authorized('spt.createHiburan') || Yii::app()->util->is_authorized('spt.createReklame') || Yii::app()->util->is_authorized('spt.createElectric') || Yii::app()->util->is_authorized('spt.createGalian') || Yii::app()->util->is_authorized('spt.createAir') || Yii::app()->util->is_authorized('spt.createWalet') || Yii::app()->util->is_authorized('spt.createRetribusi') || Yii::app()->util->is_authorized('spt.createBphtb') || Yii::app()->util->is_authorized('spt.createReklameBaru')): ?>
                         <a href="<?php echo Yii::app()->request->baseUrl ?>/spt/menu" class="shortcut"><img src="<?php echo Yii::app()->baseUrl; ?>/images/shortcut-icons/icon-48-menulist.png" /><span class="shortcut-label"><?php echo Yii::t('trans', 'Pendataan SPT'); ?></span> </a>
@@ -26,11 +26,11 @@ $this->breadcrumbs = array(
                     <?php if (Yii::app()->util->is_authorized('spt.createHotel')): ?>
                         <a href="<?php echo Yii::app()->request->baseUrl ?>/spt/createHotel" class="shortcut"><img src="<?php echo Yii::app()->baseUrl; ?>/images/shortcut-icons/icon-48-penetapan_stprd.png" /><span class="shortcut-label"><?php echo Yii::t('trans', 'Penetapan STPD/STRD'); ?></span> </a>
                     <?php endif; ?>
-                    <?php if (Yii::app()->util->is_authorized('spt.createHotel')): ?>
-                        <a href="<?php echo Yii::app()->request->baseUrl ?>/spt/createHotel" class="shortcut"><img src="<?php echo Yii::app()->baseUrl; ?>/images/shortcut-icons/icon-48-setoran.png" /><span class="shortcut-label"><?php echo Yii::t('trans', 'Penerimaan(Setoran)'); ?></span> </a>
+                    <?php if (Yii::app()->util->is_authorized('setoranPajak.create')): ?>
+                        <a href="<?php echo Yii::app()->request->baseUrl ?>/setoranPajak/create" class="shortcut"><img src="<?php echo Yii::app()->baseUrl; ?>/images/shortcut-icons/icon-48-setoran.png" /><span class="shortcut-label"><?php echo Yii::t('trans', 'Penerimaan(Setoran)'); ?></span> </a>
                     <?php endif; ?>
-                    <?php if (Yii::app()->util->is_authorized('spt.createHotel')): ?>
-                        <a href="<?php echo Yii::app()->request->baseUrl ?>/spt/createHotel" class="shortcut"><img src="<?php echo Yii::app()->baseUrl; ?>/images/shortcut-icons/icon-48-setoran_bank.png" /><span class="shortcut-label"><?php echo Yii::t('trans', 'Setoran ke Bank'); ?></span> </a>
+                    <?php if (Yii::app()->util->is_authorized('setoranBank.create')): ?>
+                        <a href="<?php echo Yii::app()->request->baseUrl ?>/setoranBank/create" class="shortcut"><img src="<?php echo Yii::app()->baseUrl; ?>/images/shortcut-icons/icon-48-setoran_bank.png" /><span class="shortcut-label"><?php echo Yii::t('trans', 'Setoran ke Bank'); ?></span> </a>
                     <?php endif; ?>
                 <!-- /shortcuts --> 
             </div>

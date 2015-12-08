@@ -23,6 +23,17 @@ class SetoranPajak extends CActiveRecord {
 
     const VIA_BAYAR_BENDAHARA = 1;
     const VIA_BAYAR_BANK = 2;
+    const DENDA_PAJAK_HOTEL = 381;
+    const DENDA_PAJAK_RESTORAN = 382;
+    const DENDA_PAJAK_HIBURAN = 383;
+    const DENDA_PAJAK_REKLAME = 384;
+    const DENDA_PAJAK_ELECTRIC = 385;
+    const DENDA_PAJAK_GALIAN = 389;
+    const DENDA_PAJAK_AIR = 387;
+    const DENDA_PAJAK_WALET = 388;
+    const DENDA_PAJAK_RETRIBUSI = 419;
+
+//    const DENDA_PAJAK_BPHTB = #;
 
     public $kohir;
     public $jenis_surat;
@@ -34,6 +45,8 @@ class SetoranPajak extends CActiveRecord {
     public $kabupaten;
     public $tanggal_jatuh_tempo;
     public $jumlah_pajak;
+    public $jumlah_pajak_denda;
+    public $jumlah_bayar_denda;
 
     /**
      * @return string the associated database table name
@@ -53,7 +66,7 @@ class SetoranPajak extends CActiveRecord {
             array('nomor, via_bayar', 'numerical', 'integerOnly' => true),
             array('jumlah_bayar, jumlah_potongan', 'numerical'),
             array('nama_penyetor', 'length', 'max' => 255),
-            array('jumlah_pajak', 'safe'),
+            array('jumlah_pajak, jumlah_bayar_denda, jumlah_pajak_denda, jenis_surat', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('id, nomor, tanggal_bayar, jumlah_bayar, jumlah_potongan, via_bayar, nama_penyetor, penetapan_id, created, updated', 'safe', 'on' => 'search'),
@@ -69,6 +82,7 @@ class SetoranPajak extends CActiveRecord {
         return array(
             'penetapan' => array(self::BELONGS_TO, 'Penetapan', 'penetapan_id'),
             'setoranBankItems' => array(self::HAS_MANY, 'SetoranBankItem', 'setoran_pajak_id'),
+            'penetapanDenda' => array(self::HAS_ONE, 'PenetapanDenda', 'setoran_pajak_id'),
         );
     }
 
@@ -95,7 +109,9 @@ class SetoranPajak extends CActiveRecord {
             'kelurahan' => Yii::t('trans', 'Kelurahan'),
             'tanggal_jatuh_tempo' => Yii::t('trans', 'Batas Penyetoran Terakhir'),
             'jumlah_pajak' => Yii::t('trans', 'Jumlah Pajak'),
+            'jumlah_pajak_denda' => Yii::t('trans', 'Jumlah Pajak'),
             'jenis_surat' => Yii::t('trans', 'Jenis Surat'),
+            'jumlah_bayar_denda' => Yii::t('trans', 'Jumlah Bayar'),
         );
     }
 
@@ -116,16 +132,16 @@ class SetoranPajak extends CActiveRecord {
 
         $criteria = new CDbCriteria;
 
-        $criteria->compare('id', $this->id, true);
-        $criteria->compare('nomor', $this->nomor);
-        $criteria->compare('tanggal_bayar', $this->tanggal_bayar, true);
-        $criteria->compare('jumlah_bayar', $this->jumlah_bayar);
-        $criteria->compare('jumlah_potongan', $this->jumlah_potongan);
-        $criteria->compare('via_bayar', $this->via_bayar);
-        $criteria->compare('nama_penyetor', $this->nama_penyetor, true);
-        $criteria->compare('penetapan_id', $this->penetapan_id, true);
-        $criteria->compare('created', $this->created, true);
-        $criteria->compare('updated', $this->updated, true);
+        $criteria->compare('t.id', $this->id, true);
+        $criteria->compare('t.nomor', $this->nomor);
+        $criteria->compare('t.tanggal_bayar', $this->tanggal_bayar, true);
+        $criteria->compare('t.jumlah_bayar', $this->jumlah_bayar);
+        $criteria->compare('t.jumlah_potongan', $this->jumlah_potongan);
+        $criteria->compare('t.via_bayar', $this->via_bayar);
+        $criteria->compare('t.nama_penyetor', $this->nama_penyetor, true);
+        $criteria->compare('t.penetapan_id', $this->penetapan_id, true);
+        $criteria->compare('t.created', $this->created, true);
+        $criteria->compare('t.updated', $this->updated, true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
@@ -181,11 +197,13 @@ class SetoranPajak extends CActiveRecord {
 
     public function beforeValidate() {
         if ($this->isNewRecord) {
-            $periode = date('Y', strtotime($this->tanggal_bayar));
-            $sql = "SELECT MAX(nomor) AS maxnomor FROM setoran_pajak WHERE date_part('year', tanggal_bayar)='$periode'";
-            $result = Yii::app()->db->createCommand($sql)->queryRow();
-            $new_code = $this->preventUniqueKode($result['maxnomor'] + 1);
-            $this->nomor = $new_code;
+            if (empty($this->nomor)) {
+                $periode = date('Y', strtotime($this->tanggal_bayar));
+                $sql = "SELECT MAX(nomor) AS maxnomor FROM setoran_pajak WHERE date_part('year', tanggal_bayar)='$periode'";
+                $result = Yii::app()->db->createCommand($sql)->queryRow();
+                $new_code = $this->preventUniqueKode($result['maxnomor'] + 1);
+                $this->nomor = $new_code;
+            }
         }
         return parent::beforeValidate();
     }
@@ -199,6 +217,40 @@ class SetoranPajak extends CActiveRecord {
             $form = $this->preventUniqueNumber($count);
         }
         return $form;
+    }
+
+    public function getKodeRekeningDenda($parent) {
+        $id = null;
+        switch ($parent) {
+            case Spt::PARENT_HOTEL:
+                $id = self::DENDA_PAJAK_HOTEL;
+                break;
+            case Spt::PARENT_RESTORAN:
+                $id = self::DENDA_PAJAK_RESTORAN;
+                break;
+            case Spt::PARENT_HIBURAN:
+                $id = self::DENDA_PAJAK_HIBURAN;
+                break;
+            case Spt::PARENT_REKLAME:
+                $id = self::DENDA_PAJAK_REKLAME;
+                break;
+            case Spt::PARENT_ELECTRIC:
+                $id = self::DENDA_PAJAK_ELECTRIC;
+                break;
+            case Spt::PARENT_AIR:
+                $id = self::DENDA_PAJAK_AIR;
+                break;
+            case Spt::PARENT_WALET:
+                $id = self::DENDA_PAJAK_WALET;
+                break;
+            case Spt::PARENT_GALIAN:
+                $id = self::DENDA_PAJAK_GALIAN;
+                break;
+            case Spt::PARENT_RETRIBUSI:
+                $id = self::DENDA_PAJAK_RETRIBUSI;
+                break;
+        }
+        return KodeRekening::model()->findByPk($id);
     }
 
 }

@@ -30,7 +30,7 @@ class SetoranBankItem extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('setoran_pajak_id, setoran_bank_id, created, updated', 'required'),
+            array('setoran_pajak_id, setoran_bank_id', 'required'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('id, setoran_pajak_id, setoran_bank_id, created, updated', 'safe', 'on' => 'search'),

@@ -28,7 +28,13 @@ $pageSize = Yii::app()->user->getState('pageSize' . $model->tableName(), Yii::ap
 <?php
 $visible_view = (Yii::app()->util->is_authorized('setoranPajak.view')) ? 'true' : 'false';
 $visible_update = (Yii::app()->util->is_authorized('setoranPajak.update')) ? 'true' : 'false';
+//if ($visible_update === 'true') {
+//    $visible_update = '($data->penetapan->jenis_surat_id != 3) ? true : false';
+//}
 $visible_delete = (Yii::app()->util->is_authorized('setoranPajak.delete')) ? 'true' : 'false';
+//if ($visible_delete === 'true') {
+//    $visible_delete = '($data->penetapan->jenis_surat_id != 3) ? true : false';
+//}
 $this->widget('yiiwheels.widgets.grid.WhGridView', array(
     'id' => 'setoran-pajak-grid',
     'dataProvider' => $model->search(),
@@ -57,7 +63,7 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
             'name' => 'jenis_surat',
             'type' => 'raw',
             'value' => 'CHtml::encode($data->namaJenisSurat)',
-            'filter' => $model->jenisSuratOptions,
+            'filter' => false, //$model->jenisSuratOptions,
         ),
         array(
             'name' => 'tanggal_bayar',

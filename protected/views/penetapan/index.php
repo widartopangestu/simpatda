@@ -90,10 +90,10 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
             'class' => 'bootstrap.widgets.TbButtonColumn',
             'buttons' => array(
                 'view' => array(
-                    'visible' => false,
+                    'visible' => 'false',
                 ),
                 'update' => array(
-                    'visible' => false,
+                    'visible' => 'false',
                 ),
                 'delete' => array(
                     'visible' => $visible_delete,

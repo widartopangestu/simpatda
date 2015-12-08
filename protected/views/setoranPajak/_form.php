@@ -59,7 +59,7 @@
             <?php echo $form->hiddenField($model, 'penetapan_id'); ?>
 
             <?php
-            echo $form->datePickerControlGroup($model, 'tanggal_bayar', array('span' => 2, 'pluginOptions' => array(
+            echo $form->datePickerControlGroup($model, 'tanggal_bayar', array('span' => 2, 'onchange'=>"getValue();", 'pluginOptions' => array(
                     'format' => 'dd/mm/yyyy'
             )));
             ?>
@@ -95,31 +95,25 @@
                 </thead>
                 <tbody>
                     <?php
-                    if ($model->penetapan_id) {
-                        $i = 1;
-                        foreach ($model->penetapan->spt->sptItems as $spt) {
-                            echo '<tr>';
-                            echo '<td>' . $i++ . '</td>';
-                            echo '<td>' . $spt->kodeRekening->kode . '</td>';
-                            echo '<td>' . $spt->kodeRekening->nama . '</td>';
-                            echo '<td>' . number_format($spt->pajak, Yii::app()->params['currency_precision']) . '</td>';
-                            echo '</tr>';
-                        }
-                    } else {
-                        echo '<tr>';
-                        echo '<td colspan="4">' . Yii::t('trans', 'There is no item.') . '</td>';
-                        echo '</tr>';
-                    }
+                    echo '<tr>';
+                    echo '<td colspan="4">' . Yii::t('trans', 'There is no item.') . '</td>';
+                    echo '</tr>';
                     ?>
                 </tbody>
             </table>
         </div>
         <div class="span5">    
+            <input name="SetoranPajakDenda[kode_rekening_id]" id="SetoranPajakDenda_kode_rekening_id" type="hidden" value="">
+            <input name="SetoranPajakDenda[keterangan]" id="SetoranPajakDenda_keterangan" type="hidden" value="">
+            <input name="SetoranPajakDenda[nilai_denda]" id="SetoranPajakDenda_nilai_denda" type="hidden" value="">
+            <input name="SetoranPajakDenda[jumlah_bulan]" id="SetoranPajakDenda_jumlah_bulan" type="hidden" value="">
         </div>
         <div class="span5">     
-            <?php echo $form->textFieldControlGroup($model, 'jumlah_pajak', array('span' => 3, 'readonly' => true, 'style' => "text-align: right")); ?>
+            <?php echo $form->textFieldControlGroup($model, 'jumlah_pajak_denda', array('span' => 3, 'readonly' => true, 'style' => "text-align: right")); ?>
             <?php echo $form->maskMoneyControlGroup($model, 'jumlah_potongan', array('class' => 'span3', 'onkeyup' => 'getValue();', 'style' => "text-align: right")); ?>
-            <?php echo $form->textFieldControlGroup($model, 'jumlah_bayar', array('span' => 3, 'readonly' => true, 'style' => "text-align: right;font-size: 20px;font-weight: bold;")); ?>
+            <?php echo $form->textFieldControlGroup($model, 'jumlah_bayar_denda', array('span' => 3, 'readonly' => true, 'style' => "text-align: right;font-size: 20px;font-weight: bold;")); ?>
+            <?php echo $form->hiddenField($model, 'jumlah_pajak'); ?>
+            <?php echo $form->hiddenField($model, 'jumlah_bayar'); ?>
         </div>
     </div>
 
@@ -137,9 +131,10 @@
 </div><!-- form --><script type="text/javascript">
     var timer;
     jQuery(document).ready(function () {
-        getValue();
-        if (jQuery("#SetoranPajak_penetapan_id").val())
+        if (jQuery("#SetoranPajak_penetapan_id").val()) {
             fillData(jQuery("#SetoranPajak_penetapan_id").val());
+            getValue();
+        }
     });
     function fillData(id) {
         jQuery.ajax({'type': 'POST', 'url': '<?php echo $this->createUrl('setoranPajak/jsonGetData'); ?>/?id=' + id, 'cache': false, dataType: 'json', 'data': null}).done(function (data) {
@@ -149,19 +144,23 @@
             jQuery("#SetoranPajak_kabupaten").val(data.kabupaten);
             jQuery("#SetoranPajak_kecamatan").val(data.kecamatan);
             jQuery("#SetoranPajak_kelurahan").val(data.kelurahan);
-            jQuery("#SetoranPajak_tanggal_jatuh_tempo").val(data.tanggal_jatuh_tempo);
-            jQuery("#SetoranPajak_jumlah_pajak").val(data.jumlah_pajak);
             getValue();
-        });
-        jQuery.ajax({'type': 'POST', 'url': '<?php echo $this->createUrl('setoranPajak/dynamicDataSpt'); ?>/?id=' + id, 'cache': false, dataType: 'html', 'data': null}).done(function (data) {
-            jQuery("#List_spt").html(data);
         });
     }
     function getValue() {
         clearInterval(timer);  //clear any interval on key up
         timer = setTimeout(function () { //then give it a second to see if the user is finished
             jQuery.ajax({'type': 'POST', 'url': '<?php echo $this->createUrl('setoranPajak/ajaxGetValue'); ?>', 'cache': false, dataType: 'json', 'data': $('#setoran-pajak-form').serialize()}).done(function (data) {
+                jQuery("#SetoranPajak_jumlah_pajak_denda").val(data.jumlah_pajak_denda);
+                jQuery("#SetoranPajak_jumlah_bayar_denda").val(data.jumlah_bayar_denda);
+                jQuery("#SetoranPajak_jumlah_pajak").val(data.jumlah_pajak);
                 jQuery("#SetoranPajak_jumlah_bayar").val(data.jumlah_bayar);
+                jQuery("#SetoranPajak_tanggal_jatuh_tempo").val(data.tanggal_jatuh_tempo);
+                jQuery("#SetoranPajakDenda_kode_rekening_id").val(data.kode_rekening_id);
+                jQuery("#SetoranPajakDenda_keterangan").val(data.keterangan);
+                jQuery("#SetoranPajakDenda_nilai_denda").val(data.nilai_denda);
+                jQuery("#SetoranPajakDenda_jumlah_bulan").val(data.jumlah_bulan);
+                jQuery("#List_spt").html(data.html);
             });
         }, 1000);
     }
