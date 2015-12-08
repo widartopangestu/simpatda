@@ -1,17 +1,17 @@
 <?php
-/* @var $this SetoranBankController */
-/* @var $model SetoranBank */
+/* @var $this PemeriksaanController */
+/* @var $model Pemeriksaan */
 
 
 $this->breadcrumbs = array(
-    Yii::t('trans', 'Setoran Bank') => array('index'),
+    Yii::t('trans', 'Laporan Hasil Pemeriksaan (LHP)') => array('index'),
     Yii::t('trans', 'Manage'),
 );
 
-$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Manage') . ' ' . Yii::t('trans', 'Setoran Bank');
-$this->modulTitle = Yii::t('trans', 'Manage') . ' ' . Yii::t('trans', 'Setoran Bank');
+$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Manage') . ' ' . Yii::t('trans', 'Laporan Hasil Pemeriksaan (LHP)');
+$this->modulTitle = Yii::t('trans', 'Manage') . ' ' . Yii::t('trans', 'Laporan Hasil Pemeriksaan (LHP)');
 $this->menu = array(
-    array('label' => Yii::t('trans', 'Create'), 'url' => array('create'), 'icon' => 'file', 'visible' => (Yii::app()->util->is_authorized('setoranBank.create')) ? true : false),
+    array('label' => Yii::t('trans', 'Create'), 'url' => array('create'), 'icon' => 'file', 'visible' => (Yii::app()->util->is_authorized('pemeriksaan.create')) ? true : false),
 );
 $pageSize = Yii::app()->user->getState('pageSize' . $model->tableName(), Yii::app()->params['defaultPageSize']);
 ?>
@@ -20,17 +20,17 @@ $pageSize = Yii::app()->user->getState('pageSize' . $model->tableName(), Yii::ap
     <div class="filter-container">
         <?php
         echo Yii::t('trans', 'Tampil') . ' : ' . CHtml::dropDownList('pageSizeTop', $pageSize, Yii::app()->params['optionsPage'], array(
-            'onchange' => '$.fn.yiiGridView.update(\'setoran-bank-grid\',{ data:{pageSize: $(this).val() }})',
+            'onchange' => '$.fn.yiiGridView.update(\'pemeriksaan-grid\',{ data:{pageSize: $(this).val() }})',
             'style' => 'width:70px;'
         ));
         ?>    </div>
 </div>
 <?php
-$visible_view = (Yii::app()->util->is_authorized('setoranBank.view')) ? 'true' : 'false';
-$visible_update = (Yii::app()->util->is_authorized('setoranBank.update')) ? 'true' : 'false';
-$visible_delete = (Yii::app()->util->is_authorized('setoranBank.delete')) ? 'true' : 'false';
+$visible_view = (Yii::app()->util->is_authorized('pemeriksaan.view')) ? 'true' : 'false';
+$visible_update = (Yii::app()->util->is_authorized('pemeriksaan.update')) ? 'true' : 'false';
+$visible_delete = (Yii::app()->util->is_authorized('pemeriksaan.delete')) ? 'true' : 'false';
 $this->widget('yiiwheels.widgets.grid.WhGridView', array(
-    'id' => 'setoran-bank-grid',
+    'id' => 'pemeriksaan-grid',
     'dataProvider' => $model->search(),
     'responsiveTable' => true,
     'filter' => $model,
@@ -40,20 +40,37 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
             'header' => 'No',
             'value' => '$this->grid->dataProvider->getPagination()->getOffset()+$row+1'
         ),
+        'nomor',
+        'periode',
         array(
             'name' => 'tanggal',
             'value' => 'date("d/m/Y",strtotime($data->tanggal))',
             'filter' => false,
         ),
-        'nomor',
+        array(
+            'name' => 'npwpd',
+            'type' => 'raw',
+            'value' => 'CHtml::encode($data->wajibpajak->npwpd)',
+            'filter' => false,
+        ),
+        array(
+            'name' => 'wp_search',
+            'type' => 'raw',
+            'value' => 'CHtml::encode($data->wajibpajak->nama)',
+        ),
+        array(
+            'name' => 'nilai_pajak',
+            'type' => 'raw',
+            'value' => 'number_format($data->nilai_pajak, Yii::app()->params[\'currency_precision\'])',
+        ),
         array(
             'class' => 'bootstrap.widgets.TbButtonColumn',
             'buttons' => array(
                 'view' => array(
-                    'visible' => $visible_view,
+                    'visible' => 'false',
                 ),
                 'update' => array(
-                    'visible' => 'false',
+                    'visible' => $visible_update,
                 ),
                 'delete' => array(
                     'visible' => $visible_delete,
@@ -67,7 +84,7 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
     <div class="summary">
         <?php
         echo Yii::t('trans', 'Tampil') . ' : ' . CHtml::dropDownList('pageSize', $pageSize, Yii::app()->params['optionsPage'], array(
-            'onchange' => '$.fn.yiiGridView.update(\'setoran-bank-grid\',{ data:{pageSize: $(this).val() }})',
+            'onchange' => '$.fn.yiiGridView.update(\'pemeriksaan-grid\',{ data:{pageSize: $(this).val() }})',
             'style' => 'width:70px;'
         ));
         ?>    </div>

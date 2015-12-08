@@ -72,7 +72,8 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
         ),
         array(
             'header' => SetoranPajak::model()->getAttributeLabel('tanggal_bayar'),
-            'value' => 'date("d/m/Y",strtotime($data->tanggal_bayar))'
+            'value' => 'date("d/m/Y",strtotime($data->tanggal_bayar))',
+            'filter' => false,
         ),
         array(
             'header' => SetoranPajak::model()->getAttributeLabel('nama_rekening'),

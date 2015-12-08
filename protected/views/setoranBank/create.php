@@ -84,7 +84,8 @@ $this->menu = array(
             ),
             array(
                 'name' => 'tanggal_bayar',
-                'value' => 'date("d/m/Y",strtotime($data->tanggal_bayar))'
+                'value' => 'date("d/m/Y",strtotime($data->tanggal_bayar))',
+                'filter' => false,
             ),
             array(
                 'name' => 'nama_rekening',

@@ -56,7 +56,8 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
         ),
         array(
             'name' => 'tanggal_penetapan',
-            'value' => 'date("d/m/Y",strtotime($data->tanggal_penetapan))'
+            'value' => 'date("d/m/Y",strtotime($data->tanggal_penetapan))',
+            'filter' => false,
         ),
         array(
             'name' => 'jenis_surat_id',
@@ -66,7 +67,8 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
         ),
         array(
             'name' => 'tanggal_jatuh_tempo',
-            'value' => 'date("d/m/Y",strtotime($data->tanggal_jatuh_tempo))'
+            'value' => 'date("d/m/Y",strtotime($data->tanggal_jatuh_tempo))',
+            'filter' => false,
         ),
         array(
             'name' => 'nama_rekening',
