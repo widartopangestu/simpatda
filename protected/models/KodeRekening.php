@@ -137,7 +137,8 @@ class KodeRekening extends CActiveRecord {
         return $data;
     }
 
-    public function getParentTreeOptions($parent = null) {
+    public function getParentTreeOptions($param = null) {
+        $parent = $param ? $param : new CDbExpression('null');
         $criteria = new CDbCriteria();
         $criteria->condition = 'parent_id='. $parent;
         $criteria->order ='kode';

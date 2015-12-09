@@ -1290,13 +1290,13 @@ table.fc-border-separate {
 }
 
 .preview-jasper {
-    -moz-transform: scale(2);
+    -moz-transform: scale(1.39);
     -moz-transform-origin: top;
-    -o-transform: scale(2);
+    -o-transform: scale(1.39);
     -o-transform-origin: top;
-    -ms-transform: scale(2);
+    -ms-transform: scale(1.39);
     -ms-transform-origin: top;
-    -webkit-transform: scale(2);
+    -webkit-transform: scale(1.39);
     -webkit-transform-origin: top;
 }
 

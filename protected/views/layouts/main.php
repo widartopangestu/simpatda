@@ -119,6 +119,7 @@
                                         array('label' => Yii::t('trans', 'User List'), 'visible' => Yii::app()->util->is_authorized('jReport.userList'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jReport/userList')),
                                         array('label' => Yii::t('trans', 'User Actvity'), 'visible' => Yii::app()->util->is_authorized('jReport.userActivityList'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jReport/userActivityList')),
                                         array('label' => Yii::t('trans', 'Wajib Pajak'), 'visible' => Yii::app()->util->is_authorized('jReport.wajibPajak'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jReport/wajibPajak')),
+                                        array('label' => Yii::t('trans', 'Setoran Pajak'), 'visible' => Yii::app()->util->is_authorized('jReport.setoranPajak'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jReport/setoranPajak')),
                                     )
                                 ),
                             ),

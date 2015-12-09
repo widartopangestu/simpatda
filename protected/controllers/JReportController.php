@@ -29,14 +29,14 @@ class JReportController extends Controller {
                     $filter[] = 'role_id=' . $model->role_id;
 
                 if (count($filter)) {
-                    $where = ' where ' . implode(' AND ', $filter);
+                    $where = ' WHERE ' . implode(' AND ', $filter);
                 }
                 $rep = new WPJasper();
                 $reportId = 'user_list';
                 $params = array(
                     'Par_JudulLaporan' => Yii::t('trans', 'MASTER USER REPORT'),
                     'Par_SubJudulLaporan' => Yii::t('trans', 'By User Name'),
-                    'Par_SQL' => 'select * from v_userlist' . $where,
+                    'Par_SQL' => 'SELECT * FROM v_userlist' . $where,
                 );
                 if (isset($_POST['type_report'])) {
                     $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);
@@ -71,14 +71,14 @@ class JReportController extends Controller {
                     $filter[] = 'user_id=' . $model->user_id;
 
                 if (count($filter)) {
-                    $where = ' where ' . implode(' AND ', $filter);
+                    $where = ' WHERE ' . implode(' AND ', $filter);
                 }
                 $rep = new WPJasper();
                 $reportId = 'user_log';
                 $params = array(
                     'Par_JudulLaporan' => Yii::t('trans', 'USER ACTIVITIES LOG REPORT'),
                     'Par_SubJudulLaporan' => Yii::t('trans', 'By User Name'),
-                    'Par_SQL' => 'select * from v_userlog' . $where,
+                    'Par_SQL' => 'SELECT * FROM v_userlog' . $where,
                 );
                 if (isset($_POST['type_report'])) {
                     $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);
@@ -129,7 +129,7 @@ class JReportController extends Controller {
                     $judul_laporan .= ' SE-KABUPATEN MUARA ENIM';
 
                 if (count($filter)) {
-                    $where = ' where ' . implode(' AND ', $filter);
+                    $where = ' WHERE ' . implode(' AND ', $filter);
                 }
                 $rep = new WPJasper();
                 $reportId = 'wajib_pajak';
@@ -150,7 +150,7 @@ class JReportController extends Controller {
                     'NipTtd1' => $diperiksa->nip,
                     'Kecamatan' => $kecamatan,
                     'Kelurahan' => $kelurahan,
-                    'Par_SQL' => 'select * from v_spt_wajib_pajak' . $where,
+                    'Par_SQL' => 'SELECT * FROM v_spt_wajib_pajak' . $where,
                 );
                 if (isset($_POST['type_report'])) {
                     $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);
@@ -172,6 +172,60 @@ class JReportController extends Controller {
         foreach ($data as $value => $name) {
             echo CHtml::tag('option', array('value' => $value), CHtml::encode($name), true);
         }
+    }
+
+    public function actionSetoranPajak() {
+        $title = Yii::t('trans', 'Laporan Daftar Setoran Pajak');
+        $filename = 'setoran_pajak_' . date("d-m-Y_h:i:s-A");
+        $model = new JrSetoranPajakForm();
+        $model->tanggal = date('d/m/Y');
+        $model->periode = date('Y');
+        $html_report = '';
+        if (isset($_POST['JrSetoranPajakForm'])) {
+            $model->attributes = $_POST['JrSetoranPajakForm'];
+            if ($model->validate()) {
+                $filter = array();
+                $judul_laporan = 'DAFTAR SETORAN PAJAK';
+                $where = '';
+                if (isset($model->periode) && trim($model->periode) != "")
+                    $filter[] = 'periode=' . $model->periode;
+                if (isset($model->nomor_from) && trim($model->nomor_from) != "" && isset($model->nomor_to) && trim($model->nomor_to) != "")
+                    $filter[] = 'nomor BETWEEN \'' . $model->nomor_from . '\' AND \'' . $model->nomor_to . '\'';
+
+                if (count($filter)) {
+                    $where = ' WHERE ' . implode(' AND ', $filter);
+                }
+                $rep = new WPJasper();
+                $reportId = 'setoran_pajak';
+                $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
+                $bendahara = Pejabat::model()->findByPk($model->bendahara);
+                $params = array(
+                    'JudulLaporan' => $judul_laporan,
+                    'SubJudulLaporan' => Yii::t('trans', 'Dari Nomor {nomor_from} s/d. {nomor_to} Tahun {periode}', array('{nomor_from}' => $model->nomor_from, '{nomor_to}' => $model->nomor_to, '{periode}' => $model->periode)),
+                    'KetTtd' => 'Mengetahui,',
+                    'PangkatTtd' => $mengetahui->pangkat->nama,
+                    'NamaTtd' => $mengetahui->nama,
+                    'JabatanTtd' => $mengetahui->jabatan->nama,
+                    'NipTtd' => $mengetahui->nip,
+                    'KetTtd1' => Yii::app()->params['kota_perusahaan'] . ", " . date_format(date_create_from_format('d/m/Y', $model->tanggal), "d F Y"),
+                    'PangkatTtd1' => $bendahara->pangkat->nama,
+                    'NamaTtd1' => $bendahara->nama,
+                    'JabatanTtd1' => $bendahara->jabatan->nama,
+                    'NipTtd1' => $bendahara->nip,
+                    'Par_SQL' => 'SELECT * FROM v_setoran_pajak' . $where,
+                );
+                if (isset($_POST['type_report'])) {
+                    $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);
+                } else {
+                    $html_report = $rep->generateReport($reportId, WPJasper::FORMAT_HTML, $params, $filename);
+                }
+            }
+        }
+        $this->render('setoran_pajak', array(
+            'model' => $model,
+            'title' => $title,
+            'html_report' => $html_report,
+        ));
     }
 
 }
