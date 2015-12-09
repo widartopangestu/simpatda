@@ -86,6 +86,7 @@
                                 ),
                                 array('label' => '<span>' . Yii::t('trans', 'Penetapan') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => '#', 'items' => array(
                                         array('label' => Yii::t('trans', 'Proses Penetapan Pajak'), 'visible' => Yii::app()->util->is_authorized('penetapan.pajak'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/penetapan/pajak')),
+                                        array('label' => Yii::t('trans', 'Proses Penetapan LHP'), 'visible' => Yii::app()->util->is_authorized('penetapan.lhp'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/penetapan/lhp')),
 //                                        array('label' => Yii::t('trans', 'Proses Penetapan Sanksi/Bunga'), 'visible' => Yii::app()->util->is_authorized('penetapan.pajak'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/penetapan/sanksi')),
                                     )
                                 ),

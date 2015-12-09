@@ -26,6 +26,7 @@ class PenetapanController extends Controller {
             $transaction = Yii::app()->db->beginTransaction();
             $flag = true;
             $model->attributes = $_POST['PenetapanForm'];
+            $sum_penetapan = 0;
             if ($model->validate()) {
                 if (!empty($model->tanggal_penetapan) && $model->tanggal_penetapan != '0000-00-00')
                     $model->tanggal_penetapan = date_format(date_create_from_format('d/m/Y', $model->tanggal_penetapan), "Y-m-d");
@@ -42,6 +43,7 @@ class PenetapanController extends Controller {
                         $penetapan->spt_id = $spt->id;
                         $penetapan->jenis_surat_id = $spt->jenis_surat_id;
                         $flag = $penetapan->save() && $flag;
+                        $sum_penetapan++;
                     }
                 }
             } else {
@@ -49,7 +51,7 @@ class PenetapanController extends Controller {
             }
             if ($flag) {
                 $transaction->commit();
-                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Create Penetapan dari nomor {spt_from} s/d. {spt_to}', array('{spt_from}' => $_POST['PenetapanForm']['spt_from'], '{spt_to}' => $_POST['PenetapanForm']['spt_to'])));
+                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Create Penetapan dari nomor {spt_from} s/d. {spt_to}. ({sum_penetapan}) Penetapan terbuat.', array('{sum_penetapan}' => $sum_penetapan, '{spt_from}' => $_POST['PenetapanForm']['spt_from'], '{spt_to}' => $_POST['PenetapanForm']['spt_to'])));
                 $this->redirect(array('pajak'));
             }
         }
@@ -61,6 +63,50 @@ class PenetapanController extends Controller {
 
     public function actionSanksi() {
         
+    }
+
+    public function actionLhp() {
+        $model = new PenetapanLhpForm;
+        $model->periode = date('Y');
+        $model->tanggal_penetapan = date('d/m/Y');
+
+        if (isset($_POST['PenetapanLhpForm'])) {
+            $transaction = Yii::app()->db->beginTransaction();
+            $flag = true;
+            $model->attributes = $_POST['PenetapanLhpForm'];
+            $sum_penetapan = 0;
+            if ($model->validate()) {
+                if (!empty($model->tanggal_penetapan) && $model->tanggal_penetapan != '0000-00-00')
+                    $model->tanggal_penetapan = date_format(date_create_from_format('d/m/Y', $model->tanggal_penetapan), "Y-m-d");
+                else
+                    $model->tanggal_penetapan = new CDbExpression('null');
+
+                $pemeriksaans = Pemeriksaan::model()->findAll("periode=$model->periode AND nomor BETWEEN $model->pemeriksaan_from AND $model->pemeriksaan_to");
+                foreach ($pemeriksaans as $pemeriksaan) {
+                    $check = Penetapan::model()->find("pemeriksaan_id=$pemeriksaan->id");
+                    if ($check == null) {
+                        $penetapan = new Penetapan;
+                        $penetapan->tanggal_penetapan = $model->tanggal_penetapan;
+                        $penetapan->tanggal_jatuh_tempo = date('Y-m-d', strtotime("+" . Yii::app()->params['hari_jatuh_tempo'] . " day", strtotime($model->tanggal_penetapan)));
+                        $penetapan->pemeriksaan_id = $pemeriksaan->id;
+                        $penetapan->jenis_surat_id = 11; //SKPDKB
+                        $flag = $penetapan->save() && $flag;
+                        $sum_penetapan++;
+                    }
+                }
+            } else {
+                $flag = false;
+            }
+            if ($flag) {
+                $transaction->commit();
+                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Create Penetapan LHP dari nomor {pemeriksaan_from} s/d. {pemeriksaan_to}. ({sum_penetapan}) Penetapan terbuat.', array('{sum_penetapan}' => $sum_penetapan, '{pemeriksaan_from}' => $_POST['PenetapanLhpForm']['pemeriksaan_from'], '{pemeriksaan_to}' => $_POST['PenetapanLhpForm']['pemeriksaan_to'])));
+                $this->redirect(array('lhp'));
+            }
+        }
+
+        $this->render('lhp', array(
+            'model' => $model,
+        ));
     }
 
     /**

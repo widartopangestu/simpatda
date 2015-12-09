@@ -12,6 +12,7 @@
  * @property integer $jenis_surat_id
  * @property string $created
  * @property string $updated
+ * @property string $pemeriksaan_id
  *
  * The followings are the available model relations:
  * @property PenetapanDenda $penetapanDenda
@@ -19,6 +20,7 @@
  * @property SetoranPajak[] $setoranPajaks
  * @property Spt $spt
  * @property JenisSurat $jenisSurat
+ * @property Pemeriksaan $pemeriksaan
  */
 class Penetapan extends CActiveRecord {
 
@@ -38,10 +40,10 @@ class Penetapan extends CActiveRecord {
         return array(
             array('tanggal_penetapan, tanggal_jatuh_tempo, jenis_surat_id', 'required'),
             array('kohir, jenis_surat_id', 'numerical', 'integerOnly' => true),
-            array('spt_id', 'safe'),
+            array('spt_id, pemeriksaan_id', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, tanggal_penetapan, tanggal_jatuh_tempo, kohir, spt_id, jenis_surat_id, created, updated', 'safe', 'on' => 'search'),
+            array('id, tanggal_penetapan, tanggal_jatuh_tempo, kohir, spt_id, jenis_surat_id, created, updated, pemeriksaan_id', 'safe', 'on' => 'search'),
         );
     }
 
@@ -57,6 +59,7 @@ class Penetapan extends CActiveRecord {
             'setoranPajaks' => array(self::HAS_MANY, 'SetoranPajak', 'penetapan_id'),
             'spt' => array(self::BELONGS_TO, 'Spt', 'spt_id'),
             'jenisSurat' => array(self::BELONGS_TO, 'JenisSurat', 'jenis_surat_id'),
+            'pemeriksaan' => array(self::BELONGS_TO, 'Pemeriksaan', 'pemeriksaan_id'),
         );
     }
 
@@ -73,6 +76,7 @@ class Penetapan extends CActiveRecord {
             'jenis_surat_id' => Yii::t('trans', 'Jenis Surat'),
             'created' => Yii::t('trans', 'Created'),
             'updated' => Yii::t('trans', 'Updated'),
+            'pemeriksaan_id' => Yii::t('trans', 'Pemeriksaan'),
         );
     }
 
@@ -101,6 +105,7 @@ class Penetapan extends CActiveRecord {
         $criteria->compare('kohir', $this->kohir);
         $criteria->compare('spt_id', $this->spt_id, true);
         $criteria->compare('jenis_surat_id', $this->jenis_surat_id);
+        $criteria->compare('pemeriksaan_id', $this->pemeriksaan_id, true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

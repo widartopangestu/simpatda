@@ -15,6 +15,7 @@
  * @property string $updated
  *
  * The followings are the available model relations:
+ * @property Penetapan[] $penetapans
  * @property WajibPajak $wajibPajak
  * @property KodeRekening $kodeRekening
  * @property PemeriksaanItem[] $pemeriksaanItems
@@ -60,6 +61,7 @@ class Pemeriksaan extends CActiveRecord {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
+            'penetapans' => array(self::HAS_MANY, 'Penetapan', 'pemeriksaan_id'),
             'wajibpajak' => array(self::BELONGS_TO, 'WajibPajak', 'wajib_pajak_id'),
             'kodeRekening' => array(self::BELONGS_TO, 'KodeRekening', 'kode_rekening_id'),
             'pemeriksaanItems' => array(self::HAS_MANY, 'PemeriksaanItem', 'pemeriksaan_id'),
