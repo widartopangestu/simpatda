@@ -23,7 +23,7 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
             'class' => 'CCheckBoxColumn',
             'checkBoxHtmlOptions' => array(
                 'name' => 'setoran_ids[]',
-                'onclick' => 'parent.getValueSetoran($(this).val(), \''. $id_selector .'\')'
+                'onclick' => 'parent.getValueSetoran($(this).val())'
             ),
             'selectableRows' => '1',
             'header' => Yii::t('trans', 'Pilih'),

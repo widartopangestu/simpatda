@@ -99,106 +99,40 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if ($model->isNewRecord): ?>
-                            <tr class="template" style="display: none;">
-                                <td>
-                                    <input type="hidden" class="items-id" name="items[x][items_id]" id="items_xxitems.id" />
-                                    <input type="hidden" name="items[x][spt_id]" id="items_xxspt_id" />
-                                    <input type="hidden" name="items[x][tanggal_jatuh_tempo]" id="items_xxtanggal_jatuh_tempo" />
-                                    <input type="hidden" name="items[x][kode_rekening_id]" id="items_xxkode_rekening_id" />
-                                    <a href="#" class="browse browse-items" rel="tooltip" data-original-title="<?php echo Yii::t('trans', 'Browse'); ?>" id="xx"><i class="icon-list"></i></a>
-                                </td>
-                                <td><input readonly="readonly" name="items[x][periode_awal]" id="items_xxperiode_awal" class="spanD" type="text" style="text-align: right;"></td>
-                                <td><input readonly="readonly" name="items[x][periode_akhir]" id="items_xxperiode_akhir" class="spanD" type="text" style="text-align: right;"></td>
-                                <td><input name="items[x][terhutang]" id="items_xxterhutang" class="spanT required" type="text" onkeyup="getValue();" style="text-align: right;"></td>
-                                <td>
-                                    <?php echo Yii::t('trans', 'Setoran'); ?> : <input readonly="readonly" name="items[x][setoran]" id="items_xxsetoran" class="spanT" type="text" style="text-align: right;"><br />
-                                    <?php echo Yii::t('trans', 'Kompensasi'); ?> : <input name="items[x][kompensasi]" id="items_xxkompensasi" class="spanT" type="text" onkeyup="getValue();" style="text-align: right;"><br />
-                                    <?php echo Yii::t('trans', 'Lain-lain'); ?> : <input name="items[x][kredit_lain]" id="items_xxkredit_lain" class="spanT" type="text" onkeyup="getValue();" style="text-align: right;"><hr />
-                                    <?php echo Yii::t('trans', 'Total'); ?> : <br /><input readonly="readonly" name="items[x][total_kredit]" id="items_xxtotal_kredit" class="spanT" type="text" style="text-align: right;">
-                                </td>
-                                <td><input readonly="readonly" name="items[x][pajak]" id="items_xxpajak" class="spanT" type="text" style="text-align: right;"></td>
-                                <td>
-                                    <?php echo Yii::t('trans', 'Bunga'); ?> : <input readonly="readonly" name="items[x][bunga]" id="items_xxbunga" class="spanT" type="text" style="text-align: right;"><br />
-                                    <?php echo Yii::t('trans', 'Kenaikan'); ?> : <input name="items[x][kenaikan]" id="items_xxkenaikan" class="spanT" type="text" onkeyup="getValue();" style="text-align: right;"><hr />
-                                    <?php echo Yii::t('trans', 'Total'); ?> : <br /><input readonly="readonly" name="items[x][total_sanksi]" id="items_xxtotal_sanksi" class="spanT" type="text" style="text-align: right;">
-                                </td>
-                                <td><input readonly="readonly" name="items[x][total]" id="items_xxtotal" class="span2" type="text" style="text-align: right;"></td>
-                                <td><a href="#" class="delete remove-items" rel="tooltip" data-original-title="<?php echo Yii::t('trans', 'Delete'); ?>"> <i class="icon-trash"></i></a></td>
-                            </tr>
-                        <?php else : ?>         
-                            <tr class="template" style="display: none;">
-                                <td>
-                                    <input type="hidden" class="items-id" name="items[x][items_id]" id="items_xxitems.id" />
-                                    <input type="hidden" name="items[x][spt_id]" id="items_xxspt_id" />
-                                    <input type="hidden" name="items[x][tanggal_jatuh_tempo]" id="items_xxtanggal_jatuh_tempo" />
-                                    <input type="hidden" name="items[x][kode_rekening_id]" id="items_xxkode_rekening_id" />
-                                    <a href="#" class="browse browse-items" rel="tooltip" data-original-title="<?php echo Yii::t('trans', 'Browse'); ?>" id="xx"><i class="icon-arrow"></i></a>
-                                </td>
-                                <td><input readonly="readonly" name="items[x][periode_awal]" id="items_xxperiode_awal" class="spanD" type="text" style="text-align: right;"></td>
-                                <td><input readonly="readonly" name="items[x][periode_akhir]" id="items_xxperiode_akhir" class="spanD" type="text" style="text-align: right;"></td>
-                                <td><input name="items[x][terhutang]" id="items_xxterhutang" class="spanT required" type="text" onkeyup="getValue();" style="text-align: right;"></td>
-                                <td>
-                                    <?php echo Yii::t('trans', 'Setoran'); ?> : <input readonly="readonly" name="items[x][setoran]" id="items_xxsetoran" class="spanT" type="text" style="text-align: right;"><br />
-                                    <?php echo Yii::t('trans', 'Kompensasi'); ?> : <input name="items[x][kompensasi]" id="items_xxkompensasi" class="spanT" type="text" onkeyup="getValue();" style="text-align: right;"><br />
-                                    <?php echo Yii::t('trans', 'Lain-lain'); ?> : <input name="items[x][kredit_lain]" id="items_xxkredit_lain" class="spanT" type="text" onkeyup="getValue();" style="text-align: right;"><hr />
-                                    <?php echo Yii::t('trans', 'Total'); ?> : <input readonly="readonly" name="items[x][total_kredit]" id="items_xxtotal_kredit" class="spanT" type="text" style="text-align: right;">
-                                </td>
-                                <td><input readonly="readonly" name="items[x][pajak]" id="items_xxpajak" class="spanT" type="text" style="text-align: right;"></td>
-                                <td>
-                                    <?php echo Yii::t('trans', 'Bunga'); ?> : <input readonly="readonly" name="items[x][bunga]" id="items_xxbunga" class="spanT" type="text" style="text-align: right;"><br />
-                                    <?php echo Yii::t('trans', 'Kenaikan'); ?> : <input name="items[x][kenaikan]" id="items_xxkenaikan" class="spanT" type="text" onkeyup="getValue();" style="text-align: right;"><hr />
-                                    <?php echo Yii::t('trans', 'Total'); ?> : <input readonly="readonly" name="items[x][total_sanksi]" id="items_xxtotal_sanksi" class="spanT" type="text" style="text-align: right;">
-                                </td>
-                                <td><input readonly="readonly" name="items[x][total]" id="items_xxtotal" class="span2" type="text" style="text-align: right;"></td>
-                                <td><a href="#" class="delete remove-items" rel="tooltip" data-original-title="<?php echo Yii::t('trans', 'Delete'); ?>"><i class="icon-trash"></i></a></td>
-                            </tr>
-                            <?php
-                            $index = 0;
-                            foreach ($model->pemeriksaanItems as $item):
-                                ?>
-                                <tr class="new">
-                                    <td>
-                                        <input type="hidden" class="items-id" name="items[<?php echo $index; ?>][items_id]" value="<?php echo $item->id; ?>" id="items_<?php echo $index; ?>xitems.id" />
-                                        <input type="hidden" name="items[<?php echo $index; ?>][spt_id]" value="<?php echo $item->spt_id; ?>" id="items_<?php echo $index; ?>xspt_id" />
-                                        <input type="hidden" name="items[<?php echo $index; ?>][tanggal_jatuh_tempo]" value="<?php echo $item->tanggal_jatuh_tempo; ?>" id="items_<?php echo $index; ?>xtanggal_jatuh_tempo" />
-                                        <input type="hidden" name="items[<?php echo $index; ?>][kode_rekening_id]" value="<?php echo $item->kode_rekening_id; ?>" id="items_<?php echo $index; ?>xkode_rekening_id" />
-                                        <a href="#" class="browse browse-items" rel="tooltip" data-original-title="<?php echo Yii::t('trans', 'Browse'); ?>" id="<?php echo $index; ?>"><i class="icon-arrow"></i></a>
-                                    </td>
-                                    <td><input value="<?php echo date('d/m/Y', strtotime($item->periode_awal)); ?>" readonly="readonly" name="items[<?php echo $index; ?>][periode_awal]" id="items_<?php echo $index; ?>xperiode_awal" class="spanD" type="text" style="text-align: right;"></td>
-                                    <td><input value="<?php echo date('d/m/Y', strtotime($item->periode_akhir)); ?>" readonly="readonly" name="items[<?php echo $index; ?>][periode_akhir]" id="items_<?php echo $index; ?>xperiode_akhir" class="spanD" type="text" style="text-align: right;"></td>
-                                    <td><input value="<?php echo $item->terhutang; ?>" name="items[<?php echo $index; ?>][terhutang]" id="items_<?php echo $index; ?>xterhutang" class="spanT required" type="text" onkeyup="getValue();" style="text-align: right;"></td>
-                                    <td>
-                                        <?php echo Yii::t('trans', 'Setoran'); ?> : <input value="<?php echo number_format($item->setoran, Yii::app()->params['currency_precision']); ?>" readonly="readonly" name="items[<?php echo $index; ?>][setoran]" id="items_<?php echo $index; ?>xsetoran" class="spanT" type="text" style="text-align: right;"><br />
-                                        <?php echo Yii::t('trans', 'Kompensasi'); ?> : <input value="<?php echo $item->kompensasi; ?>" name="items[<?php echo $index; ?>][kompensasi]" id="items_<?php echo $index; ?>xkompensasi" class="spanT" type="text" onkeyup="getValue();" style="text-align: right;"><br />
-                                        <?php echo Yii::t('trans', 'Lain-lain'); ?> : <input value="<?php echo $item->kredit_lain; ?>" name="items[<?php echo $index; ?>][kredit_lain]" id="items_<?php echo $index; ?>xkredit_lain" class="spanT" type="text" onkeyup="getValue();" style="text-align: right;"><hr />
-                                        <?php echo Yii::t('trans', 'Total'); ?> : <input value="<?php echo number_format($item->total_kredit, Yii::app()->params['currency_precision']); ?>" readonly="readonly" name="items[<?php echo $index; ?>][total_kredit]" id="items_<?php echo $index; ?>xtotal_kredit" class="spanT" type="text" style="text-align: right;">
-                                    </td>
-                                    <td><input value="<?php echo number_format($item->pajak, Yii::app()->params['currency_precision']); ?>" readonly="readonly" name="items[<?php echo $index; ?>][pajak]" id="items_<?php echo $index; ?>xpajak" class="spanT" type="text" style="text-align: right;"></td>
-                                    <td>
-                                        <?php echo Yii::t('trans', 'Bunga'); ?> : <input value="<?php echo number_format($item->bunga, Yii::app()->params['currency_precision']); ?>" readonly="readonly" name="items[<?php echo $index; ?>][bunga]" id="items_<?php echo $index; ?>xbunga" class="spanT" type="text" style="text-align: right;"><br />
-                                        <?php echo Yii::t('trans', 'Kenaikan'); ?> : <input value="<?php echo $item->kenaikan; ?>" name="items[<?php echo $index; ?>][kenaikan]" id="items_<?php echo $index; ?>xkenaikan" class="spanT" type="text" onkeyup="getValue();" style="text-align: right;"><hr />
-                                        <?php echo Yii::t('trans', 'Total'); ?> : <input value="<?php echo number_format($item->total_sanksi, Yii::app()->params['currency_precision']); ?>" readonly="readonly" name="items[<?php echo $index; ?>][total_sanksi]" id="items_<?php echo $index; ?>xtotal_sanksi" class="spanT" type="text" style="text-align: right;">
-                                    </td>
-                                    <td><input value="<?php echo number_format($item->total, Yii::app()->params['currency_precision']); ?>" readonly="readonly" name="items[<?php echo $index; ?>][total]" id="items_<?php echo $index; ?>xtotal" class="span2" type="text" style="text-align: right;"></td>
-                                    <td><a href="#" class="delete remove-items" rel="tooltip" data-original-title="<?php echo Yii::t('trans', 'Delete'); ?>" id="<?php echo $item->id; ?>"><i class="icon-trash"></i></a></td>
-                                </tr>
-                                <?php
-                                $index++;
-                            endforeach;
-                            ?>
-                        <?php endif; ?>
                         <tr>
-                            <td colspan="6"><a href="#" class="btn btn-primary add-items">
-                                    <?php echo Yii::t('trans', 'Add Item'); ?>
-                                </a></td>
+                            <td>
+                                <?php echo $form->hiddenField($model, 'setoran_pajak_id'); ?> 
+                                <?php echo $form->hiddenField($model, 'spt_id'); ?> 
+                                <?php echo $form->hiddenField($model, 'tanggal_jatuh_tempo'); ?> 
+                                <?php echo $form->hiddenField($model, 'kode_rekening_id'); ?> 
+                                <a href="#" class="browse browse" rel="tooltip" data-original-title="<?php echo Yii::t('trans', 'Browse'); ?>"><i class="icon-list"></i></a>
+                            </td>
+                            <td><?php echo $form->textField($model, 'periode_awal', array('readonly' => 'readonly', 'class' => 'spanD')); ?></td>
+                            <td><?php echo $form->textField($model, 'periode_akhir', array('readonly' => 'readonly', 'class' => 'spanD')); ?></td>
+                            <td><?php echo $form->textField($model, 'terhutang', array('class' => 'spanT required', 'style' => "text-align: right;", 'onkeyup' => "getValue();")); ?></td>
+                            <td>
+                                <?php echo Yii::t('trans', 'Setoran'); ?> : <?php echo Yii::t('trans', 'Total'); ?> : <?php echo $form->textField($model, 'setoran', array('readonly' => 'readonly', 'class' => 'spanT', 'style' => "text-align: right;")); ?><br />
+                                <?php echo Yii::t('trans', 'Kompensasi'); ?> : <?php echo $form->textField($model, 'kompensasi', array('class' => 'spanT', 'style' => "text-align: right;", 'onkeyup' => "getValue();")); ?><br />
+                                <?php echo Yii::t('trans', 'Lain-lain'); ?> : <?php echo $form->textField($model, 'kredit_lain', array('class' => 'spanT', 'style' => "text-align: right;", 'onkeyup' => "getValue();")); ?><hr />
+                                <?php echo Yii::t('trans', 'Total'); ?> : <?php echo Yii::t('trans', 'Total'); ?> : <?php echo $form->textField($model, 'total_kredit', array('readonly' => 'readonly', 'class' => 'spanT', 'style' => "text-align: right;")); ?>
+                            </td>
+                            <td><?php echo Yii::t('trans', 'Total'); ?> : <?php echo $form->textField($model, 'pajak', array('readonly' => 'readonly', 'class' => 'spanT', 'style' => "text-align: right;")); ?></td>
+                            <td>
+                                <?php echo Yii::t('trans', 'Bunga'); ?> : <?php echo $form->textField($model, 'bunga', array('readonly' => 'readonly', 'class' => 'spanT', 'style' => "text-align: right;")); ?><br />
+                                <?php echo Yii::t('trans', 'Kenaikan'); ?> : <?php echo $form->textField($model, 'kenaikan', array('class' => 'spanT', 'style' => "text-align: right;", 'onkeyup' => "getValue();")); ?><hr />
+                                <?php echo Yii::t('trans', 'Total'); ?> : <?php echo $form->textField($model, 'total_sanksi', array('readonly' => 'readonly', 'class' => 'spanT', 'style' => "text-align: right;")); ?>
+                            </td>
+                            <td><?php echo $form->textField($model, 'total', array('span' => 2, 'readonly' => 'readonly', 'style' => "text-align: right;")); ?></td>
+                            <td><a href="#" class="delete remove" rel="tooltip" data-original-title="<?php echo Yii::t('trans', 'Delete'); ?>"> <i class="icon-trash"></i></a></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6"></td>
                             <td><?php echo Yii::t('trans', 'Jumlah'); ?></td>
                             <td><?php echo $form->textField($model, 'nilai_pajak', array('span' => 2, 'readonly' => 'readonly', 'style' => "text-align: right;font-size: 20px;font-weight: bold;")); ?></td>
                             <td></td>
                         </tr>
                     </tbody>
                 </table>
-                <input type="hidden" name="deletedItem" value="" id="deletedItem" />
             </fieldset>  
         </div>
     </div>
@@ -246,72 +180,53 @@
                 $.each(data, function (key, value) {
                     jQuery("#" + key).val(value);
                 });
-                jQuery("#Pemeriksaan_nilai_pajak").val(data.nilai_pajak);
             });
         }, 1000);
     }
 
-    function getValueSetoran(id, idx) {
+    function getValueSetoran(id) {
         jQuery.ajax({'type': 'POST', 'url': '<?php echo $this->createUrl('pemeriksaan/jsonGetSetoran'); ?>/' + id, 'cache': false, dataType: 'json', 'data': null}).done(function (data) {
-            jQuery("#" + idx + "xspt_id").val(data.spt_id);
-            jQuery("#" + idx + "xtanggal_jatuh_tempo").val(data.tanggal_jatuh_tempo);
-            jQuery("#" + idx + "xkode_rekening_id").val(data.kode_rekening_id);
-            jQuery("#" + idx + "xperiode_awal").val(data.periode_awal);
-            jQuery("#" + idx + "xperiode_akhir").val(data.periode_akhir);
-            jQuery("#" + idx + "xsetoran").val(data.setoran);
+            jQuery("#Pemeriksaan_spt_id").val(data.spt_id);
+            jQuery("#Pemeriksaan_tanggal_jatuh_tempo").val(data.tanggal_jatuh_tempo);
+            jQuery("#Pemeriksaan_kode_rekening_id").val(data.kode_rekening_id);
+            jQuery("#Pemeriksaan_periode_awal").val(data.periode_awal);
+            jQuery("#Pemeriksaan_periode_akhir").val(data.periode_akhir);
+            jQuery("#Pemeriksaan_setoran").val(data.setoran);
+            jQuery("#Pemeriksaan_setoran_pajak_id").val(data.setoran_pajak_id);
             getValue();
             $.fancybox.close();
         });
     }
-    $(function () {
-        var itemCount = <?php echo $model->isNewRecord ? 0 : $model->pemeriksaanItemCount; ?>;
-        var deletedId = '';
-        $(".browse-items").on("click", function (e) {
-            var idx = $(this).prev().attr('id').split('x');
-            if (jQuery('#Pemeriksaan_wajib_pajak_id').val() != '') {
-                $.fancybox({
-                    type: 'iframe',
-                    href: '<?php echo $this->createUrl('pemeriksaan/grid'); ?>?id=' + jQuery('#Pemeriksaan_wajib_pajak_id').val() + '&idx=' + idx[0],
-                    width: 1000,
-                    height: 800,
-                });
-            } else {
-                alert('<?php echo Yii::t('trans', 'Pilih wajib pajak dulu.'); ?>');
-            }
-        });
-        $(".remove-items").on("click", function (e) {
-            e.preventDefault();
-            var row = $(this).closest("tr");
-            row.find("input[type='hidden'][value=false]").val(true);
-            (row.attr('class') == 'new') ? row.remove() : row.hide();
-            if ($(this).attr('id') !== undefined) {
-                if (deletedId == '')
-                    deletedId += $(this).attr('id');
-                else
-                    deletedId += ',' + $(this).attr('id');
-                jQuery("#deletedItem").val(deletedId);
-            }
-            getValue();
-        });
-
-        $(".add-items").on("click", function (e) {
-            e.preventDefault();
-            var rows = $(".items-list tbody tr:first").clone(true, true);
-            rows.find(".hidden").remove();
-            rows.find("input, select").each(function () {
-                this.id = this.id.replace('_xx', '_' + itemCount + 'x');
-                this.name = this.name.replace('[x]', '[' + itemCount + ']');
-                this.value = '';
+    $(".browse").on("click", function (e) {
+        var idx = jQuery("#Pemeriksaan_setoran_pajak_id").val();
+        if (jQuery('#Pemeriksaan_wajib_pajak_id').val() != '') {
+            $.fancybox({
+                type: 'iframe',
+                href: '<?php echo $this->createUrl('pemeriksaan/grid'); ?>?id=' + jQuery('#Pemeriksaan_wajib_pajak_id').val() + '&idx=' + idx,
+                width: 1000,
+                height: 800,
             });
-            rows.find(".required").prop('required', true);
-            $(this).closest("tr").before(rows.removeClass("template").addClass('new').show());
-            itemCount += 1;
-        });
-        $('form').on('submit', function (e) {
-            $(".items-list tbody tr:first").remove();
-            return true;
+        } else {
+            alert('<?php echo Yii::t('trans', 'Pilih wajib pajak dulu.'); ?>');
+        }
+    });
 
-        });
+    $(".remove").on("click", function (e) {
+        //clear data
+        jQuery("#Pemeriksaan_setoran").val('');
+        jQuery("#Pemeriksaan_total_kredit").val('');
+        jQuery("#Pemeriksaan_pajak").val('');
+        jQuery("#Pemeriksaan_bunga").val('');
+        jQuery("#Pemeriksaan_total_sanksi").val('');
+        jQuery("#Pemeriksaan_total").val('');
+        jQuery("#Pemeriksaan_nilai_pajak").val('');
+        jQuery("#Pemeriksaan_spt_id").val('');
+        jQuery("#Pemeriksaan_tanggal_jatuh_tempo").val('');
+        jQuery("#Pemeriksaan_kode_rekening_id").val('');
+        jQuery("#Pemeriksaan_periode_awal").val('');
+        jQuery("#Pemeriksaan_periode_akhir").val('');
+        jQuery("#Pemeriksaan_setoran").val('');
+//        jQuery("#Pemeriksaan_setoran_pajak_id").val('');
     });
 </script>
 <style type="text/css">

@@ -50,7 +50,7 @@
                         'results' => 'js:function(data,page) { var more = (page * 10) < data.total; return {results: data, more:more }; }',
                     ),
                     'initSelection' => empty($model->penetapan_id) ? null : 'js:function(element,callback){
-                        callback({id:' . $model->penetapan_id . ',text:"' . $model->kohir . ' [' . $model->penetapan->spt->periode . ' - ' . $model->penetapan->jenisSurat->singkatan . '] ' . $model->penetapan->spt->wajibpajak->npwpd . ' ' . $model->penetapan->spt->wajibpajak->nama . '"});
+                        callback({id:' . $model->penetapan_id . ',text:"' . $model->kohir . ' ' . date('Y', strtotime($model->penetapan->tanggal_penetapan)) . ' ' . $model->penetapan->jenisSurat->singkatan . '"});
                     }',
                 )
             ));

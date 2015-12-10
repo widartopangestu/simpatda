@@ -67,7 +67,7 @@ $this->menu = array(
             array(
                 'name' => 'periode',
                 'type' => 'raw',
-                'value' => 'CHtml::encode($data->penetapan->spt->periode)',
+                'value' => 'CHtml::encode(date(\'Y\', strtotime($data->penetapan->tanggal_penetapan)))',
                 'filter' => false,
             ),
             array(
@@ -90,19 +90,19 @@ $this->menu = array(
             array(
                 'name' => 'nama_rekening',
                 'type' => 'raw',
-                'value' => 'CHtml::encode($data->penetapan->spt->kodeRekening->nama)',
+                'value' => 'CHtml::encode($data->penetapan->spt_id != null ? $data->penetapan->spt->kodeRekening->nama : $data->penetapan->pemeriksaan->kodeRekening->nama)',
                 'filter' => false,
             ),
             array(
                 'name' => 'npwpd',
                 'type' => 'raw',
-                'value' => 'CHtml::encode($data->penetapan->spt->wajibpajak->npwpd)',
+                'value' => 'CHtml::encode($data->penetapan->spt_id != null ? $data->penetapan->spt->wajibpajak->npwpd : $data->penetapan->pemeriksaan->wajibpajak->npwpd)',
                 'filter' => false,
             ),
             array(
                 'name' => 'nama_wajib_pajak',
                 'type' => 'raw',
-                'value' => 'CHtml::encode($data->penetapan->spt->wajibpajak->nama)',
+                'value' => 'CHtml::encode($data->penetapan->spt_id != null ? $data->penetapan->spt->wajibpajak->nama : $data->penetapan->pemeriksaan->wajibpajak->nama)',
                 'filter' => false,
             ),
             array(

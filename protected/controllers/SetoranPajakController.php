@@ -41,11 +41,14 @@ class SetoranPajakController extends Controller {
                     $model->tanggal_bayar = new CDbExpression('null');
 
                 $flag = $model->save() && $flag;
-                if (isset($_POST['SetoranPajakDenda'])) {
+                if (isset($_POST['SetoranPajakDenda']) && $_POST['SetoranPajakDenda']['jumlah_bulan']) {
                     $penetapan = new Penetapan;
                     $penetapan->tanggal_penetapan = $model->tanggal_bayar;
                     $penetapan->tanggal_jatuh_tempo = date('Y-m-d', strtotime("+" . Yii::app()->params['hari_jatuh_tempo'] . " day", strtotime($model->tanggal_bayar)));
-                    $penetapan->spt_id = $model->penetapan->spt_id;
+                    if ($model->penetapan->spt_id)
+                        $penetapan->spt_id = $model->penetapan->spt_id;
+                    elseif ($model->penetapan->pemeriksaan_id)
+                        $penetapan->pemeriksaan_id = $model->penetapan->pemeriksaan_id;
                     $penetapan->jenis_surat_id = 3; //Surat Tagihan Pajak Daerah
                     $flag = $penetapan->save() && $flag;
 
@@ -105,8 +108,11 @@ class SetoranPajakController extends Controller {
                     $model->tanggal_bayar = new CDbExpression('null');
 
                 $flag = $model->save() && $flag;
-                if (isset($_POST['SetoranPajakDenda'])) {
-                    $penetapan = Penetapan::model()->findByAttributes(array('spt_id' => $model->penetapan->spt_id, 'jenis_surat_id' => 3));
+                if (isset($_POST['SetoranPajakDenda']) && $_POST['SetoranPajakDenda']['jumlah_bulan']) {
+                    if ($model->penetapan->spt_id)
+                        $penetapan = Penetapan::model()->findByAttributes(array('spt_id' => $model->penetapan->spt_id, 'jenis_surat_id' => 3));
+                    elseif ($model->penetapan->pemeriksaan_id)
+                        $penetapan = Penetapan::model()->findByAttributes(array('pemeriksaan_id' => $model->penetapan->pemeriksaan_id, 'jenis_surat_id' => 3));
                     $penetapan->tanggal_penetapan = $model->tanggal_bayar;
                     $penetapan->tanggal_jatuh_tempo = date('Y-m-d', strtotime("+" . Yii::app()->params['hari_jatuh_tempo'] . " day", strtotime($model->tanggal_bayar)));
                     $flag = $penetapan->save() && $flag;
@@ -210,10 +216,14 @@ class SetoranPajakController extends Controller {
     public function actionJsonGetData($id = null) {
         if ($id != null) {
             $model = Penetapan::model()->findByPk($id);
+            if ($model->spt_id)
+                $wajib_pajak_id = $model->spt->wajib_pajak_id;
+            else if ($model->pemeriksaan_id)
+                $wajib_pajak_id = $model->pemeriksaan->wajib_pajak_id;
             $data = array(
                 'penetapan_id' => $model->id,
             );
-            $sql = "SELECT id, nama, alamat, kabupaten, kecamatan, kelurahan FROM v_wajib_pajak WHERE id=" . $model->spt->wajib_pajak_id;
+            $sql = "SELECT id, nama, alamat, kabupaten, kecamatan, kelurahan FROM v_wajib_pajak WHERE id=" . $wajib_pajak_id;
             $result = Yii::app()->db->createCommand($sql)->queryRow();
 
             echo CJSON::encode(array_merge($data, $result));
@@ -227,34 +237,65 @@ class SetoranPajakController extends Controller {
             $model->attributes = $_POST['SetoranPajak'];
             if ($model->penetapan_id) {
                 $penetapan = Penetapan::model()->findByPk($model->penetapan_id);
-                $kode_rekening_denda = SetoranPajak::model()->getKodeRekeningDenda($penetapan->spt->kode_rekening_id);
-                $date1 = date_create_from_format('Y-m-d', $penetapan->tanggal_jatuh_tempo);
-                $date2 = date_create_from_format('d/m/Y', $model->tanggal_bayar);
-                $interval = date_diff($date1, $date2);
-                $bulan = 0;
-                if (version_compare(strtotime(date_format(date_create_from_format('d/m/Y', $model->tanggal_bayar), "Y-m-d")), strtotime($penetapan->tanggal_jatuh_tempo), ">"))
-                    $bulan = $interval->m + ($interval->y * 12) + ($interval->d > 0 ? 1 : 0);
-                $persen_denda = 2 / 100;
-                $denda = $bulan * $persen_denda * $penetapan->spt->pajak;
-                $keterangan = $kode_rekening_denda->nama . '<br/>' . $bulan . ' ' . Yii::t('trans', 'bulan') . ' x 2% x Rp. ' . number_format($penetapan->spt->pajak, Yii::app()->params['currency_precision']);
+                if ($penetapan->spt_id) {
+                    $kode_rekening_denda = SetoranPajak::model()->getKodeRekeningDenda($penetapan->spt->kode_rekening_id);
+                    $date1 = date_create_from_format('Y-m-d', $penetapan->tanggal_jatuh_tempo);
+                    $date2 = date_create_from_format('d/m/Y', $model->tanggal_bayar);
+                    $interval = date_diff($date1, $date2);
+                    $bulan = 0;
+                    if (version_compare(strtotime(date_format(date_create_from_format('d/m/Y', $model->tanggal_bayar), "Y-m-d")), strtotime($penetapan->tanggal_jatuh_tempo), ">"))
+                        $bulan = $interval->m + ($interval->y * 12) + ($interval->d > 0 ? 1 : 0);
+                    $persen_denda = 2 / 100;
+                    $denda = $bulan * $persen_denda * $penetapan->spt->pajak;
+                    $keterangan = $kode_rekening_denda->nama . '<br/>' . $bulan . ' ' . Yii::t('trans', 'bulan') . ' x 2% x Rp. ' . number_format($penetapan->spt->pajak, Yii::app()->params['currency_precision']);
 
-                $model->jumlah_pajak = $penetapan->spt->pajak;
-                $model->jumlah_potongan = ($model->jumlah_potongan != '') ? doubleval(str_replace(',', '', $model->jumlah_potongan)) : 0;
-                $model->jumlah_bayar = $model->jumlah_pajak - $model->jumlah_potongan;
-                $model->jumlah_pajak_denda = $model->jumlah_pajak + $denda;
-                $model->jumlah_bayar_denda = $model->jumlah_bayar + $denda;
+                    $model->jumlah_pajak = $penetapan->spt->pajak;
+                    $model->jumlah_potongan = ($model->jumlah_potongan != '') ? doubleval(str_replace(',', '', $model->jumlah_potongan)) : 0;
+                    $model->jumlah_bayar = $model->jumlah_pajak - $model->jumlah_potongan;
+                    $model->jumlah_pajak_denda = $model->jumlah_pajak + $denda;
+                    $model->jumlah_bayar_denda = $model->jumlah_bayar + $denda;
 
-                $denda_item = array(
-                    'jumlah_bulan' => $bulan, 'keterangan' => $keterangan, 'nilai_denda' => $denda, 'kode_rekening' => $kode_rekening_denda->kode, 'kode_rekening_id' => $kode_rekening_denda->id
-                );
-                echo CJSON::encode(array_merge($denda_item, array(
-                    'tanggal_jatuh_tempo' => date('d/m/Y', strtotime($penetapan->tanggal_jatuh_tempo)),
-                    'html' => $this->renderPartial('_ajax_data_spt', array('model' => $model, 'penetapan' => $penetapan, 'denda_item' => $denda_item), true, true),
-                    'jumlah_bayar_denda' => number_format($model->jumlah_bayar_denda, Yii::app()->params['currency_precision']),
-                    'jumlah_bayar' => number_format($model->jumlah_bayar, Yii::app()->params['currency_precision']),
-                    'jumlah_pajak' => number_format($model->jumlah_pajak, Yii::app()->params['currency_precision']),
-                    'jumlah_pajak_denda' => number_format($model->jumlah_pajak_denda, Yii::app()->params['currency_precision']),
-                )));
+                    $denda_item = array(
+                        'jumlah_bulan' => $bulan, 'keterangan' => $keterangan, 'nilai_denda' => $denda, 'kode_rekening' => $kode_rekening_denda->kode, 'kode_rekening_id' => $kode_rekening_denda->id
+                    );
+                    echo CJSON::encode(array_merge($denda_item, array(
+                        'tanggal_jatuh_tempo' => date('d/m/Y', strtotime($penetapan->tanggal_jatuh_tempo)),
+                        'html' => $this->renderPartial('_ajax_data_spt', array('penetapan' => $penetapan, 'denda_item' => $denda_item), true, true),
+                        'jumlah_bayar_denda' => number_format($model->jumlah_bayar_denda, Yii::app()->params['currency_precision']),
+                        'jumlah_bayar' => number_format($model->jumlah_bayar, Yii::app()->params['currency_precision']),
+                        'jumlah_pajak' => number_format($model->jumlah_pajak, Yii::app()->params['currency_precision']),
+                        'jumlah_pajak_denda' => number_format($model->jumlah_pajak_denda, Yii::app()->params['currency_precision']),
+                    )));
+                } else if ($penetapan->pemeriksaan_id) {
+                    $kode_rekening_denda = SetoranPajak::model()->getKodeRekeningDenda($penetapan->pemeriksaan->kode_rekening_id);
+                    $date1 = date_create_from_format('Y-m-d', $penetapan->tanggal_jatuh_tempo);
+                    $date2 = date_create_from_format('d/m/Y', $model->tanggal_bayar);
+                    $interval = date_diff($date1, $date2);
+                    $bulan = 0;
+                    if (version_compare(strtotime(date_format(date_create_from_format('d/m/Y', $model->tanggal_bayar), "Y-m-d")), strtotime($penetapan->tanggal_jatuh_tempo), ">"))
+                        $bulan = $interval->m + ($interval->y * 12) + ($interval->d > 0 ? 1 : 0);
+                    $persen_denda = 2 / 100;
+                    $denda = $bulan * $persen_denda * $penetapan->pemeriksaan->nilai_pajak;
+                    $keterangan = $kode_rekening_denda->nama . '<br/>' . $bulan . ' ' . Yii::t('trans', 'bulan') . ' x 2% x Rp. ' . number_format($penetapan->pemeriksaan->nilai_pajak, Yii::app()->params['currency_precision']);
+
+                    $model->jumlah_pajak = $penetapan->pemeriksaan->nilai_pajak;
+                    $model->jumlah_potongan = ($model->jumlah_potongan != '') ? doubleval(str_replace(',', '', $model->jumlah_potongan)) : 0;
+                    $model->jumlah_bayar = $model->jumlah_pajak - $model->jumlah_potongan;
+                    $model->jumlah_pajak_denda = $model->jumlah_pajak;
+                    $model->jumlah_bayar_denda = $model->jumlah_bayar;
+
+                    $denda_item = array(
+                        'jumlah_bulan' => $bulan, 'keterangan' => $keterangan, 'nilai_denda' => $denda, 'kode_rekening' => $kode_rekening_denda->kode, 'kode_rekening_id' => $kode_rekening_denda->id
+                    );
+                    echo CJSON::encode(array_merge($denda_item, array(
+                        'tanggal_jatuh_tempo' => date('d/m/Y', strtotime($penetapan->tanggal_jatuh_tempo)),
+                        'html' => $this->renderPartial('_ajax_data_pemeriksaan', array('penetapan' => $penetapan, 'denda_item' => $denda_item), true, true),
+                        'jumlah_bayar_denda' => number_format($model->jumlah_bayar_denda, Yii::app()->params['currency_precision']),
+                        'jumlah_bayar' => number_format($model->jumlah_bayar, Yii::app()->params['currency_precision']),
+                        'jumlah_pajak' => number_format($model->jumlah_pajak, Yii::app()->params['currency_precision']),
+                        'jumlah_pajak_denda' => number_format($model->jumlah_pajak_denda, Yii::app()->params['currency_precision']),
+                    )));
+                }
             }
         }
     }

@@ -61,10 +61,6 @@ class PenetapanController extends Controller {
         ));
     }
 
-    public function actionSanksi() {
-        
-    }
-
     public function actionLhp() {
         $model = new PenetapanLhpForm;
         $model->periode = date('Y');
@@ -179,20 +175,33 @@ class PenetapanController extends Controller {
         }
     }
 
-    public function actionJsonKohir($jenis = 'p') {
+    public function actionJsonKohir() {
         $q = isset($_REQUEST['q']) ? $_REQUEST['q'] : '';
-        //query not in akan memakan waktu lama jika data banyak
+        $periode = '';
+        $surat = '';
+        if (strpos($q, ' ')) {
+            $tmp = explode(' ', $q);
+            $q = $tmp[0];
+            $periode = isset($tmp[1]) ? $tmp[1] : $periode;
+            $surat = isset($tmp[2]) ? $tmp[2] : $surat;
+        }
         $where = '';
         if ($q !== '') {
-            $where .= "WHERE kohir::text ILIKE '%$q%'";
+            $where .= "WHERE a.kohir::text ILIKE '%$q%'";
+            if ($periode !== '') {
+                $where .= " AND date_part('year', a.tanggal_penetapan)=$periode";
+                if ($surat !== '') {
+                    $where .= " AND b.singkatan::text ILIKE '%$surat%'";
+                }
+            }
         }
-        $sql = "SELECT id, periode, kohir, singkatan_jenis_surat, nama, npwpd FROM v_penetapan_spt $where LIMIT 10";
+        $sql = "SELECT a.id, a.kohir, date_part('year', a.tanggal_penetapan) AS periode, b.nama AS nama_jenis_surat, b.kode AS kode_jenis_surat, b.singkatan AS singkatan_jenis_surat FROM penetapan a JOIN jenis_surat b ON a.jenis_surat_id = b.id $where ORDER BY kohir LIMIT 10";
         $result = Yii::app()->db->createCommand($sql)->queryAll();
         $data = array();
         foreach ($result as $item) {
             $data[] = array(
                 'id' => $item['id'],
-                'text' => $item['kohir'] . ' [' . $item['periode'] . ' - ' . $item['singkatan_jenis_surat'] . '] ' . $item['npwpd'] . ' ' . $item['nama']
+                'text' => $item['kohir'] . ' ' . $item['periode'] . ' ' . $item['singkatan_jenis_surat']
             );
         }
         echo CJSON::encode($data);

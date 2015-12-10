@@ -8,9 +8,19 @@
  * @property string $tanggal
  * @property integer $periode
  * @property integer $nomor
- * @property double $nilai_pajak
  * @property integer $wajib_pajak_id
  * @property integer $kode_rekening_id
+ * @property string $spt_id
+ * @property string $periode_awal
+ * @property string $periode_akhir
+ * @property string $tanggal_jatuh_tempo
+ * @property double $kompensasi
+ * @property double $setoran
+ * @property double $kredit_lain
+ * @property double $bunga
+ * @property double $kenaikan
+ * @property double $terhutang
+ * @property double $nilai_pajak
  * @property string $created
  * @property string $updated
  *
@@ -18,7 +28,7 @@
  * @property Penetapan[] $penetapans
  * @property WajibPajak $wajibPajak
  * @property KodeRekening $kodeRekening
- * @property PemeriksaanItem[] $pemeriksaanItems
+ * @property Spt $spt
  */
 class Pemeriksaan extends CActiveRecord {
 
@@ -29,6 +39,11 @@ class Pemeriksaan extends CActiveRecord {
     public $kelurahan;
     public $kabupaten;
     public $wp_search;
+    public $total_kredit;
+    public $total_sanksi;
+    public $pajak;
+    public $total;
+    public $setoran_pajak_id;
 
     /**
      * @return string the associated database table name
@@ -44,13 +59,13 @@ class Pemeriksaan extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('npwpd, tanggal, periode, nomor, wajib_pajak_id', 'required'),
+            array('npwpd, tanggal, periode, nomor, wajib_pajak_id, spt_id, periode_awal, periode_akhir, terhutang, nilai_pajak', 'required'),
             array('periode, nomor, wajib_pajak_id, kode_rekening_id', 'numerical', 'integerOnly' => true),
-            array('nilai_pajak', 'numerical'),
-            array('nama, alamat, kabupaten, kecamatan, kelurahan', 'safe'),
+            array('kompensasi, setoran, kredit_lain, bunga, kenaikan, terhutang, nilai_pajak, setoran_pajak_id', 'numerical'),
+            array('tanggal_jatuh_tempo, nama, alamat, kabupaten, kecamatan, kelurahan, total_kredit, total_sanksi, pajak, total, setoran_pajak_id', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, wp_search, tanggal, periode, nomor, nilai_pajak, wajib_pajak_id, kode_rekening_id, created, updated', 'safe', 'on' => 'search'),
+            array('id, tanggal, periode, nomor, wajib_pajak_id, kode_rekening_id, spt_id, periode_awal, periode_akhir, tanggal_jatuh_tempo, kompensasi, setoran, kredit_lain, bunga, kenaikan, terhutang, nilai_pajak, created, updated', 'safe', 'on' => 'search'),
         );
     }
 
@@ -64,8 +79,7 @@ class Pemeriksaan extends CActiveRecord {
             'penetapans' => array(self::HAS_MANY, 'Penetapan', 'pemeriksaan_id'),
             'wajibpajak' => array(self::BELONGS_TO, 'WajibPajak', 'wajib_pajak_id'),
             'kodeRekening' => array(self::BELONGS_TO, 'KodeRekening', 'kode_rekening_id'),
-            'pemeriksaanItems' => array(self::HAS_MANY, 'PemeriksaanItem', 'pemeriksaan_id'),
-            'pemeriksaanItemCount' => array(self::STAT, 'PemeriksaanItem', 'pemeriksaan_id'),
+            'spt' => array(self::BELONGS_TO, 'Spt', 'spt_id'),
         );
     }
 
@@ -78,10 +92,20 @@ class Pemeriksaan extends CActiveRecord {
             'tanggal' => Yii::t('trans', 'Tanggal'),
             'periode' => Yii::t('trans', 'Periode'),
             'nomor' => Yii::t('trans', 'Nomor'),
-            'nilai_pajak' => Yii::t('trans', 'Nilai Pajak'),
             'wajib_pajak_id' => Yii::t('trans', 'Wajib Pajak'),
             'wp_search' => Yii::t('trans', 'Wajib Pajak'),
             'kode_rekening_id' => Yii::t('trans', 'Kode Rekening'),
+            'spt_id' => Yii::t('trans', 'Spt'),
+            'periode_awal' => Yii::t('trans', 'Periode Awal'),
+            'periode_akhir' => Yii::t('trans', 'Periode Akhir'),
+            'tanggal_jatuh_tempo' => Yii::t('trans', 'Tanggal Jatuh Tempo'),
+            'kompensasi' => Yii::t('trans', 'Kompensasi'),
+            'setoran' => Yii::t('trans', 'Setoran'),
+            'kredit_lain' => Yii::t('trans', 'Kredit Lain'),
+            'bunga' => Yii::t('trans', 'Bunga'),
+            'kenaikan' => Yii::t('trans', 'Kenaikan'),
+            'terhutang' => Yii::t('trans', 'Terhutang'),
+            'nilai_pajak' => Yii::t('trans', 'Nilai Pajak'),
             'created' => Yii::t('trans', 'Created'),
             'updated' => Yii::t('trans', 'Updated'),
             'npwpd' => Yii::t('trans', 'NPWPD'),
@@ -90,6 +114,9 @@ class Pemeriksaan extends CActiveRecord {
             'kecamatan' => Yii::t('trans', 'Kecamatan'),
             'kelurahan' => Yii::t('trans', 'Kelurahan'),
             'kabupaten' => Yii::t('trans', 'Kabupaten'),
+            'total_kredit' => Yii::t('trans', 'Total Kredit'),
+            'total_sanksi' => Yii::t('trans', 'Total Sanksi'),
+            'pajak' => Yii::t('trans', 'Pajak'),
         );
     }
 
@@ -115,10 +142,20 @@ class Pemeriksaan extends CActiveRecord {
         $criteria->compare('tanggal', $this->tanggal, true);
         $criteria->compare('periode', $this->periode);
         $criteria->compare('nomor', $this->nomor);
-        $criteria->compare('nilai_pajak', $this->nilai_pajak);
         $criteria->compare('wajib_pajak_id', $this->wajib_pajak_id);
         $criteria->compare('wajibpajak.nama', $this->wp_search, true);
         $criteria->compare('kode_rekening_id', $this->kode_rekening_id);
+        $criteria->compare('spt_id', $this->spt_id, true);
+        $criteria->compare('periode_awal', $this->periode_awal, true);
+        $criteria->compare('periode_akhir', $this->periode_akhir, true);
+        $criteria->compare('tanggal_jatuh_tempo', $this->tanggal_jatuh_tempo, true);
+        $criteria->compare('kompensasi', $this->kompensasi);
+        $criteria->compare('setoran', $this->setoran);
+        $criteria->compare('kredit_lain', $this->kredit_lain);
+        $criteria->compare('bunga', $this->bunga);
+        $criteria->compare('kenaikan', $this->kenaikan);
+        $criteria->compare('terhutang', $this->terhutang);
+        $criteria->compare('nilai_pajak', $this->nilai_pajak);
         $criteria->compare('created', $this->created, true);
         $criteria->compare('updated', $this->updated, true);
 

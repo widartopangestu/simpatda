@@ -12,20 +12,15 @@
     <tbody>
         <?php
         if (count($penetapan) > 0) {
-            $i = 1;
-            $sum_pajak = 0;
-            foreach ($penetapan->spt->sptItems as $spt) {
-                $sum_pajak +=$spt->pajak;
-                echo '<tr>';
-                echo '<td>' . $i++ . '</td>';
-                echo '<td>' . $spt->kodeRekening->kode . '</td>';
-                echo '<td>' . $spt->kodeRekening->nama . '</td>';
-                echo '<td>' . number_format($spt->pajak, Yii::app()->params['currency_precision']) . '</td>';
-                echo '</tr>';
-            }
+            echo '<tr>';
+            echo '<td>1</td>';
+            echo '<td>' . $penetapan->pemeriksaan->kodeRekening->kode . '</td>';
+            echo '<td>' . $penetapan->pemeriksaan->kodeRekening->nama . '</td>';
+            echo '<td>' . number_format($penetapan->pemeriksaan->nilai_pajak, Yii::app()->params['currency_precision']) . '</td>';
+            echo '</tr>';
             if (isset($denda_item) && $denda_item['jumlah_bulan']) {
                 echo '<tr>';
-                echo '<td>' . $i++ . '</td>';
+                echo '<td>2</td>';
                 echo '<td>' . $denda_item['kode_rekening'] . '</td>';
                 echo '<td>' . $denda_item['keterangan'] . '</td>';
                 echo '<td>' . number_format($denda_item['nilai_denda'], Yii::app()->params['currency_precision']) . '</td>';
