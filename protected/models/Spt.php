@@ -262,7 +262,7 @@ class Spt extends CActiveRecord {
                 $jenisPajakOptions[$value] : "unknown Jenis Pajak ({$value})";
     }
 
-    public function beforeSave() {
+    public function beforeValidate() {
         if ($this->isNewRecord) {
             if (strtolower($this->nomor) === strtolower('AUTO')) {
                 $sql = "SELECT MAX(nomor) AS maxnomor FROM spt WHERE periode='$this->periode'";
