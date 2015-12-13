@@ -59,7 +59,13 @@ switch ($jenis) {
         break;
 }
 $visible_update = (Yii::app()->util->is_authorized('spt.' . $url)) ? 'true' : 'false';
+if ($visible_update === 'true') {
+    $visible_update = '($data->allowUpdate) ? true : false';
+}
 $visible_delete = (Yii::app()->util->is_authorized('spt.delete')) ? 'true' : 'false';
+if ($visible_delete === 'true') {
+    $visible_delete = '($data->allowUpdate) ? true : false';
+}
 $this->widget('yiiwheels.widgets.grid.WhGridView', array(
     'id' => 'spt-grid',
     'dataProvider' => $model->search(),
@@ -100,6 +106,12 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
             'name' => 'kode_rekening_id',
             'type' => 'raw',
             'value' => 'CHtml::encode($data->kodeRekening->nama)',
+            'filter' => false,
+        ),
+        array(
+            'name' => 'status',
+            'type' => 'html',
+            'value' => '$data->status',
             'filter' => false,
         ),
         /*

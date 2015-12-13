@@ -299,7 +299,7 @@ class SptController extends Controller {
             $model->attributes = $_POST['Spt'];
             $model->nilai = str_replace(',', '', $model->nilai);
             $model->pajak = str_replace(',', '', $model->pajak);
-            if ($model->validate()) {
+            if ($model->validate() && $model->allowUpdate) {
                 if (!empty($model->tanggal_proses) && $model->tanggal_proses != '0000-00-00')
                     $model->tanggal_proses = date_format(date_create_from_format('d/m/Y', $model->tanggal_proses), "Y-m-d");
                 else
@@ -327,6 +327,9 @@ class SptController extends Controller {
                 $flag = $model_item->save() && $flag;
             } else {
                 $flag = false;
+                if (!$model->allowUpdate) {
+                    Yii::app()->util->setLog(AccessLog::TYPE_ERROR, Yii::t('trans', 'SPTPD ID : {id} sudah di Tetapkan.', array('{id}' => $model->id)));
+                }
             }
             if ($flag) {
                 $transaction->commit();
@@ -412,7 +415,7 @@ class SptController extends Controller {
             $model->attributes = $_POST['Spt'];
             $model->nilai = str_replace(',', '', $model->nilai);
             $model->pajak = str_replace(',', '', $model->pajak);
-            if ($model->validate()) {
+            if ($model->validate() && $model->allowUpdate) {
                 if (!empty($model->tanggal_proses) && $model->tanggal_proses != '0000-00-00')
                     $model->tanggal_proses = date_format(date_create_from_format('d/m/Y', $model->tanggal_proses), "Y-m-d");
                 else
@@ -440,6 +443,9 @@ class SptController extends Controller {
                 $flag = $model_item->save() && $flag;
             } else {
                 $flag = false;
+                if (!$model->allowUpdate) {
+                    Yii::app()->util->setLog(AccessLog::TYPE_ERROR, Yii::t('trans', 'SPTPD ID : {id} sudah di Tetapkan.', array('{id}' => $model->id)));
+                }
             }
             if ($flag) {
                 $transaction->commit();
@@ -522,7 +528,7 @@ class SptController extends Controller {
             $model->attributes = $_POST['Spt'];
             $model->nilai = str_replace(',', '', $model->nilai);
             $model->pajak = str_replace(',', '', $model->pajak);
-            if ($model->validate()) {
+            if ($model->validate() && $model->allowUpdate) {
                 if (!empty($model->tanggal_proses) && $model->tanggal_proses != '0000-00-00')
                     $model->tanggal_proses = date_format(date_create_from_format('d/m/Y', $model->tanggal_proses), "Y-m-d");
                 else
@@ -560,6 +566,9 @@ class SptController extends Controller {
                 }
             } else {
                 $flag = false;
+                if (!$model->allowUpdate) {
+                    Yii::app()->util->setLog(AccessLog::TYPE_ERROR, Yii::t('trans', 'SPTPD ID : {id} sudah di Tetapkan.', array('{id}' => $model->id)));
+                }
             }
             if ($flag) {
                 $transaction->commit();
@@ -656,7 +665,7 @@ class SptController extends Controller {
             $model->pajak = str_replace(',', '', $model->pajak);
             $model->tarif_dasar = str_replace(',', '', $model->tarif_dasar);
             $model->dasar_pengenaan = str_replace(',', '', $model->dasar_pengenaan);
-            if ($model->validate()) {
+            if ($model->validate() && $model->allowUpdate) {
                 if (!empty($model->tanggal_proses) && $model->tanggal_proses != '0000-00-00')
                     $model->tanggal_proses = date_format(date_create_from_format('d/m/Y', $model->tanggal_proses), "Y-m-d");
                 else
@@ -684,6 +693,9 @@ class SptController extends Controller {
                 $flag = $model_item->save() && $flag;
             } else {
                 $flag = false;
+                if (!$model->allowUpdate) {
+                    Yii::app()->util->setLog(AccessLog::TYPE_ERROR, Yii::t('trans', 'SPTPD ID : {id} sudah di Tetapkan.', array('{id}' => $model->id)));
+                }
             }
             if ($flag) {
                 $transaction->commit();
@@ -782,7 +794,7 @@ class SptController extends Controller {
             $model->tarif_dasar = str_replace(',', '', $model->tarif_dasar);
             $model->dasar_pengenaan = str_replace(',', '', $model->dasar_pengenaan);
             $model_galian->jml_rab = str_replace(',', '', $model_galian->jml_rab);
-            if ($model->validate()) {
+            if ($model->validate() && $model->allowUpdate) {
                 if (!empty($model->tanggal_proses) && $model->tanggal_proses != '0000-00-00')
                     $model->tanggal_proses = date_format(date_create_from_format('d/m/Y', $model->tanggal_proses), "Y-m-d");
                 else
@@ -822,6 +834,9 @@ class SptController extends Controller {
                 }
             } else {
                 $flag = false;
+                if (!$model->allowUpdate) {
+                    Yii::app()->util->setLog(AccessLog::TYPE_ERROR, Yii::t('trans', 'SPTPD ID : {id} sudah di Tetapkan.', array('{id}' => $model->id)));
+                }
             }
             if ($flag) {
                 $transaction->commit();
@@ -911,7 +926,7 @@ class SptController extends Controller {
             $model->pajak = str_replace(',', '', $model->pajak);
             $model->tarif_dasar = str_replace(',', '', $model->tarif_dasar);
             $model->dasar_pengenaan = str_replace(',', '', $model->dasar_pengenaan);
-            if ($model->validate()) {
+            if ($model->validate() && $model->allowUpdate) {
                 if (!empty($model->tanggal_proses) && $model->tanggal_proses != '0000-00-00')
                     $model->tanggal_proses = date_format(date_create_from_format('d/m/Y', $model->tanggal_proses), "Y-m-d");
                 else
@@ -951,6 +966,9 @@ class SptController extends Controller {
                 }
             } else {
                 $flag = false;
+                if (!$model->allowUpdate) {
+                    Yii::app()->util->setLog(AccessLog::TYPE_ERROR, Yii::t('trans', 'SPTPD ID : {id} sudah di Tetapkan.', array('{id}' => $model->id)));
+                }
             }
             if ($flag) {
                 $transaction->commit();
@@ -1038,7 +1056,7 @@ class SptController extends Controller {
             $model->pajak = str_replace(',', '', $model->pajak);
             $model->tarif_dasar = str_replace(',', '', $model->tarif_dasar);
             $model->dasar_pengenaan = str_replace(',', '', $model->dasar_pengenaan);
-            if ($model->validate()) {
+            if ($model->validate() && $model->allowUpdate) {
                 if (!empty($model->tanggal_proses) && $model->tanggal_proses != '0000-00-00')
                     $model->tanggal_proses = date_format(date_create_from_format('d/m/Y', $model->tanggal_proses), "Y-m-d");
                 else
@@ -1077,6 +1095,9 @@ class SptController extends Controller {
                 }
             } else {
                 $flag = false;
+                if (!$model->allowUpdate) {
+                    Yii::app()->util->setLog(AccessLog::TYPE_ERROR, Yii::t('trans', 'SPTPD ID : {id} sudah di Tetapkan.', array('{id}' => $model->id)));
+                }
             }
             if ($flag) {
                 $transaction->commit();
@@ -1159,7 +1180,7 @@ class SptController extends Controller {
             $model->attributes = $_POST['Spt'];
             $model->nilai = str_replace(',', '', $model->nilai);
             $model->pajak = str_replace(',', '', $model->pajak);
-            if ($model->validate()) {
+            if ($model->validate() && $model->allowUpdate) {
                 if (!empty($model->tanggal_proses) && $model->tanggal_proses != '0000-00-00')
                     $model->tanggal_proses = date_format(date_create_from_format('d/m/Y', $model->tanggal_proses), "Y-m-d");
                 else
@@ -1197,6 +1218,9 @@ class SptController extends Controller {
                 }
             } else {
                 $flag = false;
+                if (!$model->allowUpdate) {
+                    Yii::app()->util->setLog(AccessLog::TYPE_ERROR, Yii::t('trans', 'SPTPD ID : {id} sudah di Tetapkan.', array('{id}' => $model->id)));
+                }
             }
             if ($flag) {
                 $transaction->commit();
@@ -1230,12 +1254,17 @@ class SptController extends Controller {
     public function actionDelete($id) {
         if (Yii::app()->request->isPostRequest) {
             // we only allow deletion via POST request
-            try {
-                if ($this->loadModel($id)->delete())
-                    Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Delete SPTPD ID : ') . $id);
-            } catch (CDbException $exc) {
-                throw new CHttpException(500, Yii::t('trans', 'Delete SPTPD ID : {id}. Item ini sudah dipakai pada transaksi', array('{id}' => $id)));
-            }
+            $model = $this->loadModel($id);
+            if ($model->allowUpdate) {
+                try {
+                    if ($model->delete())
+                        Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Delete SPTPD ID : ') . $id);
+                } catch (CDbException $exc) {
+                    throw new CHttpException(500, Yii::t('trans', 'Delete SPTPD ID : {id}. Item ini sudah dipakai pada transaksi', array('{id}' => $id)));
+                }
+            } else
+                throw new CHttpException(500, Yii::t('trans', 'Delete SPTPD ID : {id}. Item ini sudah ditetapkan.', array('{id}' => $id)));
+
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             if (!isset($_GET['ajax'])) {
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));

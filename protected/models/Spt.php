@@ -327,6 +327,39 @@ class Spt extends CActiveRecord {
         }
         return Yii::app()->createUrl($url, array("id" => $id));
     }
-    
+
+    public function getAllowUpdate() {
+        $sql = "SELECT count(spt_id) AS sumid FROM penetapan WHERE spt_id='$this->id'";
+        $result = Yii::app()->db->createCommand($sql)->queryRow();
+        return $result['sumid'] ? false : true;
+    }
+
+    public function getStatus() {
+        $sql = "SELECT id FROM penetapan WHERE spt_id='$this->id'";
+        $result = Yii::app()->db->createCommand($sql)->queryRow();
+        $status = TbHtml::labelTb(Yii::t('trans', 'Draft'), array('color' => TbHtml::LABEL_COLOR_DEFAULT));
+        if ($result['id']) {
+            $id = $result['id'];
+            $status = TbHtml::labelTb(Yii::t('trans', 'Ditetapkan'), array('color' => TbHtml::LABEL_COLOR_WARNING));
+            $sql = "SELECT id FROM setoran_pajak WHERE penetapan_id='$id'";
+            $result = Yii::app()->db->createCommand($sql)->queryRow();
+            if ($result['id']) {
+                $id = $result['id'];
+                $status = TbHtml::labelTb(Yii::t('trans', 'Sudah Setor'), array('color' => TbHtml::LABEL_COLOR_SUCCESS));
+                $sql = "SELECT id FROM pemeriksaan WHERE spt_id='$this->id'";
+                $result = Yii::app()->db->createCommand($sql)->queryRow();
+                if ($result['id']) {
+                    $id = $result['id'];
+                    $status = TbHtml::labelTb(Yii::t('trans', 'Diperiksa'), array('color' => TbHtml::LABEL_COLOR_IMPORTANT));
+                    $sql = "SELECT id FROM setoran_pajak WHERE pemeriksaan_id='$id'";
+                    $result = Yii::app()->db->createCommand($sql)->queryRow();
+                    if ($result['id']) {
+                        $status = TbHtml::labelTb(Yii::t('trans', 'Sudah Setor SKPDKB'), array('color' => TbHtml::LABEL_COLOR_SUCCESS));
+                    }
+                }
+            }
+        }
+        return $status;
+    }
 
 }

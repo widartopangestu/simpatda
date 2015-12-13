@@ -5,7 +5,7 @@
 
 <?php
 $this->breadcrumbs = array(
-    Yii::t('trans', 'SPTRD') => array('index'),
+    Yii::t('trans', 'SPTRD') => array('index', 'jenis' => Spt::JENIS_PAJAK_RETRIBUSI),
     Yii::t('trans', 'Create') . ' ' . Yii::t('trans', 'SPTRD Retribusi'),
 );
 $this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Create') . ' ' . Yii::t('trans', 'SPTRD Retribusi');
