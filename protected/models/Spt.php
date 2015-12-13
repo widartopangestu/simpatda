@@ -166,31 +166,30 @@ class Spt extends CActiveRecord {
         // @todo Please modify the following code to remove attributes that should not be searched.
 
         $criteria = new CDbCriteria;
-
         $criteria->with = array('wajibpajak');
         $criteria->compare('id', $this->id, true);
         $criteria->compare('periode', $this->periode);
-        $criteria->compare('nomor', $this->nomor, true);
-        $criteria->compare('periode_awal', $this->periode_awal, true);
-        $criteria->compare('periode_akhir', $this->periode_akhir, true);
-        $criteria->compare('pajak', $this->pajak);
-        $criteria->compare('nilai', $this->nilai);
-        $criteria->compare('jenis_pemungutan', $this->jenis_pemungutan);
-        $criteria->compare('tarif_dasar', $this->tarif_dasar);
-        $criteria->compare('tarif_persen', $this->tarif_persen);
-        $criteria->compare('tanggal_proses', $this->tanggal_proses, true);
-        $criteria->compare('tanggal_entry', $this->tanggal_entry, true);
-        $criteria->compare('uraian', $this->uraian, true);
+        $criteria->compare('t.nomor', $this->nomor);
+//        $criteria->compare('periode_awal', $this->periode_awal, true);
+//        $criteria->compare('periode_akhir', $this->periode_akhir, true);
+//        $criteria->compare('pajak', $this->pajak);
+//        $criteria->compare('nilai', $this->nilai);
+//        $criteria->compare('jenis_pemungutan', $this->jenis_pemungutan);
+//        $criteria->compare('tarif_dasar', $this->tarif_dasar);
+//        $criteria->compare('tarif_persen', $this->tarif_persen);
+//        $criteria->compare('tanggal_proses', $this->tanggal_proses, true);
+//        $criteria->compare('tanggal_entry', $this->tanggal_entry, true);
+//        $criteria->compare('uraian', $this->uraian, true);
         $criteria->compare('jenis_pajak', $this->jenis_pajak);
-        $criteria->compare('wajib_pajak_id', $this->wajib_pajak_id);
+//        $criteria->compare('wajib_pajak_id', $this->wajib_pajak_id);
         $criteria->compare('wajibpajak.nama', $this->wp_search, true);
-        $criteria->compare('kode_rekening_id', $this->kode_rekening_id);
+//        $criteria->compare('kode_rekening_id', $this->kode_rekening_id);
         $criteria->compare('jenis_surat_id', $this->jenis_surat_id);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
             'sort' => array(
-                'defaultOrder' => 't.created DESC',
+                'defaultOrder' => 't.periode DESC, t.nomor DESC',
                 'attributes' => array(
                     'wpr_search' => array(
                         'asc' => 'wajibpajak.nama ASC',
@@ -328,5 +327,6 @@ class Spt extends CActiveRecord {
         }
         return Yii::app()->createUrl($url, array("id" => $id));
     }
+    
 
 }

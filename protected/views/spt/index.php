@@ -100,6 +100,7 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
             'name' => 'kode_rekening_id',
             'type' => 'raw',
             'value' => 'CHtml::encode($data->kodeRekening->nama)',
+            'filter' => false,
         ),
         /*
           'periode_awal',
