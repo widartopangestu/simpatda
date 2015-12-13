@@ -36,6 +36,7 @@ class WajibPajakController extends Controller {
         $model = new WajibPajak;
         $model->kabupaten = 'MUARA ENIM';
         $model->golongan = $type;
+        $model->nomor = 'AUTO';
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
@@ -146,9 +147,12 @@ class WajibPajakController extends Controller {
     /**
      * Manages all models.
      */
-    public function actionIndex() {
+    public function actionIndex($type = NULL) {
         $model = new WajibPajak('search');
         $model->unsetAttributes();  // clear any default values
+        if($type !== NULL){
+            $model->golongan = $type;
+        }
         if (isset($_GET['WajibPajak'])) {
             $model->attributes = $_GET['WajibPajak'];
         }
@@ -191,7 +195,7 @@ class WajibPajakController extends Controller {
     }
 
     public function actionDynamicKelurahan() {
-        $data = CHtml::listData(Kelurahan::model()->findAll('kecamatan_id=:kecamatan_id', array(':kecamatan_id' => (int) $_POST['WajibPajak']['kecamatan_id'])), 'id', 'nama');
+        $data = CHtml::listData(Kelurahan::model()->findAll('kecamatan_id=:kecamatan_id', array(':kecamatan_id' => (int) $_POST['WajibPajak']['kecamatan_id'])), 'id', 'kodeNama');
         echo CHtml::tag('option', array('value' => ''), Yii::t('trans', '- Pilih Kelurahan -'), true);
         foreach ($data as $value => $name) {
             echo CHtml::tag('option', array('value' => $value), CHtml::encode($name), true);

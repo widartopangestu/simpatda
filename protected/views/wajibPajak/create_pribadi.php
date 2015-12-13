@@ -11,7 +11,7 @@ $this->breadcrumbs = array(
 $this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Create') . ' ' . Yii::t('trans', 'Wajib Pajak') . ' ' . Yii::t('trans', 'Pribadi');
 $this->modulTitle = Yii::t('trans', 'Create') . ' ' . Yii::t('trans', 'Wajib Pajak') . ' ' . Yii::t('trans', 'Pribadi');
 $this->menu = array(
-    array('label' => Yii::t('trans', 'Manage'), 'url' => array('index'), 'icon' => 'list-alt', 'visible' => (Yii::app()->util->is_authorized('wajibPajak.index')) ? true : false),
+    array('label' => Yii::t('trans', 'Manage'), 'url' => array('index', 'type' => $model->golongan), 'icon' => 'list-alt', 'visible' => (Yii::app()->util->is_authorized('wajibPajak.index')) ? true : false),
 );
 ?>
 <div class="form">
@@ -61,11 +61,13 @@ $this->menu = array(
 
             <?php echo $form->textFieldControlGroup($model, 'kodepos', array('span' => 1, 'maxlength' => 5)); ?>
 
-            <?php echo $form->dropDownListControlGroup($model, 'warga_negara', $model->wargaNegaraOptions, array('span' => 2)); ?>
-
             <?php echo $form->dropDownListControlGroup($model, 'id_jenis', $model->idJenisOptions, array('span' => 1)); ?>
 
             <?php echo $form->textFieldControlGroup($model, 'id_nomor', array('span' => 3, 'maxlength' => 255)); ?>
+
+        </div>
+        <div class="span5">
+            <?php echo $form->dropDownListControlGroup($model, 'warga_negara', $model->wargaNegaraOptions, array('span' => 2)); ?>
 
             <?php
             echo $form->datePickerControlGroup($model, 'tanggal_lahir', array('span' => 2, 'pluginOptions' => array(
@@ -73,8 +75,6 @@ $this->menu = array(
                     'endDate' => date('d/m/Y'),
             )));
             ?>  
-        </div>
-        <div class="span5">
             <?php echo $form->textFieldControlGroup($model, 'kk_nomor', array('span' => 3, 'maxlength' => 255)); ?>
 
             <?php
@@ -115,18 +115,21 @@ $this->menu = array(
             jQuery('#GWajibPajak_kecamatan').show();
         }
         jQuery('#WajibPajak_kelurahan_id').change(function () {
-            if (this.value > 0 || this.value == '') {
-                jQuery('#GWajibPajak_kelurahan').hide();
-            } else {
+            if (this.value == 0 || this.value == 3 || this.value == '') {
                 jQuery('#GWajibPajak_kelurahan').show();
+            } else {
+                jQuery('#GWajibPajak_kelurahan').hide();
             }
         });
         jQuery('#WajibPajak_kecamatan_id').change(function () {
-            if (this.value > 0 || this.value == '') {
-                jQuery('#GWajibPajak_kecamatan').hide();
-            } else {
+            if (this.value == 0 || this.value == 21 || this.value == '') {
                 jQuery('#GWajibPajak_kecamatan').show();
+            } else {
+                jQuery('#GWajibPajak_kecamatan').hide();
             }
+        });
+        jQuery('input[type=text]').keyup (function () {
+            this.value = this.value.toUpperCase();
         });
     });
 </script>

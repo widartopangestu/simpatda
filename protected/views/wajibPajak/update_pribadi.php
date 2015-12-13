@@ -14,8 +14,8 @@ $this->breadcrumbs = array(
 $this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Update') . ' ' . Yii::t('trans', 'Wajib Pajak');
 $this->modulTitle = Yii::t('trans', 'Update') . ' ' . Yii::t('trans', 'Wajib Pajak') . ' #' . $model->id;
 $this->menu = array(
-    array('label' => Yii::t('trans', 'Manage'), 'url' => array('index'), 'icon' => 'list-alt', 'visible' => (Yii::app()->util->is_authorized('wajibPajak.index')) ? true : false),
-    array('label' => Yii::t('trans', 'Create'), 'url' => array('create'), 'icon' => 'file', 'visible' => (Yii::app()->util->is_authorized('wajibPajak.create')) ? true : false),
+    array('label' => Yii::t('trans', 'Manage'), 'url' => array('index', 'type' => $model->golongan), 'icon' => 'list-alt', 'visible' => (Yii::app()->util->is_authorized('wajibPajak.index')) ? true : false),
+    array('label' => Yii::t('trans', 'Create'), 'url' => array('create', 'type' => $model->golongan), 'icon' => 'file', 'visible' => (Yii::app()->util->is_authorized('wajibPajak.create')) ? true : false),
     array('label' => Yii::t('trans', 'View'), 'url' => array('view', 'id' => $model->id), 'icon' => 'eye-open', 'visible' => (Yii::app()->util->is_authorized('wajibPajak.view')) ? true : false),
 );
 ?>
@@ -119,18 +119,21 @@ $this->menu = array(
             jQuery('#GWajibPajak_kecamatan').show();
         }
         jQuery('#WajibPajak_kelurahan_id').change(function () {
-            if (this.value > 0 || this.value == '') {
-                jQuery('#GWajibPajak_kelurahan').hide();
-            } else {
+            if (this.value == 0 || this.value == 3 || this.value == '') {
                 jQuery('#GWajibPajak_kelurahan').show();
+            } else {
+                jQuery('#GWajibPajak_kelurahan').hide();
             }
         });
         jQuery('#WajibPajak_kecamatan_id').change(function () {
-            if (this.value > 0 || this.value == '') {
-                jQuery('#GWajibPajak_kecamatan').hide();
-            } else {
+            if (this.value == 0 || this.value == 21 || this.value == '') {
                 jQuery('#GWajibPajak_kecamatan').show();
+            } else {
+                jQuery('#GWajibPajak_kecamatan').hide();
             }
+        });
+        jQuery('input[type=text]').keyup (function () {
+            this.value = this.value.toUpperCase();
         });
     });
 </script>

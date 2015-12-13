@@ -81,6 +81,7 @@ class WajibPajak extends CActiveRecord {
             array('golongan, kelurahan_id, kecamatan_id, bidang_usaha_id', 'numerical', 'integerOnly' => true),
             array('jenis', 'length', 'max' => 1),
             array('nomor', 'length', 'max' => 7),
+            array('nomor', 'unique'),
             array('nama, kabupaten, kecamatan, kelurahan, id_nomor, kk_nomor, pekerjaan, bu_nama, bu_kabupaten, bu_kecamatan, bu_kelurahan, instansi_nama, nomer_berita_acara', 'length', 'max' => 255),
             array('telepon, bu_telepon', 'length', 'max' => 20),
             array('kodepos, bu_kodepos, warga_negara', 'length', 'max' => 5),
@@ -207,6 +208,12 @@ class WajibPajak extends CActiveRecord {
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
+            'sort' => array(
+                'defaultOrder' => 'nomor DESC',
+                'attributes' => array(
+                    '*',
+                ),
+            ),
             'pagination' => array(
                 'pageSize' => Yii::app()->user->getState('pageSize' . $this->tableName(), Yii::app()->params['defaultPageSize']),
             ),
@@ -223,12 +230,32 @@ class WajibPajak extends CActiveRecord {
         return parent::model($className);
     }
 
-    public function beforeSave() {
-        if (empty($this->kecamatan))
+    public function beforeValidate() {
+        if ($this->isNewRecord) {
+            if (strtolower($this->nomor) === strtolower('AUTO')) {
+                $sql = "SELECT MAX(nomor)::INT AS maxnomor FROM wajib_pajak";
+                $result = Yii::app()->db->createCommand($sql)->queryRow();
+                $new_code = $this->preventUniqueKode($result['maxnomor'] + 1);
+                $this->nomor = str_pad($new_code, 7, '0', STR_PAD_LEFT);
+            }
+        }
+        if (empty($this->kecamatan)) {
             $this->kecamatan = $this->namaKecamatan;
-        if (empty($this->kelurahan))
+        }
+        if (empty($this->kelurahan)) {
             $this->kelurahan = $this->namaKelurahan;
-        return parent::beforeSave();
+        }
+        return parent::beforeValidate();
+    }
+
+    public function preventUniqueKode($count) {
+        $form = (int) $count;
+        $flag = self::model()->find("nomor = '$form'");
+        if ($flag) {
+            $count++;
+            $form = $this->preventUniqueNumber($count);
+        }
+        return $form;
     }
 
     public function behaviors() {
@@ -308,7 +335,7 @@ class WajibPajak extends CActiveRecord {
     }
 
     public function getIdJenisText($idJenis = null) {
-        $value = ($idJenis === null) ? $this->idJenis : $idJenis;
+        $value = ($idJenis === null) ? $this->id_jenis : $idJenis;
         $idJenisOptions = $this->getIdJenisOptions();
         return isset($idJenisOptions[$value]) ?
                 $idJenisOptions[$value] : "unknown id jenis ({$value})";
@@ -316,7 +343,7 @@ class WajibPajak extends CActiveRecord {
 
     public function getKelurahanOptions() {
         if ($this->kecamatan_id)
-            return CHtml::listData(Kelurahan::model()->findAll('kecamatan_id=:kecamatan_id', array(':kecamatan_id' => $this->kecamatan_id)), 'id', 'nama');
+            return CHtml::listData(Kelurahan::model()->findAll('kecamatan_id=:kecamatan_id ORDER BY kode ASC', array(':kecamatan_id' => $this->kecamatan_id)), 'id', 'kodeNama');
         else
             return array(); //CHtml::listData(Kelurahan::model()->findAll(), 'id', 'nama');
     }
@@ -326,7 +353,7 @@ class WajibPajak extends CActiveRecord {
     }
 
     public function getKecamatanOptions() {
-        return CHtml::listData(Kecamatan::model()->findAll(), 'id', 'nama');
+        return CHtml::listData(Kecamatan::model()->findAll(array('order' => 'kode ASC')), 'id', 'kodeNama');
     }
 
     public function getNamaKecamatan() {

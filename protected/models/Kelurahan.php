@@ -126,4 +126,8 @@ class Kelurahan extends CActiveRecord {
     public function getNamaKecamatan() {
         return ($this->kecamatan_id !== NULL) ? $this->kecamatan->nama : Yii::t('trans', 'Not Set');
     }
+    
+    public function getKodeNama() {
+        return $this->kode . '|' . $this->nama;
+    }
 }

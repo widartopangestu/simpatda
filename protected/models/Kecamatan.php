@@ -115,4 +115,8 @@ class Kecamatan extends CActiveRecord {
         );
     }
 
+    public function getKodeNama() {
+        return $this->kode . '|' . $this->nama;
+    }
+
 }

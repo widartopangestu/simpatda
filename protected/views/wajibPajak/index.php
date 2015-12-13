@@ -36,16 +36,11 @@ $columns = array(
         'value' => '$this->grid->dataProvider->getPagination()->getOffset()+$row+1'
     ),
     array(
-        'name' => 'jenis',
+        'name' => 'npwpd',
+        'header' => 'NPWPD',
         'type' => 'raw',
-        'value' => 'CHtml::encode($data->jenisText)',
-        'filter' => $model->jenisOptions,
-    ),
-    array(
-        'name' => 'golongan',
-        'type' => 'raw',
-        'value' => 'CHtml::encode($data->golonganText)',
-        'filter' => $model->golonganOptions,
+        'value' => 'CHtml::encode($data->npwpd)',
+        'filter' => false,
     ),
     'nomor',
     'nama',
@@ -55,6 +50,18 @@ $columns = array(
         'type' => 'raw',
         'value' => 'CHtml::encode($data->statusText)',
         'filter' => $model->statusOptions,
+    ),
+    array(
+        'name' => 'kecamatan_id',
+        'type' => 'raw',
+        'value' => 'CHtml::encode($data->namaKecamatan)',
+        'filter' => $model->kecamatanOptions,
+    ),
+    array(
+        'name' => 'kelurahan_id',
+        'type' => 'raw',
+        'value' => 'CHtml::encode($data->namaKelurahan)',
+        'filter' => $model->kelurahanOptions,
     ),
         /*
           'kabupaten',
