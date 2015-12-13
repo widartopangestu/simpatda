@@ -60,11 +60,13 @@ class SptController extends Controller {
             $data = array();
             $sum_pajak = 0;
             foreach ($items as $key => $item) {
-                $nilai = (int) $item['nilai'];
-                $tarif_persen = (int) $item['tarif_persen'];
-                $pajak = $nilai * ($tarif_persen / 100);
-                $data['items_' . $key . 'xpajak'] = number_format($pajak, Yii::app()->params['currency_precision']);
-                $sum_pajak += $pajak;
+                if ($key !== 'x') {
+                    $nilai = (float) $item['nilai'];
+                    $tarif_persen = (float) $item['tarif_persen'];
+                    $pajak = $nilai * ($tarif_persen / 100);
+                    $data['items_' . $key . 'xpajak'] = number_format($pajak, Yii::app()->params['currency_precision']);
+                    $sum_pajak += $pajak;
+                }
             }
             $model->pajak = $sum_pajak;
         }
@@ -114,14 +116,16 @@ class SptController extends Controller {
             $data = array();
             $sum_pajak = 0;
             foreach ($items as $key => $item) {
-                $nilai = (int) $item['nilai'];
-                $tarif_persen = (int) $item['tarif_persen'];
-                $tarif_dasar = (int) str_replace(',', '', $item['tarif_dasar']);
-                $dasar_pengenaan = $nilai * $tarif_dasar;
-                $pajak = $dasar_pengenaan * ($tarif_persen / 100);
-                $data['items_' . $key . 'xdasar_pengenaan'] = number_format($dasar_pengenaan, Yii::app()->params['currency_precision']);
-                $data['items_' . $key . 'xpajak'] = number_format($pajak, Yii::app()->params['currency_precision']);
-                $sum_pajak += $pajak;
+                if ($key !== 'x') {
+                    $nilai = (float) $item['nilai'];
+                    $tarif_persen = (float) $item['tarif_persen'];
+                    $tarif_dasar = (float) str_replace(',', '', $item['tarif_dasar']);
+                    $dasar_pengenaan = $nilai * $tarif_dasar;
+                    $pajak = $dasar_pengenaan * ($tarif_persen / 100);
+                    $data['items_' . $key . 'xdasar_pengenaan'] = number_format($dasar_pengenaan, Yii::app()->params['currency_precision']);
+                    $data['items_' . $key . 'xpajak'] = number_format($pajak, Yii::app()->params['currency_precision']);
+                    $sum_pajak += $pajak;
+                }
             }
             $model->pajak = $sum_pajak;
         }
@@ -142,14 +146,16 @@ class SptController extends Controller {
             $data = array();
             $sum_pajak = 0;
             foreach ($items as $key => $item) {
-                $nilai = (int) $item['nilai'];
-                $tarif_persen = (int) $item['tarif_persen'];
-                $tarif_dasar = (int) str_replace(',', '', $item['tarif_dasar']);
-                $dasar_pengenaan = $nilai * $tarif_dasar;
-                $pajak = $dasar_pengenaan * ($tarif_persen / 100);
-                $data['items_' . $key . 'xdasar_pengenaan'] = number_format($dasar_pengenaan, Yii::app()->params['currency_precision']);
-                $data['items_' . $key . 'xpajak'] = number_format($pajak, Yii::app()->params['currency_precision']);
-                $sum_pajak += $pajak;
+                if ($key !== 'x') {
+                    $nilai = (float) $item['nilai'];
+                    $tarif_persen = (float) $item['tarif_persen'];
+                    $tarif_dasar = (float) str_replace(',', '', $item['tarif_dasar']);
+                    $dasar_pengenaan = $nilai * $tarif_dasar;
+                    $pajak = $dasar_pengenaan * ($tarif_persen / 100);
+                    $data['items_' . $key . 'xdasar_pengenaan'] = number_format($dasar_pengenaan, Yii::app()->params['currency_precision']);
+                    $data['items_' . $key . 'xpajak'] = number_format($pajak, Yii::app()->params['currency_precision']);
+                    $sum_pajak += $pajak;
+                }
             }
             $model->pajak = $sum_pajak;
         }
@@ -170,14 +176,16 @@ class SptController extends Controller {
             $data = array();
             $sum_pajak = 0;
             foreach ($items as $key => $item) {
-                $nilai = (int) $item['nilai'];
-                $tarif_persen = (int) $item['tarif_persen'];
-                $tarif_dasar = (int) str_replace(',', '', $item['tarif_dasar']);
-                $dasar_pengenaan = $nilai * $tarif_dasar;
-                $pajak = $dasar_pengenaan * ($tarif_persen / 100);
-                $data['items_' . $key . 'xdasar_pengenaan'] = number_format($dasar_pengenaan, Yii::app()->params['currency_precision']);
-                $data['items_' . $key . 'xpajak'] = number_format($pajak, Yii::app()->params['currency_precision']);
-                $sum_pajak += $pajak;
+                if ($key !== 'x') {
+                    $nilai = (float) $item['nilai'];
+                    $tarif_persen = (float) $item['tarif_persen'];
+                    $tarif_dasar = (float) str_replace(',', '', $item['tarif_dasar']);
+                    $dasar_pengenaan = $nilai * $tarif_dasar;
+                    $pajak = $dasar_pengenaan * ($tarif_persen / 100);
+                    $data['items_' . $key . 'xdasar_pengenaan'] = number_format($dasar_pengenaan, Yii::app()->params['currency_precision']);
+                    $data['items_' . $key . 'xpajak'] = number_format($pajak, Yii::app()->params['currency_precision']);
+                    $sum_pajak += $pajak;
+                }
             }
             $model->pajak = $sum_pajak;
         }
@@ -198,11 +206,13 @@ class SptController extends Controller {
             $data = array();
             $sum_pajak = 0;
             foreach ($items as $key => $item) {
-                $nilai = (int) $item['nilai'];
-                $tarif_dasar = (int) str_replace(',', '', $item['tarif_dasar']);
-                $pajak = $nilai * $tarif_dasar;
-                $data['items_' . $key . 'xpajak'] = number_format($pajak, Yii::app()->params['currency_precision']);
-                $sum_pajak += $pajak;
+                if ($key !== 'x') {
+                    $nilai = (float) $item['nilai'];
+                    $tarif_dasar = (float) str_replace(',', '', $item['tarif_dasar']);
+                    $pajak = $nilai * $tarif_dasar;
+                    $data['items_' . $key . 'xpajak'] = number_format($pajak, Yii::app()->params['currency_precision']);
+                    $sum_pajak += $pajak;
+                }
             }
             $model->pajak = $sum_pajak;
         }
@@ -1248,7 +1258,7 @@ class SptController extends Controller {
         }
 
         if (isset($_GET['pageSize'])) {
-            Yii::app()->user->setState('pageSize' . $model->tableName(), (int) $_GET['pageSize']);
+            Yii::app()->user->setState('pageSize' . $model->tableName(), (float) $_GET['pageSize']);
             unset($_GET['pageSize']);  // would interfere with pager and repetitive page size change
         }
         Yii::app()->util->setLog(AccessLog::TYPE_INFO, Yii::t('trans', 'Manage SPTPD'));

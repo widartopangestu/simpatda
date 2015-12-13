@@ -40,11 +40,11 @@ class PemeriksaanController extends Controller {
             $model->attributes = $_POST['Pemeriksaan'];
             $model->nilai_pajak = ($model->nilai_pajak != '') ? doubleval(str_replace(',', '', $model->nilai_pajak)) : 0;
             $data = array();
-            $terhutang = (int) $model->terhutang;
-            $kompensasi = (int) $model->kompensasi;
-            $kredit_lain = (int) $model->kredit_lain;
-            $kenaikan = (int) $model->kenaikan;
-            $setoran = (int) str_replace(',', '', $model->setoran);
+            $terhutang = (float) $model->terhutang;
+            $kompensasi = (float) $model->kompensasi;
+            $kredit_lain = (float) $model->kredit_lain;
+            $kenaikan = (float) $model->kenaikan;
+            $setoran = (float) str_replace(',', '', $model->setoran);
             $total_kredit = $setoran + $kompensasi + $kredit_lain;
             $pajak = $terhutang - $total_kredit;
             $date1 = date_create_from_format('Y-m-d', $model->tanggal_jatuh_tempo);
