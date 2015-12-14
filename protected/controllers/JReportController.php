@@ -165,9 +165,6 @@ class JReportController extends Controller {
             'html_report' => $html_report,
         ));
     }
-    public function actionSpt() {
-        
-    }
 
     public function actionDynamicKelurahan() {
         $data = CHtml::listData(Kelurahan::model()->findAll('kecamatan_id=:kecamatan_id', array(':kecamatan_id' => (int) $_POST['JrWajibPajakForm']['kecamatan'])), 'id', 'nama');
@@ -225,6 +222,60 @@ class JReportController extends Controller {
             }
         }
         $this->render('setoran_pajak', array(
+            'model' => $model,
+            'title' => $title,
+            'html_report' => $html_report,
+        ));
+    }
+
+    public function actionSpt() {
+        $title = Yii::t('trans', 'Laporan Daftar SPT');
+        $filename = 'spt_' . date("d-m-Y_h:i:s-A");
+        $model = new JrSptForm();
+        $model->periode = date('Y');
+        $html_report = '';
+        if (isset($_POST['JrSptForm'])) {
+            $model->attributes = $_POST['JrSptForm'];
+            if ($model->validate()) {
+                $filter = array();
+                $where = '';
+                if (isset($model->periode) && trim($model->periode) != "")
+                    $filter[] = 'periode=' . $model->periode;
+                if (isset($model->nomor_from) && trim($model->nomor_from) != "" && isset($model->nomor_to) && trim($model->nomor_to) != "")
+                    $filter[] = 'nomor BETWEEN \'' . $model->nomor_from . '\' AND \'' . $model->nomor_to . '\'';
+
+                if (count($filter)) {
+                    $where = ' WHERE ' . implode(' AND ', $filter);
+                }
+                $rep = new WPJasper();
+                $reportId = 'daftar_spt';
+                $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
+                $diperiksa = Pejabat::model()->findByPk($model->diperiksa);
+                $params = array(
+                    'JudulLaporan' => 'DAFTAR FORMULIR PENDAFTARAN YANG DIKIRIM/KEMBALI/BELUM KEMBALI WP/WR *)',
+                    'SubJudulLaporan' => Yii::t('trans', 'Dari Nomor {nomor_from} s/d. {nomor_to} Periode {periode}', array('{nomor_from}' => $model->nomor_from, '{nomor_to}' => $model->nomor_to, '{periode}' => $model->periode)),
+                    'KetTtd' => 'Mengetahui,',
+                    'PangkatTtd' => $mengetahui->pangkat->nama,
+                    'NamaTtd' => $mengetahui->nama,
+                    'JabatanTtd' => $mengetahui->jabatan->nama,
+                    'NipTtd' => $mengetahui->nip,
+                    'KetTtd1' => 'Diperiksa Oleh,',
+                    'PangkatTtd1' => $diperiksa->pangkat->nama,
+                    'NamaTtd1' => $diperiksa->nama,
+                    'JabatanTtd1' => $diperiksa->jabatan->nama,
+                    'NipTtd1' => $diperiksa->nip,
+                    'UserName' => Yii::app()->user->nickName,
+                    'RoleName' => Yii::app()->user->roleName,
+                    'Par_SQL' => 'SELECT * FROM v_daftar_spt' . $where,
+                );
+                if (isset($_POST['type_report'])) {
+                    $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);
+                } else {
+                    $html_report = $rep->generateReport($reportId, WPJasper::FORMAT_HTML, $params, $filename);
+                }
+            }
+        }
+        $this->render('spt', array(
             'model' => $model,
             'title' => $title,
             'html_report' => $html_report,

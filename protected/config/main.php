@@ -65,6 +65,7 @@ return array(
         'metadata' => array('class' => 'WMetadata'),
         'user' => array(
             // enable cookie-based authentication
+            'class' => 'WebUser',
             'allowAutoLogin' => true,
             'loginUrl' => array('user/login'),
         ),
