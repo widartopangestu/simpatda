@@ -150,7 +150,7 @@ class WajibPajakController extends Controller {
     public function actionIndex($type = NULL) {
         $model = new WajibPajak('search');
         $model->unsetAttributes();  // clear any default values
-        if($type !== NULL){
+        if ($type !== NULL) {
             $model->golongan = $type;
         }
         if (isset($_GET['WajibPajak'])) {
@@ -277,6 +277,60 @@ class WajibPajakController extends Controller {
             echo CJSON::encode($result);
         } else
             echo CJSON::encode(array());
+    }
+
+    public function actionKartuData() {
+        $title = Yii::t('trans', 'Cetak Kartu Data');
+        $filename = 'kartu_data_' . date("d-m-Y_h:i:s-A");
+        $model = new KartuDataForm();
+        $model->periode = date('Y');
+        $html_report = '';
+        if (isset($_POST['KartuDataForm'])) {
+            $model->attributes = $_POST['KartuDataForm'];
+            if ($model->validate()) {
+                $filter = array();
+                $where = '';
+                if (isset($model->periode) && trim($model->periode) != "")
+                    $filter[] = 'periode=' . $model->periode;
+                if (isset($model->wajib_pajak_id) && trim($model->wajib_pajak_id) != "")
+                    $filter[] = 'wajib_pajak_id=' . $model->wajib_pajak_id;
+
+                if (count($filter)) {
+                    $where = ' WHERE ' . implode(' AND ', $filter);
+                }
+                $rep = new WPJasper();
+                $reportId = 'kartu_data';
+                $wajib_pajak = WajibPajak::model()->findByPk($model->wajib_pajak_id);
+                $alamat = $wajib_pajak->alamat . ' Kel. ' . $wajib_pajak->kelurahan . ' Kec. ' . $wajib_pajak->kecamatan . ' ' . $wajib_pajak->kabupaten;
+                $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
+                $diperiksa = Pejabat::model()->findByPk($model->diperiksa);
+                $params = array(
+                    'JudulLaporan' => 'KARTU DATA',
+                    'SubJudulLaporan' => 'PAJAK RESTORAN<br>Tahun : 2015.',
+                    'KetTtd' => 'Mengetahui,',
+                    'PangkatTtd' => $mengetahui->pangkat->nama,
+                    'NamaTtd' => $mengetahui->nama,
+                    'JabatanTtd' => $mengetahui->jabatan->nama,
+                    'NipTtd' => $mengetahui->nip,
+                    'KetTtd1' => 'Diperiksa Oleh,',
+                    'PangkatTtd1' => $diperiksa->pangkat->nama,
+                    'NamaTtd1' => $diperiksa->nama,
+                    'JabatanTtd1' => $diperiksa->jabatan->nama,
+                    'NipTtd1' => $diperiksa->nip,
+                    'Par_SQL' => 'SELECT * FROM v_kartu_data' . $where,
+                );
+                if (isset($_POST['type_report'])) {
+                    $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);
+                } else {
+                    $html_report = $rep->generateReport($reportId, WPJasper::FORMAT_HTML, $params, $filename);
+                }
+            }
+        }
+        $this->render('kartu_data', array(
+            'model' => $model,
+            'title' => $title,
+            'html_report' => $html_report,
+        ));
     }
 
 }

@@ -207,4 +207,16 @@ class PenetapanController extends Controller {
         echo CJSON::encode($data);
     }
 
+    public function actionCetakNotaPerhitungan() {
+        
+    }
+
+    public function actionCetakDaftarPenetapan() {
+        
+    }
+
+    public function actionCetakPenetapan() {
+        
+    }
+
 }

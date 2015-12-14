@@ -109,7 +109,6 @@ $this->menu = array(
             jQuery("#TutupWajibPajakForm_kabupaten").val(data.kabupaten);
             jQuery("#TutupWajibPajakForm_kecamatan").val(data.kecamatan);
             jQuery("#TutupWajibPajakForm_kelurahan").val(data.kelurahan);
-            console.log(data);
         });
     }
 </script>

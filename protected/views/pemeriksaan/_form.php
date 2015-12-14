@@ -170,7 +170,6 @@
             jQuery("#Pemeriksaan_kabupaten").val(data.kabupaten);
             jQuery("#Pemeriksaan_kecamatan").val(data.kecamatan);
             jQuery("#Pemeriksaan_kelurahan").val(data.kelurahan);
-            console.log(data);
         });
     }
     function getValue() {

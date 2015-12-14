@@ -164,7 +164,6 @@ $this->menu = array(
             jQuery("#Spt_kabupaten").val(data.kabupaten);
             jQuery("#Spt_kecamatan").val(data.kecamatan);
             jQuery("#Spt_kelurahan").val(data.kelurahan);
-            console.log(data);
         });
     }
     jQuery('#Spt_nilai').keyup(function (e) {

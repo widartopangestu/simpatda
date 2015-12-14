@@ -165,6 +165,9 @@ class JReportController extends Controller {
             'html_report' => $html_report,
         ));
     }
+    public function actionSpt() {
+        
+    }
 
     public function actionDynamicKelurahan() {
         $data = CHtml::listData(Kelurahan::model()->findAll('kecamatan_id=:kecamatan_id', array(':kecamatan_id' => (int) $_POST['JrWajibPajakForm']['kecamatan'])), 'id', 'nama');
