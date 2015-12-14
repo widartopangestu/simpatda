@@ -95,6 +95,7 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
             'filter' => $model->viaBayarOptions,
         ),
         'nama_penyetor',
+//        'jumlah_bayar',
         array(
             'class' => 'bootstrap.widgets.TbButtonColumn',
             'buttons' => array(

@@ -254,6 +254,20 @@ class Spt extends CActiveRecord {
             self::JENIS_PAJAK_BPHTB => Yii::t('trans', 'BPHTB')
         );
     }
+    public function getKodeRekeningPajakOptions() {
+        return array(
+            self::PARENT_HOTEL => Yii::t('trans', 'Pajak Hotel'),
+            self::PARENT_RESTORAN => Yii::t('trans', 'Pajak Restoran'),
+            self::PARENT_HIBURAN => Yii::t('trans', 'Pajak Hiburan'),
+            self::PARENT_REKLAME => Yii::t('trans', 'Pajak Reklame'),
+            self::PARENT_ELECTRIC => Yii::t('trans', 'Pajak Penerangan Jalan / Genset'),
+            self::PARENT_AIR => Yii::t('trans', 'Pajak Air Bawah Tanah'),
+            self::PARENT_WALET => Yii::t('trans', 'Pajak Sarang Burung Walet'),
+            self::PARENT_GALIAN => Yii::t('trans', 'Pajak Bahan Mineral Bukan Logam dan Batuan'),
+            self::PARENT_RETRIBUSI => Yii::t('trans', 'Retribusi'),
+            self::PARENT_BPHTB => Yii::t('trans', 'BPHTB')
+        );
+    }
 
     public function getJenisPajakText($jenisPajak = null) {
         $value = ($jenisPajak === null) ? $this->jenis_pajak : $jenisPajak;
