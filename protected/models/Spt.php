@@ -288,12 +288,13 @@ class Spt extends CActiveRecord {
         if ($this->jenis_pajak == self::JENIS_PAJAK_RETRIBUSI) {
             $this->jenis_surat_id = 9;
         } else {
-            if ($this->jenis_pemungutan == self::PUNGUTAN_SELF)
+            if ($this->jenis_pemungutan == self::PUNGUTAN_SELF) {
                 $this->jenis_surat_id = 8;
-            else
+            } else {
                 $this->jenis_surat_id = 1;
+            }
         }
-        return parent::beforeSave();
+        return parent::beforeValidate();
     }
 
     public function preventUniqueKode($count) {

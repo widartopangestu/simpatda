@@ -145,6 +145,9 @@ class SetoranPajak extends CActiveRecord {
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
+            'sort' => array(
+                'defaultOrder' => 'tanggal_bayar DESC',
+            ),
             'pagination' => array(
                 'pageSize' => Yii::app()->user->getState('pageSize' . $this->tableName(), Yii::app()->params['defaultPageSize']),
             ),
