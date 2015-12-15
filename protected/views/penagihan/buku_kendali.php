@@ -35,9 +35,9 @@ $this->modulTitle = Yii::t('trans', 'Cetak Buku Kendali');
             'format' => 'dd/mm/yyyy'
     )));
     ?>
-    <?php echo $form->dropdownListControlGroup($model, 'jenis_pajak', $model->kodeRekeningOptions, array('span' => 5, 'empty' => Yii::t('trans', '--'))); ?>
-    <?php echo $form->dropdownListControlGroup($model, 'jenis_surat_id', $model->jenisSuratOptions, array('span' => 5, 'empty' => Yii::t('trans', '--'))); ?>
-    <?php echo $form->dropdownListControlGroup($model, 'kecamatan_id', $model->kecamatanOptions, array('span' => 5, 'empty' => Yii::t('trans', '--'))); ?>
+    <?php echo $form->dropdownListControlGroup($model, 'jenis_pajak', $model->kodeRekeningOptions, array('span' => 5, 'empty' => '--')); ?>
+    <?php echo $form->dropdownListControlGroup($model, 'jenis_surat_id', $model->jenisSuratOptions, array('span' => 5, 'empty' => '--')); ?>
+    <?php echo $form->dropdownListControlGroup($model, 'kecamatan_id', $model->kecamatanOptions, array('span' => 5, 'empty' => '--')); ?>
     <?php echo $form->dropdownListControlGroup($model, 'menyetujui', $model->pejabatOptions, array('span' => 5)); ?>
     <?php echo $form->dropdownListControlGroup($model, 'mengetahui', $model->pejabatOptions, array('span' => 5)); ?>
     <?php echo $form->dropdownListControlGroup($model, 'diperiksa', $model->pejabatOptions, array('span' => 5)); ?>

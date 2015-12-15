@@ -262,7 +262,79 @@ class PenetapanController extends Controller {
     }
 
     public function actionCetakDaftarPenetapan() {
-        
+        $title = Yii::t('trans', 'Cetak Daftar Surat Ketetapan');
+        $filename = 'surat_ketetapan_' . date("d-m-Y_h:i:s-A");
+        $model = new SuratKetetapanForm();
+        $model->tanggal = date('d/m/Y');
+        $html_report = '';
+        if (isset($_POST['SuratKetetapanForm'])) {
+            $model->attributes = $_POST['SuratKetetapanForm'];
+            if ($model->validate()) {
+                $filter = array();
+                $order = array('nama_kecamatan');
+                $where = '';
+                $sort = '';
+                $judul_laporan = 'DAFTAR';
+                if (isset($model->sort_by) && trim($model->sort_by) != "")
+                    $order[] = $model->sort_by;
+                if (isset($model->kecamatan_id) && trim($model->kecamatan_id) != "")
+                    $filter[] = 'kecamatan_id=' . $model->kecamatan_id;
+                if (isset($model->jenis_pajak) && trim($model->jenis_pajak) != "")
+                    $filter[] = 'kode_rekening_id=' . $model->jenis_pajak;
+                if (isset($model->jenis_surat_id) && trim($model->jenis_surat_id) != "") {
+                    $filter[] = 'jenis_surat_id=' . $model->jenis_surat_id;
+                    $judul_laporan .= ' ' . $model->jenisSuratText;
+                }
+                if ((isset($model->date_from) && trim($model->date_from) != "") && (isset($model->date_to) && trim($model->date_to) != ""))
+                    $filter[] = "tanggal_penetapan BETWEEN '" . date("Y-m-d", strtotime(date_format(date_create_from_format('d/m/Y', $model->date_from), "Y-m-d"))) . "' AND '" . date("Y-m-d", strtotime(date_format(date_create_from_format('d/m/Y', $model->date_to), "Y-m-d") . ' +1 day')) . "'";
+
+                if (count($filter)) {
+                    $where = ' WHERE ' . implode(' AND ', $filter);
+                }
+                if (count($order)) {
+                    $sort = ' ORDER BY ' . implode(', ', $order);
+                }
+                $rep = new WPJasper();
+                $reportId = 'daftar_surat_ketetapan';
+                $menyetujui = Pejabat::model()->findByPk($model->menyetujui);
+                $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
+                $diperiksa = Pejabat::model()->findByPk($model->diperiksa);
+                $params = array(
+                    'JudulLaporan' => $judul_laporan,
+                    'SubJudulLaporan' => Yii::t('trans', '{date_from} s/d. {date_to}', array('{date_from}' => $model->date_from, '{date_to}' => $model->date_to)),
+                    'KetTtd' => 'Menyetujui,',
+                    'PangkatTtd' => $menyetujui->pangkat->nama,
+                    'NamaTtd' => $menyetujui->nama,
+                    'JabatanTtd' => $menyetujui->jabatan->nama,
+                    'NipTtd' => $menyetujui->nip,
+                    'KetTtd1' => 'Mengetahui,',
+                    'PangkatTtd1' => $mengetahui->pangkat->nama,
+                    'NamaTtd1' => $mengetahui->nama,
+                    'JabatanTtd1' => $mengetahui->jabatan->nama,
+                    'NipTtd1' => $mengetahui->nip,
+                    'KetTtd2' => 'Diperiksa Oleh,',
+                    'PangkatTtd2' => $diperiksa->pangkat->nama,
+                    'NamaTtd2' => $diperiksa->nama,
+                    'JabatanTtd2' => $diperiksa->jabatan->nama,
+                    'NipTtd2' => $diperiksa->nip,
+                    'UserName' => Yii::app()->user->nickName,
+                    'RoleName' => Yii::app()->user->roleName,
+                    'NamaRekening' => $model->kodeRekeningText,
+                    'Tanggal' => date_format(date_create_from_format('d/m/Y', $model->tanggal), "d F Y"),
+                    'Par_SQL' => 'SELECT * FROM v_buku_kendali' . $where . $sort,
+                );
+                if (isset($_POST['type_report'])) {
+                    $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);
+                } else {
+                    $html_report = $rep->generateReport($reportId, WPJasper::FORMAT_HTML, $params, $filename);
+                }
+            }
+        }
+        $this->render('surat_ketetapan', array(
+            'model' => $model,
+            'title' => $title,
+            'html_report' => $html_report,
+        ));
     }
 
     public function actionCetakPenetapan() {

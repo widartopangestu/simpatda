@@ -1,10 +1,10 @@
 <?php
 $this->breadcrumbs = array(
-    Yii::t('trans', 'Penagihan') => array('index'),
-    Yii::t('trans', 'Cetak Daftar Tunggakan'),
+    Yii::t('trans', 'Penetapan') => array('index'),
+    Yii::t('trans', 'Cetak Daftar Surat Ketetapan'),
 );
-$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Cetak Daftar Tunggakan');
-$this->modulTitle = Yii::t('trans', 'Cetak Daftar Tunggakan');
+$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Cetak Daftar Surat Ketetapan');
+$this->modulTitle = Yii::t('trans', 'Cetak Daftar Surat Ketetapan');
 ?>
 <div class="form">
     <?php
@@ -20,6 +20,7 @@ $this->modulTitle = Yii::t('trans', 'Cetak Daftar Tunggakan');
     ?>
     <p class="help-block"><?php echo Yii::t('trans', 'Fields with'); ?> <span class="required">*</span> <?php echo Yii::t('trans', 'are required.'); ?></p>
     <?php echo $form->errorSummary($model); ?>       
+    <?php echo $form->dropdownListControlGroup($model, 'sort_by', $model->sortByOptions, array('span' => 3)); ?>
     <?php
     echo $form->datePickerControlGroup($model, 'tanggal', array('span' => 2, 'pluginOptions' => array(
             'format' => 'dd/mm/yyyy'
@@ -35,9 +36,9 @@ $this->modulTitle = Yii::t('trans', 'Cetak Daftar Tunggakan');
             'format' => 'dd/mm/yyyy'
     )));
     ?>
-    <?php echo $form->dropdownListControlGroup($model, 'jenis_pajak', $model->kodeRekeningOptions, array('span' => 5, 'empty' => '--')); ?>
-    <?php echo $form->dropdownListControlGroup($model, 'jenis_surat_id', $model->jenisSuratOptions, array('span' => 5, 'empty' => '--')); ?>
-    <?php echo $form->dropdownListControlGroup($model, 'kecamatan_id', $model->kecamatanOptions, array('span' => 5, 'empty' => '--')); ?>
+    <?php echo $form->dropdownListControlGroup($model, 'jenis_pajak', $model->kodeRekeningOptions, array('span' => 3)); ?>
+    <?php echo $form->dropdownListControlGroup($model, 'jenis_surat_id', $model->jenisSuratOptions, array('span' => 3)); ?>
+    <?php echo $form->dropdownListControlGroup($model, 'kecamatan_id', $model->kecamatanOptions, array('span' => 3, 'empty' => '--')); ?>
     <?php echo $form->dropdownListControlGroup($model, 'menyetujui', $model->pejabatOptions, array('span' => 5)); ?>
     <?php echo $form->dropdownListControlGroup($model, 'mengetahui', $model->pejabatOptions, array('span' => 5)); ?>
     <?php echo $form->dropdownListControlGroup($model, 'diperiksa', $model->pejabatOptions, array('span' => 5)); ?>
