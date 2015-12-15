@@ -583,11 +583,118 @@ class SptController extends Controller {
     }
 
     public function actionCreateReklame() {
-        
+        $model = new Spt;
+        $model->nomor = 'AUTO';
+        $model->jenis_pajak = Spt::JENIS_PAJAK_REKLAME;
+        $model->periode = date('Y');
+        $model->tanggal_proses = date('d/m/Y');
+        $model->tanggal_entry = date('d/m/Y');
+
+        if (isset($_POST['Spt'])) {
+            $transaction = Yii::app()->db->beginTransaction();
+            $flag = true;
+            $model->attributes = $_POST['Spt'];
+            $model->nilai = str_replace(',', '', $model->nilai);
+            $model->pajak = str_replace(',', '', $model->pajak);
+            if ($model->validate()) {
+                if (!empty($model->tanggal_proses) && $model->tanggal_proses != '0000-00-00')
+                    $model->tanggal_proses = date_format(date_create_from_format('d/m/Y', $model->tanggal_proses), "Y-m-d");
+                else
+                    $model->tanggal_proses = new CDbExpression('null');
+                if (!empty($model->tanggal_entry) && $model->tanggal_entry != '0000-00-00')
+                    $model->tanggal_entry = date_format(date_create_from_format('d/m/Y', $model->tanggal_entry), "Y-m-d");
+                else
+                    $model->tanggal_entry = new CDbExpression('null');
+                if (!empty($model->periode_awal) && $model->periode_awal != '0000-00-00')
+                    $model->periode_awal = date_format(date_create_from_format('d/m/Y', $model->periode_awal), "Y-m-d");
+                else
+                    $model->periode_awal = new CDbExpression('null');
+                if (!empty($model->periode_akhir) && $model->periode_akhir != '0000-00-00')
+                    $model->periode_akhir = date_format(date_create_from_format('d/m/Y', $model->periode_akhir), "Y-m-d");
+                else
+                    $model->periode_akhir = new CDbExpression('null');
+
+                $model_item = new SptItem;
+                $model_item->pajak = $model->pajak;
+                $model_item->nilai = $model->nilai;
+                $model_item->tarif_dasar = $model->tarif_dasar;
+                $model_item->tarif_persen = $model->tarif_persen;
+                $model_item->kode_rekening_id = $model->kode_rekening_id;
+                $model->kode_rekening_id = Spt::PARENT_REKLAME;
+                $flag = $model->save() && $flag;
+                $model_item->spt_id = $model->primaryKey;
+                $flag = $model_item->save() && $flag;
+            } else {
+                $flag = false;
+            }
+            if ($flag) {
+                $transaction->commit();
+                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Create SPTPD Pajak Reklame ID : ') . $model->primaryKey);
+                $this->redirect(array('createReklame'));
+            }
+        }
+
+        $this->render('form_reklame', array(
+            'model' => $model,
+        ));
     }
 
     public function actionUpdateReklame($id) {
-        
+        $model = $this->loadModel($id);
+        $model->tanggal_proses = date('d/m/Y', strtotime($model->tanggal_proses));
+        $model->tanggal_entry = date('d/m/Y', strtotime($model->tanggal_entry));
+        $model->periode_awal = date('d/m/Y', strtotime($model->periode_awal));
+        $model->periode_akhir = date('d/m/Y', strtotime($model->periode_akhir));
+        $model_item = SptItem::model()->findByAttributes(array('spt_id' => $model->id));
+        $model->kode_rekening_id = $model_item->kode_rekening_id;
+        if (isset($_POST['Spt'])) {
+            $transaction = Yii::app()->db->beginTransaction();
+            $flag = true;
+            $model->attributes = $_POST['Spt'];
+            $model->nilai = str_replace(',', '', $model->nilai);
+            $model->pajak = str_replace(',', '', $model->pajak);
+            if ($model->validate() && $model->allowUpdate) {
+                if (!empty($model->tanggal_proses) && $model->tanggal_proses != '0000-00-00')
+                    $model->tanggal_proses = date_format(date_create_from_format('d/m/Y', $model->tanggal_proses), "Y-m-d");
+                else
+                    $model->tanggal_proses = new CDbExpression('null');
+                if (!empty($model->tanggal_entry) && $model->tanggal_entry != '0000-00-00')
+                    $model->tanggal_entry = date_format(date_create_from_format('d/m/Y', $model->tanggal_entry), "Y-m-d");
+                else
+                    $model->tanggal_entry = new CDbExpression('null');
+                if (!empty($model->periode_awal) && $model->periode_awal != '0000-00-00')
+                    $model->periode_awal = date_format(date_create_from_format('d/m/Y', $model->periode_awal), "Y-m-d");
+                else
+                    $model->periode_awal = new CDbExpression('null');
+                if (!empty($model->periode_akhir) && $model->periode_akhir != '0000-00-00')
+                    $model->periode_akhir = date_format(date_create_from_format('d/m/Y', $model->periode_akhir), "Y-m-d");
+                else
+                    $model->periode_akhir = new CDbExpression('null');
+
+                $model_item->pajak = $model->pajak;
+                $model_item->nilai = $model->nilai;
+                $model_item->tarif_dasar = $model->tarif_dasar;
+                $model_item->tarif_persen = $model->tarif_persen;
+                $model_item->kode_rekening_id = $model->kode_rekening_id;
+                $model->kode_rekening_id = Spt::PARENT_REKLAME;
+                $flag = $model->save() && $flag;
+                $flag = $model_item->save() && $flag;
+            } else {
+                $flag = false;
+                if (!$model->allowUpdate) {
+                    Yii::app()->util->setLog(AccessLog::TYPE_ERROR, Yii::t('trans', 'SPTPD ID : {id} sudah di Tetapkan.', array('{id}' => $model->id)));
+                }
+            }
+            if ($flag) {
+                $transaction->commit();
+                Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Update SPTPD Pajak Reklame ID : ') . $model->id);
+                $this->redirect(array('index', 'jenis' => Spt::JENIS_PAJAK_REKLAME));
+            }
+        }
+
+        $this->render('form_reklame', array(
+            'model' => $model,
+        ));
     }
 
     public function actionCreateElectric() {

@@ -100,6 +100,8 @@
                                 array('label' => '<span>' . Yii::t('trans', 'BKP') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => '#', 'items' => array(
                                         array('label' => Yii::t('trans', 'Rekam Penerimaan Pajak'), 'visible' => Yii::app()->util->is_authorized('setoranPajak.create'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/setoranPajak/create')),
                                         array('label' => Yii::t('trans', 'Rekam Penyetoran ke Bank'), 'visible' => Yii::app()->util->is_authorized('setoranBank.create'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/setoranBank/create')),
+                                        TbHtml::menuDivider(),
+                                        array('label' => Yii::t('trans', 'Cetak Setoran Pajak'), 'visible' => Yii::app()->util->is_authorized('jReport.setoranPajak'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jReport/setoranPajak')),
                                     )
                                 ),
                                 array('label' => '<span>' . Yii::t('trans', 'Pembukuan Pelaporan') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => '#', 'items' => array(
@@ -128,7 +130,6 @@
                                 array('label' => '<span>' . Yii::t('trans', 'Report') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => '#', 'items' => array(
                                         array('label' => Yii::t('trans', 'User List'), 'visible' => Yii::app()->util->is_authorized('jReport.userList'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jReport/userList')),
                                         array('label' => Yii::t('trans', 'User Actvity'), 'visible' => Yii::app()->util->is_authorized('jReport.userActivityList'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jReport/userActivityList')),
-                                        array('label' => Yii::t('trans', 'Setoran Pajak'), 'visible' => Yii::app()->util->is_authorized('jReport.setoranPajak'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jReport/setoranPajak')),
                                     )
                                 ),
                             ),
