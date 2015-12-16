@@ -9,8 +9,161 @@ class JReportController extends Controller {
      */
     public function filters() {
         return array(
-            'WAuth - dynamicKelurahan',
+            'WAuth - rekapitulasiMenu, rekapitulasiPenerimaanMenu, rekapitulasi, rekapitulasiPenerimaan, dynamicKelurahan',
         );
+    }
+
+    public function actionRekapitulasiMenu() {
+        if (Yii::app()->util->is_authorized('jReport.rekapitulasiHotel') || Yii::app()->util->is_authorized('jReport.rekapitulasiRestoran') || Yii::app()->util->is_authorized('jReport.rekapitulasiHiburan') || Yii::app()->util->is_authorized('jReport.rekapitulasiReklame') || Yii::app()->util->is_authorized('jReport.rekapitulasiElectric') || Yii::app()->util->is_authorized('jReport.rekapitulasiGalian') || Yii::app()->util->is_authorized('jReport.rekapitulasiAir') || Yii::app()->util->is_authorized('jReport.rekapitulasiWalet') || Yii::app()->util->is_authorized('jReport.rekapitulasiRetribusi') || Yii::app()->util->is_authorized('jReport.rekapitulasiBphtb')) {
+            $this->render('rekapitulasi_menu');
+        } else {
+            throw new CHttpException(403, Yii::t('trans', 'You do not have sufficient permissions to access this page.'));
+        }
+    }
+
+    public function actionRekapitulasiPenerimaanMenu() {
+        if (Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanHotel') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanRestoran') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanHiburan') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanReklame') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanElectric') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanGalian') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanAir') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanWalet') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanRetribusi') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanBphtb')) {
+            $this->render('rekapitulasi_penerimaan_menu');
+        } else {
+            throw new CHttpException(403, Yii::t('trans', 'You do not have sufficient permissions to access this page.'));
+        }
+    }
+
+    public function actionRekapitulasi($pajak) {
+        if (Yii::app()->util->is_authorized('jReport.rekapitulasiHotel') || Yii::app()->util->is_authorized('jReport.rekapitulasiRestoran') || Yii::app()->util->is_authorized('jReport.rekapitulasiHiburan') || Yii::app()->util->is_authorized('jReport.rekapitulasiReklame') || Yii::app()->util->is_authorized('jReport.rekapitulasiElectric') || Yii::app()->util->is_authorized('jReport.rekapitulasiGalian') || Yii::app()->util->is_authorized('jReport.rekapitulasiAir') || Yii::app()->util->is_authorized('jReport.rekapitulasiWalet') || Yii::app()->util->is_authorized('jReport.rekapitulasiRetribusi') || Yii::app()->util->is_authorized('jReport.rekapitulasiBphtb')) {
+            $title = Yii::t('trans', 'Cetak Rekapitulasi');
+            $model = new RekapitulasiForm();
+            $model->tahun = date('Y');
+            $model->jenis_pajak = $pajak;
+            $filename = 'rekapitulasi_' . date("d-m-Y_h:i:s-A");
+            $html_report = '';
+            if (isset($_POST['RekapitulasiForm'])) {
+                $model->attributes = $_POST['RekapitulasiForm'];
+                if ($model->validate()) {
+                    $filter = array();
+                    $where = '';
+                    $judul_laporan = 'Rekapitulasi';
+                    if (isset($model->tahun) && trim($model->tahun) != "")
+                        $filter[] = 'periode=' . $model->tahun;
+                    if (isset($model->kecamatan_id) && trim($model->kecamatan_id) != "")
+                        $filter[] = 'kecamatan_id=' . $model->kecamatan_id;
+                    if (isset($model->jenis_pajak) && trim($model->jenis_pajak) != "") {
+                        $filter[] = 'kode_rekening_id=' . $model->jenis_pajak;
+                        $nama_rekening = KodeRekening::model()->findByPk($model->jenis_pajak)->nama;
+                        $judul_laporan .= ' ' . $nama_rekening;
+                        $filename = 'rekapitulasi_' . $model->tahun . '_' . strtolower($nama_rekening) . '_' . date("d-m-Y_h:i:s-A");
+                    }
+                    if (count($filter)) {
+                        $where = ' WHERE ' . implode(' AND ', $filter);
+                    }
+                    $rep = new WPJasper();
+                    $reportId = 'rekapitulasi';
+                    $pembuat = Pejabat::model()->findByPk($model->pembuat);
+                    $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
+                    $params = array(
+                        'JudulLaporan' => $judul_laporan,
+                        'SubJudulLaporan' => 'Tahun ' . $model->tahun,
+                        'KetTtd' => 'Mengetahui,',
+                        'PangkatTtd' => $mengetahui->pangkat->nama,
+                        'NamaTtd' => $mengetahui->nama,
+                        'JabatanTtd' => $mengetahui->jabatan->nama,
+                        'NipTtd' => $mengetahui->nip,
+                        'KetTtd1' => Yii::app()->params['kota_perusahaan'] . ", " . date("d F Y"),
+                        'PangkatTtd1' => $pembuat->pangkat->nama,
+                        'NamaTtd1' => $pembuat->nama,
+                        'JabatanTtd1' => $pembuat->jabatan->nama,
+                        'NipTtd1' => $pembuat->nip,
+                        'UserName' => Yii::app()->user->nickName,
+                        'RoleName' => Yii::app()->user->roleName,
+                        'Par_SQL' => 'SELECT * FROM v_rekapitulasi' . $where . ' order by nama_kecamatan',
+                    );
+                    if (isset($_POST['type_report'])) {
+                        $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);
+                    } else {
+                        $html_report = $rep->generateReport($reportId, WPJasper::FORMAT_HTML, $params, $filename);
+                    }
+                }
+            }
+            $this->render('rekapitulasi', array(
+                'model' => $model,
+                'title' => $title,
+                'html_report' => $html_report,
+            ));
+        } else {
+            throw new CHttpException(403, Yii::t('trans', 'You do not have sufficient permissions to access this page.'));
+        }
+    }
+
+    public function actionRekapitulasiPenerimaan($pajak) {
+        if (Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanHotel') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanRestoran') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanHiburan') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanReklame') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanElectric') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanGalian') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanAir') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanWalet') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanRetribusi') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanBphtb')) {
+            $title = Yii::t('trans', 'Cetak Rekapitulasi Penerimaan');
+            $filename = 'rekapitulasi_penerimaan_' . date("d-m-Y_h:i:s-A");
+            $model = new RekapitulasiPenerimaanForm();
+            $model->tahun = date('Y');
+            $model->jenis_pajak = $pajak;
+            $html_report = '';
+            if (isset($_POST['RekapitulasiPenerimaanForm'])) {
+                $model->attributes = $_POST['RekapitulasiPenerimaanForm'];
+                if ($model->validate()) {
+                    $filter = array();
+                    $where = '';
+                    $judul_laporan = 'Rekapitulasi Penerimaan';
+                    if (isset($model->tahun) && trim($model->tahun) != "")
+                        $filter[] = 'periode=' . $model->tahun;
+                    if (isset($model->kecamatan_id) && trim($model->kecamatan_id) != "")
+                        $filter[] = 'kecamatan_id=' . $model->kecamatan_id;
+                    if (isset($model->jenis_pajak) && trim($model->jenis_pajak) != "") {
+                        $filter[] = 'kode_rekening_id=' . $model->jenis_pajak;
+                        $nama_rekening = KodeRekening::model()->findByPk($model->jenis_pajak)->nama;
+                        $judul_laporan .= ' ' . $nama_rekening;
+                        $filename = 'rekapitulasi_penerimaan_' . $model->tahun . '_' . strtolower($nama_rekening) . '_' . date("d-m-Y_h:i:s-A");
+                    }
+                    if (count($filter)) {
+                        $where = ' WHERE ' . implode(' AND ', $filter);
+                    }
+                    $rep = new WPJasper();
+                    $reportId = 'rekapitulasi_penerimaan';
+                    $menyetujui = Pejabat::model()->findByPk($model->menyetujui);
+                    $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
+                    $diperiksa = Pejabat::model()->findByPk($model->diperiksa);
+                    $params = array(
+                        'JudulLaporan' => $judul_laporan,
+                        'SubJudulLaporan' => '',
+                        'KetTtd' => 'Menyetujui,',
+                        'PangkatTtd' => $menyetujui->pangkat->nama,
+                        'NamaTtd' => $menyetujui->nama,
+                        'JabatanTtd' => $menyetujui->jabatan->nama,
+                        'NipTtd' => $menyetujui->nip,
+                        'KetTtd1' => 'Mengetahui,',
+                        'PangkatTtd1' => $mengetahui->pangkat->nama,
+                        'NamaTtd1' => $mengetahui->nama,
+                        'JabatanTtd1' => $mengetahui->jabatan->nama,
+                        'NipTtd1' => $mengetahui->nip,
+                        'KetTtd2' => 'Diperiksa Oleh,',
+                        'PangkatTtd2' => $diperiksa->pangkat->nama,
+                        'NamaTtd2' => $diperiksa->nama,
+                        'JabatanTtd2' => $diperiksa->jabatan->nama,
+                        'NipTtd2' => $diperiksa->nip,
+                        'UserName' => Yii::app()->user->nickName,
+                        'RoleName' => Yii::app()->user->roleName,
+                        'Tanggal' => date("d F Y"),
+                        'Par_SQL' => 'SELECT * FROM v_rekapitulasi_penerimaan' . $where . ' order by nama_kecamatan',
+                    );
+                    if (isset($_POST['type_report'])) {
+                        $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);
+                    } else {
+                        $html_report = $rep->generateReport($reportId, WPJasper::FORMAT_HTML, $params, $filename);
+                    }
+                }
+            }
+            $this->render('rekapitulasi_penerimaan', array(
+                'model' => $model,
+                'title' => $title,
+                'html_report' => $html_report,
+            ));
+        } else {
+            throw new CHttpException(403, Yii::t('trans', 'You do not have sufficient permissions to access this page.'));
+        }
     }
 
     public function actionUserList() {

@@ -2,7 +2,7 @@
 $this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Pilih Jenis Pajak / Retribusi');
 $this->breadcrumbs = array(
     Yii::t('trans', 'SPTPD') => array('index'),
-    Yii::t('trans', 'Pilihan Pajak / Retribusi')
+    Yii::t('trans', 'Pilihan Pajak')
 );
 ?>
 <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/pages/dashboard.css" rel="stylesheet">         
@@ -37,8 +37,5 @@ $this->breadcrumbs = array(
     <?php if (Yii::app()->util->is_authorized('spt.createBphtb')): ?>
         <a href="<?php echo Yii::app()->request->baseUrl ?>/spt/createBphtb" class="shortcut"><img src="<?php echo Yii::app()->baseUrl; ?>/images/shortcut-icons/icon-48-bphtb.png" /><span class="shortcut-label"><?php echo Yii::t('trans', 'BPHTB'); ?></span> </a>
     <?php endif; ?>
-    <?php if (Yii::app()->util->is_authorized('spt.createReklameBaru')): ?>
-        <a href="<?php echo Yii::app()->request->baseUrl ?>/spt/createReklameBaru" class="shortcut"><img src="<?php echo Yii::app()->baseUrl; ?>/images/shortcut-icons/icon-48-reklame.png" /><span class="shortcut-label"><?php echo Yii::t('trans', 'Pajak Reklame Baru'); ?></span> </a>
-        <?php endif; ?>
 </div>
 <!-- /shortcuts --> 

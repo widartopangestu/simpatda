@@ -84,7 +84,7 @@ class WPJasper extends CApplicationComponent {
         try {
             ini_set('max_execution_time', 0);
             ini_set('memory_limit', '-1');
-            $this->_client->setRequestTimeout(60 * 60);
+            $this->_client->setRequestTimeout(60 * 60 * 30);
             $report = $this->_client->reportService()->runReport($uri, $format, $pages, null, $inputControls);
             if ($format == self::FORMAT_HTML) {
                 return $report;
