@@ -128,6 +128,16 @@
                                         array('label' => Yii::t('trans', 'Wajib Pajak'), 'visible' => Yii::app()->util->is_authorized('wajibPajak.index'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/wajibPajak/index')),
                                     )
                                 ),
+                                array('label' => '<span>' . Yii::t('trans', 'Master Reklame') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => '#', 'items' => array(
+                                        array('label' => Yii::t('trans', 'Ketinggian'), 'visible' => Yii::app()->util->is_authorized('reklameKetinggian.index'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/reklameKetinggian/index')),
+                                        array('label' => Yii::t('trans', 'Lokasi'), 'visible' => Yii::app()->util->is_authorized('reklameLokasi.index'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/reklameLokasi/index')),
+                                        array('label' => Yii::t('trans', 'Luas'), 'visible' => Yii::app()->util->is_authorized('reklameLuas.index'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/reklameLuas/index')),
+                                        array('label' => Yii::t('trans', 'NJOP'), 'visible' => Yii::app()->util->is_authorized('reklameNjop.index'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/reklameNjop/index')),
+                                        array('label' => Yii::t('trans', 'NJOP Ketinggian'), 'visible' => Yii::app()->util->is_authorized('reklameNjopKetinggian.index'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/reklameNjopKetinggian/index')),
+                                        array('label' => Yii::t('trans', 'Nilai Strategis'), 'visible' => Yii::app()->util->is_authorized('reklameStrategis.index'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/reklameStrategis/index')),
+                                        array('label' => Yii::t('trans', 'Sudut Pandang'), 'visible' => Yii::app()->util->is_authorized('reklameSudutPandang.index'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/reklameSudutPandang/index')),
+                                    )
+                                ),
                                 array('label' => '<span>' . Yii::t('trans', 'Report') . '</span>', 'visible' => !Yii::app()->user->isGuest, 'url' => '#', 'items' => array(
                                         array('label' => Yii::t('trans', 'User List'), 'visible' => Yii::app()->util->is_authorized('jReport.userList'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jReport/userList')),
                                         array('label' => Yii::t('trans', 'User Actvity'), 'visible' => Yii::app()->util->is_authorized('jReport.userActivityList'), 'icon' => TbHtml::ICON_LIST, 'url' => array('/jReport/userActivityList')),
