@@ -91,6 +91,7 @@ class SetoranPajakController extends Controller {
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
         $model->tanggal_bayar = date('d/m/Y', strtotime($model->tanggal_bayar));
+        $model->kohir = $model->penetapan_id;
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
@@ -108,25 +109,38 @@ class SetoranPajakController extends Controller {
                     $model->tanggal_bayar = new CDbExpression('null');
 
                 $flag = $model->save() && $flag;
+                //delete stpd
+                if ($model->penetapan->spt_id)
+                    $penetapan = Penetapan::model()->findByAttributes(array('spt_id' => $model->penetapan->spt_id, 'jenis_surat_id' => 3));
+                elseif ($model->penetapan->pemeriksaan_id)
+                    $penetapan = Penetapan::model()->findByAttributes(array('pemeriksaan_id' => $model->penetapan->pemeriksaan_id, 'jenis_surat_id' => 3));
+                $flag = $penetapan->delete() && $flag;
+                
                 if (isset($_POST['SetoranPajakDenda']) && $_POST['SetoranPajakDenda']['jumlah_bulan']) {
-                    if ($model->penetapan->spt_id)
-                        $penetapan = Penetapan::model()->findByAttributes(array('spt_id' => $model->penetapan->spt_id, 'jenis_surat_id' => 3));
-                    elseif ($model->penetapan->pemeriksaan_id)
-                        $penetapan = Penetapan::model()->findByAttributes(array('pemeriksaan_id' => $model->penetapan->pemeriksaan_id, 'jenis_surat_id' => 3));
+                    $penetapan = new Penetapan;
                     $penetapan->tanggal_penetapan = $model->tanggal_bayar;
                     $penetapan->tanggal_jatuh_tempo = date('Y-m-d', strtotime("+" . Yii::app()->params['hari_jatuh_tempo'] . " day", strtotime($model->tanggal_bayar)));
+                    if ($model->penetapan->spt_id)
+                        $penetapan->spt_id = $model->penetapan->spt_id;
+                    elseif ($model->penetapan->pemeriksaan_id)
+                        $penetapan->pemeriksaan_id = $model->penetapan->pemeriksaan_id;
+                    $penetapan->jenis_surat_id = 3; //Surat Tagihan Pajak Daerah
                     $flag = $penetapan->save() && $flag;
 
-                    $penetapan_denda = PenetapanDenda::model()->findByAttributes(array('setoran_pajak_id' => $model->id));
+                    $penetapan_denda = new PenetapanDenda;
                     $penetapan_denda->attributes = $_POST['SetoranPajakDenda'];
+                    $penetapan_denda->penetapan_id = $penetapan->primaryKey;
+                    $penetapan_denda->setoran_pajak_id = $model->primaryKey;
                     $flag = $penetapan_denda->save() && $flag;
 
-                    $setoran = SetoranPajak::model()->findByAttributes(array('nomor' => $model->nomor, 'penetapan_id' => $penetapan->id));
+                    $setoran = new SetoranPajak;
+                    $setoran->nomor = $model->nomor;
                     $setoran->kohir = $model->penetapan->kohir;
                     $setoran->tanggal_bayar = $model->tanggal_bayar;
                     $setoran->jumlah_bayar = $penetapan_denda->nilai_denda;
                     $setoran->via_bayar = $model->via_bayar;
                     $setoran->nama_penyetor = $model->nama_penyetor;
+                    $setoran->penetapan_id = $penetapan->primaryKey;
                     $flag = $setoran->save() && $flag;
                 }
             } else {
@@ -151,9 +165,20 @@ class SetoranPajakController extends Controller {
     public function actionDelete($id) {
         if (Yii::app()->request->isPostRequest) {
             // we only allow deletion via POST request
+            $model = $this->loadModel($id);
             try {
-                if ($this->loadModel($id)->delete())
+                $transaction = Yii::app()->db->beginTransaction();
+                $flag = true;
+                if ($model->penetapan->spt_id)
+                    $penetapan = Penetapan::model()->findByAttributes(array('spt_id' => $model->penetapan->spt_id, 'jenis_surat_id' => 3));
+                elseif ($model->penetapan->pemeriksaan_id)
+                    $penetapan = Penetapan::model()->findByAttributes(array('pemeriksaan_id' => $model->penetapan->pemeriksaan_id, 'jenis_surat_id' => 3));
+                $flag = $penetapan->delete() && $flag;
+                $flag = $model->delete() && $flag;
+                if ($flag) {
+                    $transaction->commit();
                     Yii::app()->util->setLog(AccessLog::TYPE_SUCCESS, Yii::t('trans', 'Delete Setoran Pajak ID : ') . $id);
+                }
             } catch (CDbException $exc) {
                 throw new CHttpException(500, Yii::t('trans', 'Delete Setoran Pajak ID : {id}. Item ini sudah dipakai pada transaksi', array('{id}' => $id)));
             }
@@ -281,8 +306,8 @@ class SetoranPajakController extends Controller {
                     $model->jumlah_pajak = $penetapan->pemeriksaan->nilai_pajak;
                     $model->jumlah_potongan = ($model->jumlah_potongan != '') ? doubleval(str_replace(',', '', $model->jumlah_potongan)) : 0;
                     $model->jumlah_bayar = $model->jumlah_pajak - $model->jumlah_potongan;
-                    $model->jumlah_pajak_denda = $model->jumlah_pajak;
-                    $model->jumlah_bayar_denda = $model->jumlah_bayar;
+                    $model->jumlah_pajak_denda = $model->jumlah_pajak + $denda;
+                    $model->jumlah_bayar_denda = $model->jumlah_bayar + $denda;
 
                     $denda_item = array(
                         'jumlah_bulan' => $bulan, 'keterangan' => $keterangan, 'nilai_denda' => $denda, 'kode_rekening' => $kode_rekening_denda->kode, 'kode_rekening_id' => $kode_rekening_denda->id

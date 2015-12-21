@@ -45,13 +45,13 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
         array(
             'name' => 'periode',
             'type' => 'raw',
-            'value' => 'CHtml::encode($data->spt->periode)',
+            'value' => 'CHtml::encode(!empty($data->spt_id) ? $data->spt->periode : $data->pemeriksaan->periode)',
             'filter' => false,
         ),
         array(
-            'name' => 'no_sptpd',
+            'name' => 'no_sptpd_/_lhp',
             'type' => 'raw',
-            'value' => 'CHtml::encode($data->spt->nomor)',
+            'value' => 'CHtml::encode(!empty($data->spt_id) ? $data->spt->nomor : $data->pemeriksaan->nomor)',
             'filter' => false,
         ),
         array(
@@ -73,19 +73,19 @@ $this->widget('yiiwheels.widgets.grid.WhGridView', array(
         array(
             'name' => 'nama_rekening',
             'type' => 'raw',
-            'value' => 'CHtml::encode($data->spt->kodeRekening->nama)',
+            'value' => 'CHtml::encode(!empty($data->spt_id) ? $data->spt->kodeRekening->nama :  $data->pemeriksaan->kodeRekening->nama)',
             'filter' => false,
         ),
         array(
             'name' => 'npwpd',
             'type' => 'raw',
-            'value' => 'CHtml::encode($data->spt->wajibpajak->npwpd)',
+            'value' => 'CHtml::encode(!empty($data->spt_id) ? $data->spt->wajibpajak->npwpd : $data->pemeriksaan->wajibpajak->npwpd)',
             'filter' => false,
         ),
         array(
             'name' => 'nama_wajib_pajak',
             'type' => 'raw',
-            'value' => 'CHtml::encode($data->spt->wajibpajak->nama)',
+            'value' => 'CHtml::encode(!empty($data->spt_id) ? $data->spt->wajibpajak->nama : $data->pemeriksaan->wajibpajak->nama)',
             'filter' => false,
         ),
         array(

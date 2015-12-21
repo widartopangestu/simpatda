@@ -17,7 +17,10 @@ class JReportController extends Controller {
         if (Yii::app()->util->is_authorized('jReport.rekapitulasiHotel') || Yii::app()->util->is_authorized('jReport.rekapitulasiRestoran') || Yii::app()->util->is_authorized('jReport.rekapitulasiHiburan') || Yii::app()->util->is_authorized('jReport.rekapitulasiReklame') || Yii::app()->util->is_authorized('jReport.rekapitulasiElectric') || Yii::app()->util->is_authorized('jReport.rekapitulasiGalian') || Yii::app()->util->is_authorized('jReport.rekapitulasiAir') || Yii::app()->util->is_authorized('jReport.rekapitulasiWalet') || Yii::app()->util->is_authorized('jReport.rekapitulasiRetribusi') || Yii::app()->util->is_authorized('jReport.rekapitulasiBphtb')) {
             $this->render('rekapitulasi_menu');
         } else {
-            throw new CHttpException(403, Yii::t('trans', 'You do not have sufficient permissions to access this page.'));
+            if (Yii::app()->user->isGuest)
+                $this->redirect(Yii::app()->user->loginUrl);
+            else
+                throw new CHttpException(403, Yii::t('trans', 'You do not have sufficient permissions to access this page.'));
         }
     }
 
@@ -25,7 +28,10 @@ class JReportController extends Controller {
         if (Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanHotel') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanRestoran') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanHiburan') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanReklame') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanElectric') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanGalian') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanAir') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanWalet') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanRetribusi') || Yii::app()->util->is_authorized('jReport.rekapitulasiPenerimaanBphtb')) {
             $this->render('rekapitulasi_penerimaan_menu');
         } else {
-            throw new CHttpException(403, Yii::t('trans', 'You do not have sufficient permissions to access this page.'));
+            if (Yii::app()->user->isGuest)
+                $this->redirect(Yii::app()->user->loginUrl);
+            else
+                throw new CHttpException(403, Yii::t('trans', 'You do not have sufficient permissions to access this page.'));
         }
     }
 
@@ -90,7 +96,10 @@ class JReportController extends Controller {
                 'html_report' => $html_report,
             ));
         } else {
-            throw new CHttpException(403, Yii::t('trans', 'You do not have sufficient permissions to access this page.'));
+            if (Yii::app()->user->isGuest)
+                $this->redirect(Yii::app()->user->loginUrl);
+            else
+                throw new CHttpException(403, Yii::t('trans', 'You do not have sufficient permissions to access this page.'));
         }
     }
 
@@ -162,7 +171,10 @@ class JReportController extends Controller {
                 'html_report' => $html_report,
             ));
         } else {
-            throw new CHttpException(403, Yii::t('trans', 'You do not have sufficient permissions to access this page.'));
+            if (Yii::app()->user->isGuest)
+                $this->redirect(Yii::app()->user->loginUrl);
+            else
+                throw new CHttpException(403, Yii::t('trans', 'You do not have sufficient permissions to access this page.'));
         }
     }
 

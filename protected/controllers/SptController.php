@@ -21,7 +21,10 @@ class SptController extends Controller {
         if (Yii::app()->util->is_authorized('spt.createHotel') || Yii::app()->util->is_authorized('spt.createRestoran') || Yii::app()->util->is_authorized('spt.createHiburan') || Yii::app()->util->is_authorized('spt.createReklame') || Yii::app()->util->is_authorized('spt.createElectric') || Yii::app()->util->is_authorized('spt.createGalian') || Yii::app()->util->is_authorized('spt.createAir') || Yii::app()->util->is_authorized('spt.createWalet') || Yii::app()->util->is_authorized('spt.createRetribusi') || Yii::app()->util->is_authorized('spt.createBphtb') || Yii::app()->util->is_authorized('spt.createReklameBaru')) {
             $this->render('menu');
         } else {
-            throw new CHttpException(403, Yii::t('trans', 'You do not have sufficient permissions to access this page.'));
+            if (Yii::app()->user->isGuest)
+                $this->redirect(Yii::app()->user->loginUrl);
+            else
+                throw new CHttpException(403, Yii::t('trans', 'You do not have sufficient permissions to access this page.'));
         }
     }
 

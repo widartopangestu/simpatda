@@ -195,7 +195,7 @@ class PenetapanController extends Controller {
                 }
             }
         }
-        $sql = "SELECT a.id, a.kohir, date_part('year', a.tanggal_penetapan) AS periode, b.nama AS nama_jenis_surat, b.kode AS kode_jenis_surat, b.singkatan AS singkatan_jenis_surat FROM penetapan a JOIN jenis_surat b ON a.jenis_surat_id = b.id $where ORDER BY kohir LIMIT 10";
+        $sql = "SELECT a.id, a.kohir, date_part('year', a.tanggal_penetapan) AS periode, b.nama AS nama_jenis_surat, b.kode AS kode_jenis_surat, b.singkatan AS singkatan_jenis_surat FROM penetapan a JOIN jenis_surat b ON a.jenis_surat_id = b.id $where AND jenis_surat_id NOT IN (3) ORDER BY kohir LIMIT 10";
         $result = Yii::app()->db->createCommand($sql)->queryAll();
         $data = array();
         foreach ($result as $item) {

@@ -33,6 +33,7 @@
             echo $form->select2ActiveTextFieldControlGroup($model, 'kohir', array(
                 'style' => 'width:300px',
                 'onChange' => 'fillData($(this).val());',
+                'readonly' => !$model->isNewRecord,
                 'options' => array(
                     'allowClear' => true,
                     'placeholder' => Yii::t('trans', 'Ketik nomor kohir'),

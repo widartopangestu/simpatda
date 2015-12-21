@@ -67,10 +67,22 @@ class SetoranPajak extends CActiveRecord {
             array('jumlah_bayar, jumlah_potongan', 'numerical'),
             array('nama_penyetor', 'length', 'max' => 255),
             array('jumlah_pajak, jumlah_bayar_denda, jumlah_pajak_denda, jenis_surat', 'safe'),
+            array('kohir', 'checkexists'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
             array('id, nomor, tanggal_bayar, jumlah_bayar, jumlah_potongan, via_bayar, nama_penyetor, penetapan_id, created, updated', 'safe', 'on' => 'search'),
         );
+    }
+
+    public function checkexists($attribute, $params) {
+        if (!$this->hasErrors() && $this->isNewRecord) { 
+            $flag = self::model()->exists('penetapan_id = ' . $this->penetapan_id);
+            if (!$flag) {
+                return;
+            } else {
+                $this->addError($attribute, Yii::t('trans', '{attribute} {value} sudah dipakai.', array('{attribute}' => $this->getAttributeLabel($attribute), '{value}' => $this->$attribute)));
+            }
+        }
     }
 
     /**
