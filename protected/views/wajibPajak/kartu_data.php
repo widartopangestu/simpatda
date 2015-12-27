@@ -50,6 +50,7 @@ $this->modulTitle = Yii::t('trans', 'Wajib Pajak') . ' ' . Yii::t('trans', 'Ceta
     ?>
 
     <?php echo $form->hiddenField($model, 'wajib_pajak_id'); ?>
+    <?php echo $form->dropdownListControlGroup($model, 'kode_rekening_id', $model->kodeRekeningOptions, array('span' => 5, 'empty' => Yii::t('trans', '- Pilih Kode Rekening -'))); ?>
     <?php echo $form->dropdownListControlGroup($model, 'mengetahui', $model->pejabatOptions, array('span' => 5)); ?>
     <?php echo $form->dropdownListControlGroup($model, 'diperiksa', $model->pejabatOptions, array('span' => 5)); ?>
     <div class="form-actions">
@@ -86,12 +87,20 @@ $this->modulTitle = Yii::t('trans', 'Wajib Pajak') . ' ' . Yii::t('trans', 'Ceta
 <script type="text/javascript">
     var timer;
     jQuery(document).ready(function () {
-        if (jQuery("#SuratTeguranForm_wajib_pajak_id").val())
-            fillData(jQuery("#SuratTeguranForm_wajib_pajak_id").val());
+        if (jQuery("#KartuDataForm_wajib_pajak_id").val() && !jQuery("#KartuDataForm_kode_rekening_id").val())
+            fillData(jQuery("#KartuDataForm_wajib_pajak_id").val());
     });
     function fillData(id) {
         jQuery.ajax({'type': 'POST', 'url': '<?php echo $this->createUrl('wajibPajak/jsonGetData'); ?>/?id=' + id, 'cache': false, dataType: 'json', 'data': null}).done(function (data) {
-            jQuery("#SuratTeguranForm_wajib_pajak_id").val(data.id);
+            jQuery("#KartuDataForm_wajib_pajak_id").val(data.id);
+            jQuery.ajax({'type': 'POST', 'url': '<?php echo $this->createUrl('wajibPajak/dynamicKodeRekening'); ?>', 'cache': false, 'data': jQuery("#kartu-data-form").serialize(), 'success': function (html) {
+                    jQuery("#KartuDataForm_kode_rekening_id").html(html)
+                }});
         });
     }
+//    jQuery("#KartuDataForm_periode").change(function () {
+//        jQuery.ajax({'type': 'POST', 'url': '<?php echo $this->createUrl('wajibPajak/dynamicKodeRekening'); ?>', 'cache': false, 'data': jQuery("#kartu-data-form").serialize(), 'success': function (html) {
+//                jQuery("#KartuDataForm_kode_rekening_id").html(html)
+//            }});
+//    });
 </script>

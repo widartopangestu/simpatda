@@ -372,4 +372,28 @@ class WajibPajak extends CActiveRecord {
         return strtoupper($this->jenis) . '.' . $this->golongan . '.' . $this->nomor . '.' . $this->kecamatan0->kode . '.' . $this->kelurahan0->kode;
     }
 
+    public function getGolonganPajak($id, $periode, $parent_kode_rekening) {
+        $sql = "SELECT distinct f.kode_rekening_id,
+    d.periode,
+    a.id,
+    e.kode,
+    f.kode_rekening_id,
+    e.nama as nama_kode_rekening,
+    d.kode_rekening_id as parent_kode_rekening
+   FROM spt_item f
+     JOIN spt d ON f.spt_id = d.id
+     JOIN wajib_pajak a ON a.id = d.wajib_pajak_id
+     JOIN kecamatan b ON a.kecamatan_id = b.id
+     JOIN kelurahan c ON a.kelurahan_id = c.id
+     join kode_rekening e on f.kode_rekening_id=e.id
+     where a.id=$id and d.periode=$periode and d.kode_rekening_id=$parent_kode_rekening
+  ORDER BY e.kode;";
+        $result = Yii::app()->db->createCommand($sql)->queryAll();
+        $data = array();
+        foreach ($result as $item) {
+            $data[] = $item['nama_kode_rekening'];
+        }
+        return implode(', ', $data);
+    }
+
 }

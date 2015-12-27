@@ -13,7 +13,7 @@ class WajibPajakController extends Controller {
      */
     public function filters() {
         return array(
-            'WAuth - dynamicKelurahan, jsonNpwpd, jsonGetData',
+            'WAuth - dynamicKelurahan, jsonNpwpd, jsonGetData, dynamicKodeRekening',
         );
     }
 
@@ -293,20 +293,20 @@ class WajibPajakController extends Controller {
                 if (isset($model->periode) && trim($model->periode) != "")
                     $filter[] = 'periode=' . $model->periode;
                 if (isset($model->wajib_pajak_id) && trim($model->wajib_pajak_id) != "")
-                    $filter[] = 'wajib_pajak_id=' . $model->wajib_pajak_id;
+                    $filter[] = 'id=' . $model->wajib_pajak_id;
+                if (isset($model->kode_rekening_id) && trim($model->kode_rekening_id) != "")
+                    $filter[] = 'kode_rekening_id=' . $model->kode_rekening_id;
 
                 if (count($filter)) {
                     $where = ' WHERE ' . implode(' AND ', $filter);
                 }
                 $rep = new WPJasper();
                 $reportId = 'kartu_data';
-                $wajib_pajak = WajibPajak::model()->findByPk($model->wajib_pajak_id);
-                $alamat = $wajib_pajak->alamat . ' Kel. ' . $wajib_pajak->kelurahan . ' Kec. ' . $wajib_pajak->kecamatan . ' ' . $wajib_pajak->kabupaten;
                 $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
                 $diperiksa = Pejabat::model()->findByPk($model->diperiksa);
                 $params = array(
                     'JudulLaporan' => 'KARTU DATA',
-                    'SubJudulLaporan' => 'PAJAK RESTORAN<br>Tahun : 2015.',
+                    'GolonganPajak' => WajibPajak::model()->getGolonganPajak($model->wajib_pajak_id, $model->periode, $model->kode_rekening_id),
                     'KetTtd' => 'Mengetahui,',
                     'PangkatTtd' => $mengetahui->pangkat->nama,
                     'NamaTtd' => $mengetahui->nama,
@@ -317,7 +317,7 @@ class WajibPajakController extends Controller {
                     'NamaTtd1' => $diperiksa->nama,
                     'JabatanTtd1' => $diperiksa->jabatan->nama,
                     'NipTtd1' => $diperiksa->nip,
-                    'Par_SQL' => 'SELECT * FROM v_kartu_data' . $where,
+                    'Par_SQL' => 'SELECT * FROM v_spt_wajib_pajak_periode' . $where,
                 );
                 if (isset($_POST['type_report'])) {
                     $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);
@@ -331,6 +331,22 @@ class WajibPajakController extends Controller {
             'title' => $title,
             'html_report' => $html_report,
         ));
+    }
+
+    public function actionDynamicKodeRekening() {
+        $id = (int) $_POST['KartuDataForm']['wajib_pajak_id'];
+        $periode = (int) $_POST['KartuDataForm']['periode'];
+        $sql = "SELECT kode_rekening_id, nama_kode_rekening FROM v_spt_wajib_pajak_periode
+     where id=$id"; //and periode=$periode;
+        $result = Yii::app()->db->createCommand($sql)->queryAll();
+        $data = array();
+        foreach ($result as $item) {
+            $data[$item['kode_rekening_id']] = $item['nama_kode_rekening'];
+        }
+        echo CHtml::tag('option', array('value' => ''), Yii::t('trans', '- Pilih Kode Rekening -'), true);
+        foreach ($data as $value => $name) {
+            echo CHtml::tag('option', array('value' => $value), CHtml::encode($name), true);
+        }
     }
 
 }

@@ -34,14 +34,9 @@ class SiteController extends Controller {
         if (Yii::app()->user->isGuest)
             $this->redirect(Yii::app()->user->loginUrl);
         else {
-            $accessLog = new AccessLog('search');
-            $accessLog->unsetAttributes();  // clear any default values
-            $accessLog->user_id = Yii::app()->user->id;
-            if (isset($_GET['AccessLog'])) {
-                $accessLog->attributes = $_GET['AccessLog'];
-            }
             $user = User::model()->findByPk(Yii::app()->user->id);
-            $this->render('index', array('user' => $user, 'accessLog' => $accessLog));
+            $this->_generatePeriode();
+            $this->render('index', array('user' => $user));
         }
     }
 
@@ -91,6 +86,16 @@ class SiteController extends Controller {
                 $this->render('error', $error);
         }
         Yii::app()->util->setLog(AccessLog::TYPE_ERROR, $error['code'] . ' ' . $error['message'] . ' - Access Page : "' . Yii::app()->request->requestUri . '"');
+    }
+
+    protected function _generatePeriode() {
+        $periode = date('Y');
+        $check = Periode::model()->exists('tahun = ' . (int) $periode);
+        if (!$check) {
+            $model = new Periode;
+            $model->tahun = $periode;
+            $model->save();
+        }
     }
 
 }
