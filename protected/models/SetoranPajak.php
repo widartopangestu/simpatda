@@ -199,7 +199,7 @@ class SetoranPajak extends CActiveRecord {
         $value = ($viaBayar === null) ? $this->via_bayar : $viaBayar;
         $viaBayarOptions = $this->getViaBayarOptions();
         return isset($viaBayarOptions[$value]) ?
-                $viaBayarOptions[$value] : "unknown Jenis Pemungutan ({$value})";
+                $viaBayarOptions[$value] : "unknown via bayar ({$value})";
     }
 
     public function getJenisSuratOptions() {

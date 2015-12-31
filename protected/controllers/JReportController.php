@@ -363,7 +363,7 @@ class JReportController extends Controller {
                 $rep = new WPJasper();
                 $reportId = 'setoran_pajak';
                 $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
-                $bendahara = Pejabat::model()->findByPk($model->bendahara);
+                $pembuat = Pejabat::model()->findByPk($model->pembuat);
                 $params = array(
                     'JudulLaporan' => $judul_laporan,
                     'SubJudulLaporan' => Yii::t('trans', 'Dari Nomor {nomor_from} s/d. {nomor_to} Tahun {periode}', array('{nomor_from}' => $model->nomor_from, '{nomor_to}' => $model->nomor_to, '{periode}' => $model->periode)),
@@ -373,10 +373,10 @@ class JReportController extends Controller {
                     'JabatanTtd' => $mengetahui->jabatan->nama,
                     'NipTtd' => $mengetahui->nip,
                     'KetTtd1' => Yii::app()->params['kota_perusahaan'] . ", " . date_format(date_create_from_format('d/m/Y', $model->tanggal), "d F Y"),
-                    'PangkatTtd1' => $bendahara->pangkat->nama,
-                    'NamaTtd1' => $bendahara->nama,
-                    'JabatanTtd1' => $bendahara->jabatan->nama,
-                    'NipTtd1' => $bendahara->nip,
+                    'PangkatTtd1' => $pembuat->pangkat->nama,
+                    'NamaTtd1' => $pembuat->nama,
+                    'JabatanTtd1' => $pembuat->jabatan->nama,
+                    'NipTtd1' => $pembuat->nip,
                     'Par_SQL' => 'SELECT * FROM v_setoran_pajak' . $where,
                 );
                 if (isset($_POST['type_report'])) {
@@ -387,6 +387,187 @@ class JReportController extends Controller {
             }
         }
         $this->render('setoran_pajak', array(
+            'model' => $model,
+            'title' => $title,
+            'html_report' => $html_report,
+        ));
+    }
+
+    public function actionBpps() {
+        $title = Yii::t('trans', 'Laporan Daftar BPPS');
+        $filename = 'bpps_' . date("d-m-Y_h:i:s-A");
+        $model = new JrBppsForm();
+        $model->date_from = date("d/m/Y");
+        $model->date_to = date("01/m/Y");
+        $html_report = '';
+        if (isset($_POST['JrBppsForm'])) {
+            $model->attributes = $_POST['JrBppsForm'];
+            if ($model->validate()) {
+                $filter = array();
+                $judul_laporan = 'BUKU PEMBANTU PENERIMAAN SEJENIS';
+                $where = '';
+                if (isset($model->kode_rekening_id) && trim($model->kode_rekening_id) != "")
+                    $filter[] = 'kode_rekening_id=' . $model->kode_rekening_id;
+                if (isset($model->kecamatan_id) && trim($model->kecamatan_id) != "")
+                    $filter[] = 'kecamatan_id=' . $model->kecamatan_id;
+                if (isset($model->via_bayar) && trim($model->via_bayar) != "") {
+                    $filter[] = 'via_bayar=' . $model->via_bayar;
+                    $judul_laporan .= '<br>Via ' . SetoranPajak::model()->getViaBayarText($model->via_bayar);
+                }
+                if ((isset($model->date_from) && trim($model->date_from) != "") && (isset($model->date_to) && trim($model->date_to) != "")) {
+                    $filter[] = "tanggal_bayar BETWEEN '" . date("Y-m-d", strtotime(date_format(date_create_from_format('d/m/Y', $model->date_from), "Y-m-d"))) . "' AND '" . date("Y-m-d", strtotime(date_format(date_create_from_format('d/m/Y', $model->date_to), "Y-m-d") . ' +1 day')) . "'";
+                    $judul_laporan .= '<br>Tahun Anggaran ' . date_format(date_create_from_format('d/m/Y', $model->date_from), "Y");
+                }
+
+                if (count($filter)) {
+                    $where = ' WHERE ' . implode(' AND ', $filter);
+                }
+                $rep = new WPJasper();
+                $reportId = 'bpps';
+                $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
+                $pembuat = Pejabat::model()->findByPk($model->pembuat);
+                $params = array(
+                    'JudulLaporan' => $judul_laporan,
+                    'SubJudulLaporan' => Yii::t('trans', 'Dari Tanggal {date_from} s/d. {date_to}', array('{date_from}' => $model->date_from, '{date_to}' => $model->date_to)),
+                    'KetTtd' => 'Mengetahui,',
+                    'PangkatTtd' => $mengetahui->pangkat->nama,
+                    'NamaTtd' => $mengetahui->nama,
+                    'JabatanTtd' => $mengetahui->jabatan->nama,
+                    'NipTtd' => $mengetahui->nip,
+                    'KetTtd1' => Yii::app()->params['kota_perusahaan'] . ", " . date("d F Y"),
+                    'PangkatTtd1' => $pembuat->pangkat->nama,
+                    'NamaTtd1' => $pembuat->nama,
+                    'JabatanTtd1' => $pembuat->jabatan->nama,
+                    'NipTtd1' => $pembuat->nip,
+                    'Par_SQL' => 'SELECT * FROM v_setoran_pajak' . $where . ' order by kecamatan',
+                );
+                if (isset($_POST['type_report'])) {
+                    $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);
+                } else {
+                    $html_report = $rep->generateReport($reportId, WPJasper::FORMAT_HTML, $params, $filename);
+                }
+            }
+        }
+        $this->render('bpps', array(
+            'model' => $model,
+            'title' => $title,
+            'html_report' => $html_report,
+        ));
+    }
+
+    public function actionBppsDetail() {
+        $title = Yii::t('trans', 'Laporan Daftar BPPS');
+        $filename = 'bpps_detail_' . date("d-m-Y_h:i:s-A");
+        $model = new JrBppsDetailForm();
+        $model->date_from = date("d/m/Y");
+        $model->date_to = date("01/m/Y");
+        $html_report = '';
+        if (isset($_POST['JrBppsDetailForm'])) {
+            $model->attributes = $_POST['JrBppsDetailForm'];
+            if ($model->validate()) {
+                $filter = array();
+                $judul_laporan = 'BUKU PEMBANTU PENERIMAAN SEJENIS PER SUB REKENING';
+                $where = '';
+                if (isset($model->kode_rekening_id) && trim($model->kode_rekening_id) != "")
+                    $filter[] = 'kode_rekening_id=' . $model->kode_rekening_id;
+                if (isset($model->kecamatan_id) && trim($model->kecamatan_id) != "")
+                    $filter[] = 'kecamatan_id=' . $model->kecamatan_id;
+                if (isset($model->via_bayar) && trim($model->via_bayar) != "") {
+                    $filter[] = 'via_bayar=' . $model->via_bayar;
+                    $judul_laporan .= '<br>Via ' . SetoranPajak::model()->getViaBayarText($model->via_bayar);
+                }
+                if ((isset($model->date_from) && trim($model->date_from) != "") && (isset($model->date_to) && trim($model->date_to) != "")) {
+                    $filter[] = "tanggal_bayar BETWEEN '" . date("Y-m-d", strtotime(date_format(date_create_from_format('d/m/Y', $model->date_from), "Y-m-d"))) . "' AND '" . date("Y-m-d", strtotime(date_format(date_create_from_format('d/m/Y', $model->date_to), "Y-m-d") . ' +1 day')) . "'";
+                    $judul_laporan .= '<br>Tahun Anggaran ' . date_format(date_create_from_format('d/m/Y', $model->date_from), "Y");
+                }
+
+                if (count($filter)) {
+                    $where = ' WHERE ' . implode(' AND ', $filter);
+                }
+                $rep = new WPJasper();
+                $reportId = 'bpps_detail';
+                $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
+                $pembuat = Pejabat::model()->findByPk($model->pembuat);
+                $params = array(
+                    'JudulLaporan' => $judul_laporan,
+                    'SubJudulLaporan' => Yii::t('trans', 'Dari Tanggal {date_from} s/d. {date_to}', array('{date_from}' => $model->date_from, '{date_to}' => $model->date_to)),
+                    'KetTtd' => 'Mengetahui,',
+                    'PangkatTtd' => $mengetahui->pangkat->nama,
+                    'NamaTtd' => $mengetahui->nama,
+                    'JabatanTtd' => $mengetahui->jabatan->nama,
+                    'NipTtd' => $mengetahui->nip,
+                    'KetTtd1' => Yii::app()->params['kota_perusahaan'] . ", " . date("d F Y"),
+                    'PangkatTtd1' => $pembuat->pangkat->nama,
+                    'NamaTtd1' => $pembuat->nama,
+                    'JabatanTtd1' => $pembuat->jabatan->nama,
+                    'NipTtd1' => $pembuat->nip,
+                    'Par_SQL' => 'SELECT * FROM v_setoran_spt_item' . $where . ' order by nama_kecamatan',
+                );
+                if (isset($_POST['type_report'])) {
+                    $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);
+                } else {
+                    $html_report = $rep->generateReport($reportId, WPJasper::FORMAT_HTML, $params, $filename);
+                }
+            }
+        }
+        $this->render('bpps_detail', array(
+            'model' => $model,
+            'title' => $title,
+            'html_report' => $html_report,
+        ));
+    }
+
+    public function actionBpsReklame() {
+        
+    }
+
+    public function actionBpsWalet() {
+        $title = Yii::t('trans', 'Laporan Daftar BPS Pajak Walet');
+        $filename = 'bps_walet_' . date("d-m-Y_h:i:s-A");
+        $model = new JrBpsWaletForm();
+        $model->date_from = date("d/m/Y");
+        $model->date_to = date("01/m/Y");
+        $html_report = '';
+        if (isset($_POST['JrBpsWaletForm'])) {
+            $model->attributes = $_POST['JrBpsWaletForm'];
+            if ($model->validate()) {
+                $filter = array();
+                $judul_laporan = 'BUKU PEMBANTU SETORAN/PENETAPAN PAJAK WALET';
+                $where = '';
+                $filter[] = 'kode_rekening_id=' . Spt::PARENT_WALET;
+                if ((isset($model->date_from) && trim($model->date_from) != "") && (isset($model->date_to) && trim($model->date_to) != ""))
+                    $filter[] = "tanggal_bayar BETWEEN '" . date("Y-m-d", strtotime(date_format(date_create_from_format('d/m/Y', $model->date_from), "Y-m-d"))) . "' AND '" . date("Y-m-d", strtotime(date_format(date_create_from_format('d/m/Y', $model->date_to), "Y-m-d") . ' +1 day')) . "'";
+
+                if (count($filter)) {
+                    $where = ' WHERE ' . implode(' AND ', $filter);
+                }
+                $rep = new WPJasper();
+                $reportId = 'bps_walet';
+                $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
+                $pembuat = Pejabat::model()->findByPk($model->pembuat);
+                $params = array(
+                    'JudulLaporan' => $judul_laporan,
+                    'SubJudulLaporan' => Yii::t('trans', 'Dari Tanggal {date_from} s/d. {date_to}', array('{date_from}' => $model->date_from, '{date_to}' => $model->date_to)),
+                    'KetTtd' => 'Mengetahui,',
+                    'PangkatTtd' => $mengetahui->pangkat->nama,
+                    'NamaTtd' => $mengetahui->nama,
+                    'JabatanTtd' => $mengetahui->jabatan->nama,
+                    'NipTtd' => $mengetahui->nip,
+                    'KetTtd1' => Yii::app()->params['kota_perusahaan'] . ", " . date("d F Y"),
+                    'PangkatTtd1' => $pembuat->pangkat->nama,
+                    'NamaTtd1' => $pembuat->nama,
+                    'JabatanTtd1' => $pembuat->jabatan->nama,
+                    'NipTtd1' => $pembuat->nip,
+                    'Par_SQL' => 'SELECT * FROM v_setoran_pajak' . $where . ' order by tanggal_bayar DESC',
+                );
+                if (isset($_POST['type_report'])) {
+                    $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);
+                } else {
+                    $html_report = $rep->generateReport($reportId, WPJasper::FORMAT_HTML, $params, $filename);
+                }
+            }
+        }
+        $this->render('bps_walet', array(
             'model' => $model,
             'title' => $title,
             'html_report' => $html_report,
