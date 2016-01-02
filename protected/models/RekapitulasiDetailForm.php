@@ -1,28 +1,29 @@
 <?php
 
 /**
- * RekapitulasiForm class.
- * RekapitulasiForm is the data structure for keeping
+ * RekapitulasiDetailForm class.
+ * RekapitulasiDetailForm is the data structure for keeping
  */
-class RekapitulasiForm extends CFormModel {
+class RekapitulasiDetailForm extends CFormModel {
 
     public $periode;
-    public $pembuat;
+    public $menyetujui;
     public $mengetahui;
+    public $diperiksa;
     public $kecamatan_id;
     public $kode_rekening_id;
 
     public function rules() {
         return array(
-            array('periode, pembuat, mengetahui', 'required'),
+            array('periode, menyetujui, mengetahui, diperiksa', 'required'),
             array('periode, kode_rekening_id', 'numerical'),
             array('periode', 'check_periode'),
-            array('kode_rekening_id, mengetahui, pembuat, kecamatan_id', 'safe'),
+            array('kode_rekening_id, menyetujui, mengetahui, diperiksa, kecamatan_id', 'safe'),
         );
     }
 
     public function check_periode($attribute) {
-        $flag = Spt::model()->exists('periode = ' . (int) $this->$attribute . ' AND kode_rekening_id=' . (int) $this->kode_rekening_id);
+        $flag = Spt::model()->exists('periode = ' . (int) $this->$attribute . ' AND kode_rekening_id=' . (int) KodeRekening::model()->getParentJenisPajak($this->kode_rekening_id)->id);
         if ($flag) {
             return;
         } else {
@@ -33,10 +34,11 @@ class RekapitulasiForm extends CFormModel {
     public function attributeLabels() {
         return array(
             'periode' => Yii::t('trans', 'Tahun'),
-            'pembuat' => Yii::t('trans', 'Pembuat'),
+            'menyetujui' => Yii::t('trans', 'Menyetujui'),
             'mengetahui' => Yii::t('trans', 'Mengetahui'),
+            'diperiksa' => Yii::t('trans', 'Diperiksa Oleh'),
             'kecamatan_id' => Yii::t('trans', 'Kecamatan'),
-            'kode_rekening_id' => Yii::t('trans', 'Jenis Pajak'),
+            'kode_rekening_id' => Yii::t('trans', 'Kode Rekening'),
         );
     }
 
@@ -49,16 +51,7 @@ class RekapitulasiForm extends CFormModel {
     }
 
     public function getKodeRekeningOptions() {
-        return Spt::model()->getKodeRekeningPajakOptions();
-    }
-
-    public function getKodeRekeningText() {
-        $model = KodeRekening::model()->findByPk($this->kode_rekening_id);
-        $nama = '';
-        if ($model !== null) {
-            $nama = $model->nama;
-        }
-        return $nama;
+        return KodeRekening::model()->getParentTreeOptions(421);
     }
 
 }

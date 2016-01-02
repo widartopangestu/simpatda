@@ -1,10 +1,11 @@
 <?php
 $this->breadcrumbs = array(
-    Yii::t('trans', 'Rekapitulasi') => array('rekapitulasiMenu'),
-    Yii::t('trans', 'Cetak Rekapitulasi') . ' ' . $model->kodeRekeningText,
+    Yii::t('trans', 'Laporan') => array('menu/jlaporan'),
+    Yii::t('trans', 'Master') => array('report/jmaster'),
+    Yii::t('trans', 'Rekapitulasi Detail'),
 );
-$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Cetak Rekapitulasi') . ' ' . $model->kodeRekeningText;
-$this->modulTitle = Yii::t('trans', 'Cetak Rekapitulasi') . ' ' . $model->kodeRekeningText;
+$this->pageTitle = Yii::app()->params['title'] . ' - ' . Yii::t('trans', 'Rekapitulasi Detail');
+$this->modulTitle = Yii::t('trans', 'Laporan') . ' ' . Yii::t('trans', 'Rekapitulasi Detail');
 ?>
 <div class="form">
     <?php
@@ -19,11 +20,13 @@ $this->modulTitle = Yii::t('trans', 'Cetak Rekapitulasi') . ' ' . $model->kodeRe
     ));
     ?>
     <p class="help-block"><?php echo Yii::t('trans', 'Fields with'); ?> <span class="required">*</span> <?php echo Yii::t('trans', 'are required.'); ?></p>
-    <?php echo $form->errorSummary($model); ?>          
+    <?php echo $form->errorSummary($model); ?>     
     <?php echo $form->textFieldControlGroup($model, 'periode', array('span' => 1)); ?>
-    <?php echo $form->dropdownListControlGroup($model, 'kecamatan_id', $model->kecamatanOptions, array('span' => 5, 'empty' => '--')); ?>
-    <?php echo $form->dropdownListControlGroup($model, 'pembuat', $model->pejabatOptions, array('span' => 5)); ?>
+    <?php echo $form->dropdownListControlGroup($model, 'kode_rekening_id', $model->kodeRekeningOptions, array('span' => 5, 'empty' => Yii::t('trans', '- Semua Kode Rekening -'))); ?>
+    <?php echo $form->dropdownListControlGroup($model, 'kecamatan_id', $model->kecamatanOptions, array('span' => 5, 'empty' => Yii::t('trans', '- Semua Kecamatan -'))); ?>
+    <?php echo $form->dropdownListControlGroup($model, 'menyetujui', $model->pejabatOptions, array('span' => 5)); ?>
     <?php echo $form->dropdownListControlGroup($model, 'mengetahui', $model->pejabatOptions, array('span' => 5)); ?>
+    <?php echo $form->dropdownListControlGroup($model, 'diperiksa', $model->pejabatOptions, array('span' => 5)); ?>
     <div class="form-actions">
         <?php
         echo TbHtml::submitButton(Yii::t('trans', 'Preview'), array(

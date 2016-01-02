@@ -76,7 +76,7 @@ class PenagihanController extends Controller {
             if ($model->validate()) {
                 $filter = array();
                 $where = '';
-                $judul_laporan = 'BUKU KENDALI';
+                $judul_laporan = 'Buku Kendali';
                 if (isset($model->kecamatan_id) && trim($model->kecamatan_id) != "")
                     $filter[] = 'kecamatan_id=' . $model->kecamatan_id;
                 if (isset($model->jenis_pajak) && trim($model->jenis_pajak) != "") {
@@ -144,7 +144,7 @@ class PenagihanController extends Controller {
             if ($model->validate()) {
                 $filter = array();
                 $where = '';
-                $judul_laporan = 'BUKU TUNGGAKAN';
+                $judul_laporan = 'Buku Tunggakan';
                 $filter[] = 'jumlah_bayar=0';
                 if (isset($model->kecamatan_id) && trim($model->kecamatan_id) != "")
                     $filter[] = 'kecamatan_id=' . $model->kecamatan_id;

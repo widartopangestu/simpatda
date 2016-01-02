@@ -274,7 +274,7 @@ class PenetapanController extends Controller {
                 $order = array('nama_kecamatan');
                 $where = '';
                 $sort = '';
-                $judul_laporan = 'DAFTAR';
+                $judul_laporan = 'Daftar';
                 if (isset($model->sort_by) && trim($model->sort_by) != "")
                     $order[] = $model->sort_by;
                 if (isset($model->kecamatan_id) && trim($model->kecamatan_id) != "")

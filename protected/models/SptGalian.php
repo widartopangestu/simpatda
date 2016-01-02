@@ -57,7 +57,7 @@ class SptGalian extends CActiveRecord {
     public function attributeLabels() {
         return array(
             'spt_id' => Yii::t('trans', 'Spt'),
-            'nama' => Yii::t('trans', 'Nama'),
+            'nama' => Yii::t('trans', 'Nama Pekerjaan'),
             'jml_rab' => Yii::t('trans', 'Jumlah  RAB'),
             'no_kontrak' => Yii::t('trans', 'No Kontrak'),
             'created' => Yii::t('trans', 'Created'),

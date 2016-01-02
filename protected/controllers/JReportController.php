@@ -39,8 +39,8 @@ class JReportController extends Controller {
         if (Yii::app()->util->is_authorized('jReport.rekapitulasiHotel') || Yii::app()->util->is_authorized('jReport.rekapitulasiRestoran') || Yii::app()->util->is_authorized('jReport.rekapitulasiHiburan') || Yii::app()->util->is_authorized('jReport.rekapitulasiReklame') || Yii::app()->util->is_authorized('jReport.rekapitulasiElectric') || Yii::app()->util->is_authorized('jReport.rekapitulasiGalian') || Yii::app()->util->is_authorized('jReport.rekapitulasiAir') || Yii::app()->util->is_authorized('jReport.rekapitulasiWalet') || Yii::app()->util->is_authorized('jReport.rekapitulasiRetribusi') || Yii::app()->util->is_authorized('jReport.rekapitulasiBphtb')) {
             $title = Yii::t('trans', 'Cetak Rekapitulasi');
             $model = new RekapitulasiForm();
-            $model->tahun = date('Y');
-            $model->jenis_pajak = $pajak;
+            $model->periode = date('Y');
+            $model->kode_rekening_id = $pajak;
             $filename = 'rekapitulasi_' . date("d-m-Y_h:i:s-A");
             $html_report = '';
             if (isset($_POST['RekapitulasiForm'])) {
@@ -49,16 +49,17 @@ class JReportController extends Controller {
                     $filter = array();
                     $where = '';
                     $judul_laporan = 'Rekapitulasi';
-                    if (isset($model->tahun) && trim($model->tahun) != "")
-                        $filter[] = 'periode=' . $model->tahun;
+                    if (isset($model->periode) && trim($model->periode) != "")
+                        $filter[] = 'periode=' . $model->periode;
                     if (isset($model->kecamatan_id) && trim($model->kecamatan_id) != "")
                         $filter[] = 'kecamatan_id=' . $model->kecamatan_id;
-                    if (isset($model->jenis_pajak) && trim($model->jenis_pajak) != "") {
-                        $filter[] = 'kode_rekening_id=' . $model->jenis_pajak;
-                        $nama_rekening = KodeRekening::model()->findByPk($model->jenis_pajak)->nama;
+                    if (isset($model->kode_rekening_id) && trim($model->kode_rekening_id) != "") {
+                        $filter[] = 'kode_rekening_id=' . $model->kode_rekening_id;
+                        $nama_rekening = KodeRekening::model()->findByPk($model->kode_rekening_id)->nama;
                         $judul_laporan .= ' ' . $nama_rekening;
-                        $filename = 'rekapitulasi_' . $model->tahun . '_' . strtolower($nama_rekening) . '_' . date("d-m-Y_h:i:s-A");
+                        $filename = 'rekapitulasi_' . $model->periode . '_' . strtolower($nama_rekening) . '_' . date("d-m-Y_h:i:s-A");
                     }
+                    TmpRekapitulasi::model()->generateData($model->periode, $model->kode_rekening_id, false);
                     if (count($filter)) {
                         $where = ' WHERE ' . implode(' AND ', $filter);
                     }
@@ -68,7 +69,7 @@ class JReportController extends Controller {
                     $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
                     $params = array(
                         'JudulLaporan' => $judul_laporan,
-                        'SubJudulLaporan' => 'Tahun ' . $model->tahun,
+                        'SubJudulLaporan' => 'Tahun ' . $model->periode,
                         'KetTtd' => 'Mengetahui,',
                         'PangkatTtd' => $mengetahui->pangkat->nama,
                         'NamaTtd' => $mengetahui->nama,
@@ -81,7 +82,7 @@ class JReportController extends Controller {
                         'NipTtd1' => $pembuat->nip,
                         'UserName' => Yii::app()->user->nickName,
                         'RoleName' => Yii::app()->user->roleName,
-                        'Par_SQL' => 'SELECT * FROM v_rekapitulasi' . $where . ' order by nama_kecamatan',
+                        'Par_SQL' => 'SELECT * FROM tmp_rekapitulasi' . $where . ' order by nama_kecamatan',
                     );
                     if (isset($_POST['type_report'])) {
                         $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);
@@ -101,6 +102,74 @@ class JReportController extends Controller {
             else
                 throw new CHttpException(403, Yii::t('trans', 'You do not have sufficient permissions to access this page.'));
         }
+    }
+
+    public function actionRekapitulasiDetail() {
+        $title = Yii::t('trans', 'Cetak RekapitulasiDetail');
+        $model = new RekapitulasiDetailForm();
+        $model->periode = date('Y');
+        $filename = 'rekapitulasi_detail_' . date("d-m-Y_h:i:s-A");
+        $html_report = '';
+        if (isset($_POST['RekapitulasiDetailForm'])) {
+            $model->attributes = $_POST['RekapitulasiDetailForm'];
+            if ($model->validate()) {
+                $filter = array();
+                $where = '';
+                $judul_laporan = 'Rekapitulasi';
+                if (isset($model->periode) && trim($model->periode) != "")
+                    $filter[] = 'periode=' . $model->periode;
+                if (isset($model->kecamatan_id) && trim($model->kecamatan_id) != "")
+                    $filter[] = 'kecamatan_id=' . $model->kecamatan_id;
+                if (isset($model->kode_rekening_id) && trim($model->kode_rekening_id) != "") {
+                    $filter[] = 'kode_rekening_id=' . $model->kode_rekening_id;
+                    $nama_rekening = KodeRekening::model()->findByPk($model->kode_rekening_id)->nama;
+                    $judul_laporan .= ' ' . $nama_rekening;
+                    $filename = 'rekapitulasi_detail_' . $model->periode . '_' . strtolower($nama_rekening) . '_' . date("d-m-Y_h:i:s-A");
+                }
+                TmpRekapitulasi::model()->generateDataDetail($model->periode, $model->kode_rekening_id, false);
+                if (count($filter)) {
+                    $where = ' WHERE ' . implode(' AND ', $filter);
+                }
+                $rep = new WPJasper();
+                $reportId = 'rekapitulasi_detail';
+                $menyetujui = Pejabat::model()->findByPk($model->menyetujui);
+                $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
+                $diperiksa = Pejabat::model()->findByPk($model->diperiksa);
+                $params = array(
+                    'JudulLaporan' => $judul_laporan,
+                    'SubJudulLaporan' => 'Tahun ' . $model->periode,
+                    'KetTtd' => 'Menyetujui,',
+                    'PangkatTtd' => $menyetujui->pangkat->nama,
+                    'NamaTtd' => $menyetujui->nama,
+                    'JabatanTtd' => $menyetujui->jabatan->nama,
+                    'NipTtd' => $menyetujui->nip,
+                    'KetTtd1' => 'Mengetahui,',
+                    'PangkatTtd1' => $mengetahui->pangkat->nama,
+                    'NamaTtd1' => $mengetahui->nama,
+                    'JabatanTtd1' => $mengetahui->jabatan->nama,
+                    'NipTtd1' => $mengetahui->nip,
+                    'KetTtd2' => 'Diperiksa Oleh,',
+                    'PangkatTtd2' => $diperiksa->pangkat->nama,
+                    'NamaTtd2' => $diperiksa->nama,
+                    'JabatanTtd2' => $diperiksa->jabatan->nama,
+                    'NipTtd2' => $diperiksa->nip,
+                    'UserName' => Yii::app()->user->nickName,
+                    'RoleName' => Yii::app()->user->roleName,
+                    'Tanggal' => date("d F Y"),
+                    'Par_SQL' => 'SELECT * FROM tmp_rekapitulasi' . $where . ' order by nama_kecamatan',
+                );
+                if (isset($_POST['type_report'])) {
+                    $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);
+                } else {
+                    $html_report = $rep->generateReport($reportId, WPJasper::FORMAT_HTML, $params, $filename);
+                }
+            }
+        }
+        $this->render('rekapitulasi_detail', array(
+            'model' => $model,
+            'title' => $title,
+            'html_report' => $html_report,
+        ));
     }
 
     public function actionRekapitulasiPenerimaan($pajak) {
@@ -269,7 +338,7 @@ class JReportController extends Controller {
             $model->attributes = $_POST['JrWajibPajakForm'];
             if ($model->validate()) {
                 $filter = array();
-                $judul_laporan = 'DAFTAR INDUK WAJIB PAJAK';
+                $judul_laporan = 'Daftar Induk Wajib Pajak';
                 $kecamatan = '';
                 $kelurahan = '';
                 $where = '';
@@ -291,7 +360,7 @@ class JReportController extends Controller {
                     $filter[] = 'kode_rekening_id=' . $model->kode_rekening;
                     $judul_laporan .= '<br>' . KodeRekening::model()->findByPk($model->kode_rekening)->nama;
                 } else
-                    $judul_laporan .= ' SE-KABUPATEN MUARA ENIM';
+                    $judul_laporan .= ' Se-Kabupaten Muara Enim';
 
                 if (count($filter)) {
                     $where = ' WHERE ' . implode(' AND ', $filter);
@@ -350,7 +419,7 @@ class JReportController extends Controller {
             $model->attributes = $_POST['JrSetoranPajakForm'];
             if ($model->validate()) {
                 $filter = array();
-                $judul_laporan = 'DAFTAR SETORAN PAJAK';
+                $judul_laporan = 'Daftar Setoran Pajak';
                 $where = '';
                 if (isset($model->periode) && trim($model->periode) != "")
                     $filter[] = 'periode=' . $model->periode;
@@ -404,7 +473,7 @@ class JReportController extends Controller {
             $model->attributes = $_POST['JrBppsForm'];
             if ($model->validate()) {
                 $filter = array();
-                $judul_laporan = 'BUKU PEMBANTU PENERIMAAN SEJENIS';
+                $judul_laporan = 'Buku Pembantu Penerimaan Sejenis';
                 $where = '';
                 if (isset($model->kode_rekening_id) && trim($model->kode_rekening_id) != "")
                     $filter[] = 'kode_rekening_id=' . $model->kode_rekening_id;
@@ -466,7 +535,7 @@ class JReportController extends Controller {
             $model->attributes = $_POST['JrBppsDetailForm'];
             if ($model->validate()) {
                 $filter = array();
-                $judul_laporan = 'BUKU PEMBANTU PENERIMAAN SEJENIS PER SUB REKENING';
+                $judul_laporan = 'Buku Pembantu Penerimaan Sejenis Per Sub Kode Rekening';
                 $where = '';
                 if (isset($model->kode_rekening_id) && trim($model->kode_rekening_id) != "")
                     $filter[] = 'kode_rekening_id=' . $model->kode_rekening_id;
@@ -518,7 +587,246 @@ class JReportController extends Controller {
     }
 
     public function actionBpsReklame() {
-        
+        $title = Yii::t('trans', 'Laporan Daftar BPS Pajak Reklame');
+        $filename = 'bps_reklame_' . date("d-m-Y_h:i:s-A");
+        $model = new JrBpsReklameForm();
+        $model->tanggal = date('d/m/Y');
+        $model->periode = date('Y');
+        $html_report = '';
+        if (isset($_POST['JrBpsReklameForm'])) {
+            $model->attributes = $_POST['JrBpsReklameForm'];
+            if ($model->validate()) {
+                $filter = array();
+                $judul_laporan = 'Buku Pembantu Setoran/Penetapan Pajak Reklame';
+                $where = '';
+                if (isset($model->periode) && trim($model->periode) != "")
+                    $filter[] = 'periode=' . $model->periode;
+                if (isset($model->bulan) && trim($model->bulan) != "")
+                    $filter[] = "date_part('month', tanggal_bayar)=" . $model->bulan;
+
+                if (count($filter)) {
+                    $where = ' WHERE ' . implode(' AND ', $filter);
+                }
+                $rep = new WPJasper();
+                $reportId = 'bps_reklame';
+                $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
+                $pembuat = Pejabat::model()->findByPk($model->pembuat);
+                $jumlah_bulan_lalu = 0;
+                //
+                $sql = "SELECT sum(jumlah_bayar) as total FROM v_setoran_pajak_reklame WHERE tanggal_bayar < '" . $model->periode . "-" . str_pad($model->bulan, 2, "0", STR_PAD_LEFT) . "-01'";
+                $result = Yii::app()->db->createCommand($sql)->queryRow();
+                if ($result) {
+                    $jumlah_bulan_lalu = $result['total'];
+                }
+                $params = array(
+                    'JudulLaporan' => $judul_laporan,
+                    'Periode' => $model->periode,
+                    'Bulan' => Yii::app()->locale->getMonthName($model->bulan),
+                    'KetTtd' => 'Mengetahui,',
+                    'PangkatTtd' => $mengetahui->pangkat->nama,
+                    'NamaTtd' => $mengetahui->nama,
+                    'JabatanTtd' => $mengetahui->jabatan->nama,
+                    'NipTtd' => $mengetahui->nip,
+                    'KetTtd1' => Yii::app()->params['kota_perusahaan'] . ", " . date_format(date_create_from_format('d/m/Y', $model->tanggal), "d F Y"),
+                    'PangkatTtd1' => $pembuat->pangkat->nama,
+                    'NamaTtd1' => $pembuat->nama,
+                    'JabatanTtd1' => $pembuat->jabatan->nama,
+                    'NipTtd1' => $pembuat->nip,
+                    'JumlahBulanLalu' => $jumlah_bulan_lalu,
+                    'Par_SQL' => 'SELECT * FROM v_setoran_pajak_reklame' . $where . ' order by tanggal_bayar DESC',
+                );
+                if (isset($_POST['type_report'])) {
+                    $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);
+                } else {
+                    $html_report = $rep->generateReport($reportId, WPJasper::FORMAT_HTML, $params, $filename);
+                }
+            }
+        }
+        $this->render('bps_reklame', array(
+            'model' => $model,
+            'title' => $title,
+            'html_report' => $html_report,
+        ));
+    }
+
+    public function actionPenggunaanGalian() {
+        $title = Yii::t('trans', 'Daftar Rekapitulasi Penggunaan Mineral Bukan Logam');
+        $filename = 'penggunaan_galian_' . date("d-m-Y_h:i:s-A");
+        $model = new JrPenggunaanGalianForm();
+        $model->periode = date('Y');
+        $html_report = '';
+        if (isset($_POST['JrPenggunaanGalianForm'])) {
+            $model->attributes = $_POST['JrPenggunaanGalianForm'];
+            if ($model->validate()) {
+                $filter = array();
+                $judul_laporan = 'Rekapitulasi Penggunaan Bahan Mineral Bukan Logam Dan Batuan';
+                $where = '';
+                if (isset($model->periode) && trim($model->periode) != "") {
+                    $filter[] = 'periode=' . $model->periode;
+                    TmpRekapitulasiPenggunaanGalian::model()->generateData($model->periode);
+                }
+
+                if (count($filter)) {
+                    $where = ' WHERE ' . implode(' AND ', $filter);
+                }
+                $rep = new WPJasper();
+                $reportId = 'rekapitulasi_penggunaan_galian';
+                $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
+                $pembuat = Pejabat::model()->findByPk($model->pembuat);
+                $params = array(
+                    'JudulRekapitulasi' => $judul_laporan,
+                    'SubJudulRekapitulasi' => Yii::t('trans', 'Tahun {periode}', array('{periode}' => $model->periode)),
+                    'Periode' => $model->periode,
+                    'KetTtd' => 'Mengetahui,',
+                    'PangkatTtd' => $mengetahui->pangkat->nama,
+                    'NamaTtd' => $mengetahui->nama,
+                    'JabatanTtd' => $mengetahui->jabatan->nama,
+                    'NipTtd' => $mengetahui->nip,
+                    'KetTtd1' => Yii::app()->params['kota_perusahaan'] . ", " . date("d F Y"),
+                    'PangkatTtd1' => $pembuat->pangkat->nama,
+                    'NamaTtd1' => $pembuat->nama,
+                    'JabatanTtd1' => $pembuat->jabatan->nama,
+                    'NipTtd1' => $pembuat->nip,
+                    'Par_SQL' => 'SELECT * FROM tmp_rekapitulasi_penggunaan_galian' . $where,
+                );
+                if (isset($_POST['type_report'])) {
+                    $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);
+                } else {
+                    $html_report = $rep->generateReport($reportId, WPJasper::FORMAT_HTML, $params, $filename);
+                }
+            }
+        }
+        $this->render('penggunaan_galian', array(
+            'model' => $model,
+            'title' => $title,
+            'html_report' => $html_report,
+        ));
+    }
+
+    public function actionProduksiGalian() {
+        $title = Yii::t('trans', 'Laporan Produksi dan Penerimaan Daerah dari Bahan Mineral Bukan Logam Dan Batuan');
+        $filename = 'produksi_galian_' . date("d-m-Y_h:i:s-A");
+        $model = new JrProduksiGalianForm();
+        $model->periode = date('Y');
+        $html_report = '';
+        if (isset($_POST['JrProduksiGalianForm'])) {
+            $model->attributes = $_POST['JrProduksiGalianForm'];
+            if ($model->validate()) {
+                $filter = array();
+                $judul_laporan = 'Laporan Produksi dan Penerimaan Daerah dari Bahan Mineral Bukan Logam Dan Batuan';
+                $where = '';
+                $filter[] = "session_id='" . session_id() . "'";
+                if (isset($model->periode) && trim($model->periode) != "")
+                    $filter[] = 'periode=' . $model->periode;
+                if (isset($model->bulan_from) && trim($model->bulan_from) != "")
+                    $filter[] = 'bulan_from=' . $model->bulan_from;
+                if (isset($model->bulan_to) && trim($model->bulan_to) != "")
+                    $filter[] = 'bulan_to=' . $model->bulan_to;
+                TmpProduksiPenerimaanGalian::model()->generateData($model->periode, $model->bulan_from, $model->bulan_to);
+
+                if (count($filter)) {
+                    $where = ' WHERE ' . implode(' AND ', $filter);
+                }
+                $rep = new WPJasper();
+                $reportId = 'produksi_penerimaan_galian';
+                $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
+                $pembuat = Pejabat::model()->findByPk($model->pembuat);
+                $params = array(
+                    'JudulLaporan' => $judul_laporan,
+                    'SubJudulLaporan' => Yii::t('trans', 'Kabupaten Muara Enim Bulan {bulan_from} s/d {bulan_to} {periode}', array('{bulan_from}' => Yii::app()->locale->getMonthName($model->bulan_from), '{bulan_to}' => Yii::app()->locale->getMonthName($model->bulan_to), '{periode}' => $model->periode)),
+                    'Periode' => $model->periode,
+                    'KetTtd' => 'Mengetahui,',
+                    'PangkatTtd' => $mengetahui->pangkat->nama,
+                    'NamaTtd' => $mengetahui->nama,
+                    'JabatanTtd' => $mengetahui->jabatan->nama,
+                    'NipTtd' => $mengetahui->nip,
+                    'KetTtd1' => Yii::app()->params['kota_perusahaan'] . ", " . date("d F Y"),
+                    'PangkatTtd1' => $pembuat->pangkat->nama,
+                    'NamaTtd1' => $pembuat->nama,
+                    'JabatanTtd1' => $pembuat->jabatan->nama,
+                    'NipTtd1' => $pembuat->nip,
+                    'Par_SQL' => 'SELECT * FROM tmp_produksi_penerimaan_galian' . $where,
+                );
+                if (isset($_POST['type_report'])) {
+                    $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);
+                } else {
+                    $html_report = $rep->generateReport($reportId, WPJasper::FORMAT_HTML, $params, $filename);
+                }
+            }
+        }
+        $this->render('produksi_galian', array(
+            'model' => $model,
+            'title' => $title,
+            'html_report' => $html_report,
+        ));
+    }
+
+    public function actionBulananGalian() {
+        $title = Yii::t('trans', 'Laporan Bulanan Bahan Mineral Bukan Logam Dan Batuan');
+        $filename = 'bulanan_galian_' . date("d-m-Y_h:i:s-A");
+        $model = new JrBulananGalianForm();
+        $model->periode = date('Y');
+        $html_report = '';
+        if (isset($_POST['JrBulananGalianForm'])) {
+            $model->attributes = $_POST['JrBulananGalianForm'];
+            if ($model->validate()) {
+                $filter = array();
+                $judul_laporan = 'Laporan Bulanan Bahan Mineral Bukan Logam Dan Batuan';
+                $where = '';
+                if (isset($model->periode) && trim($model->periode) != "")
+                    $filter[] = 'periode=' . $model->periode;
+                if (isset($model->bulan) && trim($model->bulan) != "")
+                    $filter[] = "date_part('month', tanggal_bayar)=" . $model->bulan;
+
+                if (count($filter)) {
+                    $where = ' WHERE ' . implode(' AND ', $filter);
+                }
+                $rep = new WPJasper();
+                $reportId = 'bulanan_galian';
+                $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
+                $pembuat = Pejabat::model()->findByPk($model->pembuat);
+                $jumlah_bulan_lalu = 0;
+                //
+                $bulan = $model->bulan - 1;
+                if ($bulan == 0) {
+                    $periode = $model->periode - 1;
+                    $bulan = 12;
+                } else
+                    $periode = $model->periode;
+                $sql = "SELECT sum(jumlah_bayar) as total FROM v_setoran_pajak_galian WHERE periode=$periode AND date_part('month', tanggal_bayar)=$bulan"; //tanggal_bayar < '" . $model->periode . "-" . str_pad($model->bulan, 2, "0", STR_PAD_LEFT) . "-01'";
+                $result = Yii::app()->db->createCommand($sql)->queryRow();
+                if ($result) {
+                    $jumlah_bulan_lalu = $result['total'];
+                }
+                $params = array(
+                    'JudulLaporan' => $judul_laporan,
+                    'SubJudulLaporan' => Yii::t('trans', 'Bulan {bulan} Tahun {periode}', array('{bulan}' => Yii::app()->locale->getMonthName($model->bulan), '{periode}' => $model->periode)),
+                    'Periode' => $model->periode,
+                    'KetTtd' => 'Mengetahui,',
+                    'PangkatTtd' => $mengetahui->pangkat->nama,
+                    'NamaTtd' => $mengetahui->nama,
+                    'JabatanTtd' => $mengetahui->jabatan->nama,
+                    'NipTtd' => $mengetahui->nip,
+                    'KetTtd1' => Yii::app()->params['kota_perusahaan'] . ", " . date("d F Y"),
+                    'PangkatTtd1' => $pembuat->pangkat->nama,
+                    'NamaTtd1' => $pembuat->nama,
+                    'JabatanTtd1' => $pembuat->jabatan->nama,
+                    'NipTtd1' => $pembuat->nip,
+                    'JumlahBulanLalu' => $jumlah_bulan_lalu,
+                    'Par_SQL' => 'SELECT * FROM v_setoran_pajak_galian' . $where . ' order by tanggal_bayar DESC',
+                );
+                if (isset($_POST['type_report'])) {
+                    $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);
+                } else {
+                    $html_report = $rep->generateReport($reportId, WPJasper::FORMAT_HTML, $params, $filename);
+                }
+            }
+        }
+        $this->render('bulanan_galian', array(
+            'model' => $model,
+            'title' => $title,
+            'html_report' => $html_report,
+        ));
     }
 
     public function actionBpsWalet() {
@@ -532,9 +840,9 @@ class JReportController extends Controller {
             $model->attributes = $_POST['JrBpsWaletForm'];
             if ($model->validate()) {
                 $filter = array();
-                $judul_laporan = 'BUKU PEMBANTU SETORAN/PENETAPAN PAJAK WALET';
+                $judul_laporan = 'Buku Pembantu Setoran/Penetapan Pajak Reklame';
                 $where = '';
-                $filter[] = 'kode_rekening_id=' . Spt::PARENT_WALET;
+                $filter[] = 'kode_rekening_id=' . Spt::PARENT_Reklame;
                 if ((isset($model->date_from) && trim($model->date_from) != "") && (isset($model->date_to) && trim($model->date_to) != ""))
                     $filter[] = "tanggal_bayar BETWEEN '" . date("Y-m-d", strtotime(date_format(date_create_from_format('d/m/Y', $model->date_from), "Y-m-d"))) . "' AND '" . date("Y-m-d", strtotime(date_format(date_create_from_format('d/m/Y', $model->date_to), "Y-m-d") . ' +1 day')) . "'";
 

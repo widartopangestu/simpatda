@@ -170,4 +170,14 @@ class KodeRekening extends CActiveRecord {
         return $this->kode . ' - ' . $this->nama;
     }
 
+    public function getParentJenisPajak($child) {
+        $model = self::model()->findByPk($child);
+        $parent = self::model()->findByPk($model->parent_id);
+        $check = array_key_exists($parent->id, Spt::model()->getKodeRekeningPajakOptions());
+        if ($check)
+            return $parent;
+        else
+            getParentJenisPajak($parent->id);
+    }
+
 }

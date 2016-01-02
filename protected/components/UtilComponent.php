@@ -242,4 +242,12 @@ class UtilComponent extends CApplicationComponent {
         return $string;
     }
 
+    public function deleteTmpData() {
+        $session_id = session_id();
+        if (TmpProduksiPenerimaanGalian::model()->exists("session_id='$session_id'"))
+            TmpProduksiPenerimaanGalian::model()->deleteAll("session_id='$session_id'");
+        if (TmpRekapitulasi::model()->exists("session_id='$session_id'"))
+            TmpRekapitulasi::model()->deleteAll("session_id='$session_id'");
+    }
+
 }
