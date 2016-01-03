@@ -172,7 +172,7 @@ class TmpRekapitulasi extends CActiveRecord {
                 $tmp_model->nama_kecamatan = $result['nama_kecamatan'];
                 $tmp_model->kode_rekening_id = $result['kode_rekening_id'];
                 $tmp_model->kode_rekening = $result['nama_kode_rekening'];
-                $tmp_model->januari = $this->getSumNilaiDetailDetail($periode, $result['id'], $kode_rekening_id, 1);
+                $tmp_model->januari = $this->getSumNilaiDetail($periode, $result['id'], $kode_rekening_id, 1);
                 $tmp_model->februari = $this->getSumNilaiDetail($periode, $result['id'], $kode_rekening_id, 2);
                 $tmp_model->maret = $this->getSumNilaiDetail($periode, $result['id'], $kode_rekening_id, 3);
                 $tmp_model->april = $this->getSumNilaiDetail($periode, $result['id'], $kode_rekening_id, 4);

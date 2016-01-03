@@ -35,7 +35,6 @@ class SiteController extends Controller {
             $this->redirect(Yii::app()->user->loginUrl);
         else {
             $user = User::model()->findByPk(Yii::app()->user->id);
-            $this->_generatePeriode();
             $this->render('index', array('user' => $user));
         }
     }
@@ -86,16 +85,6 @@ class SiteController extends Controller {
                 $this->render('error', $error);
         }
         Yii::app()->util->setLog(AccessLog::TYPE_ERROR, $error['code'] . ' ' . $error['message'] . ' - Access Page : "' . Yii::app()->request->requestUri . '"');
-    }
-
-    protected function _generatePeriode() {
-        $periode = date('Y');
-        $check = Periode::model()->exists('tahun = ' . (int) $periode);
-        if (!$check) {
-            $model = new Periode;
-            $model->tahun = $periode;
-            $model->save();
-        }
     }
 
 }

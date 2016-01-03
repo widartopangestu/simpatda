@@ -177,8 +177,8 @@ class JReportController extends Controller {
             $title = Yii::t('trans', 'Cetak Rekapitulasi Penerimaan');
             $filename = 'rekapitulasi_penerimaan_' . date("d-m-Y_h:i:s-A");
             $model = new RekapitulasiPenerimaanForm();
-            $model->tahun = date('Y');
-            $model->jenis_pajak = $pajak;
+            $model->periode = date('Y');
+            $model->kode_rekening_id = $pajak;
             $html_report = '';
             if (isset($_POST['RekapitulasiPenerimaanForm'])) {
                 $model->attributes = $_POST['RekapitulasiPenerimaanForm'];
@@ -186,16 +186,17 @@ class JReportController extends Controller {
                     $filter = array();
                     $where = '';
                     $judul_laporan = 'Rekapitulasi Penerimaan';
-                    if (isset($model->tahun) && trim($model->tahun) != "")
-                        $filter[] = 'periode=' . $model->tahun;
+                    if (isset($model->periode) && trim($model->periode) != "")
+                        $filter[] = 'periode=' . $model->periode;
                     if (isset($model->kecamatan_id) && trim($model->kecamatan_id) != "")
                         $filter[] = 'kecamatan_id=' . $model->kecamatan_id;
-                    if (isset($model->jenis_pajak) && trim($model->jenis_pajak) != "") {
-                        $filter[] = 'kode_rekening_id=' . $model->jenis_pajak;
-                        $nama_rekening = KodeRekening::model()->findByPk($model->jenis_pajak)->nama;
+                    if (isset($model->kode_rekening_id) && trim($model->kode_rekening_id) != "") {
+                        $filter[] = 'kode_rekening_parent_id=' . $model->kode_rekening_id;
+                        $nama_rekening = KodeRekening::model()->findByPk($model->kode_rekening_id)->nama;
                         $judul_laporan .= ' ' . $nama_rekening;
-                        $filename = 'rekapitulasi_penerimaan_' . $model->tahun . '_' . strtolower($nama_rekening) . '_' . date("d-m-Y_h:i:s-A");
+                        $filename = 'rekapitulasi_penerimaan_' . $model->periode . '_' . strtolower($nama_rekening) . '_' . date("d-m-Y_h:i:s-A");
                     }
+                    TmpRekapitulasiPenerimaan::model()->generateData($model->periode, $model->kode_rekening_id, false);
                     if (count($filter)) {
                         $where = ' WHERE ' . implode(' AND ', $filter);
                     }
@@ -225,7 +226,7 @@ class JReportController extends Controller {
                         'UserName' => Yii::app()->user->nickName,
                         'RoleName' => Yii::app()->user->roleName,
                         'Tanggal' => date("d F Y"),
-                        'Par_SQL' => 'SELECT * FROM v_rekapitulasi_penerimaan' . $where . ' order by nama_kecamatan',
+                        'Par_SQL' => 'SELECT * FROM tmp_rekapitulasi_penerimaan' . $where . ' order by nama_kecamatan',
                     );
                     if (isset($_POST['type_report'])) {
                         $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);

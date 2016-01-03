@@ -6,24 +6,24 @@
  */
 class RekapitulasiPenerimaanForm extends CFormModel {
 
-    public $tahun;
+    public $periode;
     public $menyetujui;
     public $mengetahui;
     public $diperiksa;
     public $kecamatan_id;
-    public $jenis_pajak;
+    public $kode_rekening_id;
 
     public function rules() {
         return array(
-            array('tahun, menyetujui, mengetahui, diperiksa', 'required'),
-            array('tahun, jenis_pajak', 'numerical'),
-            array('tahun', 'check_periode'),
-            array('jenis_pajak, mengetahui, menyetujui, diperiksa, kecamatan_id', 'safe'),
+            array('periode, menyetujui, mengetahui, diperiksa', 'required'),
+            array('periode, kode_rekening_id', 'numerical'),
+            array('periode', 'check_periode'),
+            array('kode_rekening_id, mengetahui, menyetujui, diperiksa, kecamatan_id', 'safe'),
         );
     }
 
     public function check_periode($attribute) {
-        $flag = Spt::model()->exists('periode = ' . (int) $this->$attribute . ' AND kode_rekening_id=' . (int) $this->jenis_pajak);
+        $flag = Spt::model()->exists('periode = ' . (int) $this->$attribute . ' AND kode_rekening_id=' . (int) $this->kode_rekening_id);
         if ($flag) {
             return;
         } else {
@@ -33,12 +33,12 @@ class RekapitulasiPenerimaanForm extends CFormModel {
 
     public function attributeLabels() {
         return array(
-            'tahun' => Yii::t('trans', 'Tahun'),
+            'periode' => Yii::t('trans', 'Tahun'),
             'menyetujui' => Yii::t('trans', 'Menyetujui'),
             'mengetahui' => Yii::t('trans', 'Mengetahui'),
             'diperiksa' => Yii::t('trans', 'Diperiksa Oleh'),
             'kecamatan_id' => Yii::t('trans', 'Kecamatan'),
-            'jenis_pajak' => Yii::t('trans', 'Jenis Pajak'),
+            'kode_rekening_id' => Yii::t('trans', 'Jenis Pajak'),
         );
     }
 
@@ -55,11 +55,12 @@ class RekapitulasiPenerimaanForm extends CFormModel {
     }
 
     public function getKodeRekeningText() {
-        $model = KodeRekening::model()->findByPk($this->jenis_pajak);
+        $model = KodeRekening::model()->findByPk($this->kode_rekening_id);
         $nama = '';
         if ($model !== null) {
             $nama = $model->nama;
         }
         return $nama;
     }
+
 }

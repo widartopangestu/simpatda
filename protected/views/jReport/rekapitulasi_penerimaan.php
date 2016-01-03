@@ -19,7 +19,7 @@ $this->modulTitle = Yii::t('trans', 'Cetak Rekapitulasi Penerimaan') . ' ' . $mo
     ?>
     <p class="help-block"><?php echo Yii::t('trans', 'Fields with'); ?> <span class="required">*</span> <?php echo Yii::t('trans', 'are required.'); ?></p>
     <?php echo $form->errorSummary($model); ?>          
-    <?php echo $form->textFieldControlGroup($model, 'tahun', array('span' => 1)); ?>
+    <?php echo $form->textFieldControlGroup($model, 'periode', array('span' => 1)); ?>
     <?php echo $form->dropdownListControlGroup($model, 'kecamatan_id', $model->kecamatanOptions, array('span' => 5, 'empty' => '--')); ?>
     <?php echo $form->dropdownListControlGroup($model, 'menyetujui', $model->pejabatOptions, array('span' => 5)); ?>
     <?php echo $form->dropdownListControlGroup($model, 'mengetahui', $model->pejabatOptions, array('span' => 5)); ?>
