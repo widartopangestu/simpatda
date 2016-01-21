@@ -297,6 +297,7 @@ class UserController extends Controller {
             $session->open();
             $current_db = explode('dbname=', Yii::app()->db->connectionString);
             $session['user_choose_db'] = $current_db[1];
+            setlocale(LC_ALL, TranslateModule::translator()->getLanguage()); 
             // validate user input and redirect to the previous page if valid
             if ($model->validate() && $model->login())
                 $this->redirect(Yii::app()->user->returnUrl);

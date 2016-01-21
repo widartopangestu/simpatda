@@ -108,4 +108,8 @@ class ReklameLuas extends CActiveRecord {
         );
     }
 
+    public function getIdNilai() {
+        return $this->id . '|' . $this->nilai;
+    }
+
 }

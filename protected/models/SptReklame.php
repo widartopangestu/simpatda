@@ -20,9 +20,23 @@
  * @property double $pajak
  * @property string $created
  * @property string $updated
+ * @property integer $reklame_ketinggian_id
+ * @property integer $reklame_lokasi_id
+ * @property integer $reklame_luas_id
+ * @property integer $reklame_njop_id
+ * @property integer $reklame_njop_ketinggian_id
+ * @property integer $reklame_strategis_id
+ * @property integer $reklame_sudut_pandang_id
  *
  * The followings are the available model relations:
  * @property Spt $spt
+ * @property ReklameKetinggian $reklameKetinggian
+ * @property ReklameLokasi $reklameLokasi
+ * @property ReklameLuas $reklameLuas
+ * @property ReklameNjop $reklameNjop
+ * @property ReklameNjopKetinggian $reklameNjopKetinggian
+ * @property ReklameStrategis $reklameStrategis
+ * @property ReklameSudutPandang $reklameSudutPandang
  */
 class SptReklame extends CActiveRecord {
 
@@ -41,12 +55,12 @@ class SptReklame extends CActiveRecord {
         // will receive user inputs.
         return array(
             array('spt_id', 'required'),
-            array('spt_id, jumlah, lama', 'numerical', 'integerOnly' => true),
+            array('spt_id, jumlah, lama, reklame_ketinggian_id, reklame_lokasi_id, reklame_luas_id, reklame_njop_id, reklame_njop_ketinggian_id, reklame_strategis_id, reklame_sudut_pandang_id', 'numerical', 'integerOnly' => true),
             array('kelas_kawasan, kelas_luas, kelas_sudut_pandang, kelas_jalan, panjang, lebar, njopr, nspr, pajak', 'numerical'),
             array('lokasi, judul', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('spt_id, jumlah, lama, kelas_kawasan, kelas_luas, kelas_sudut_pandang, kelas_jalan, panjang, lebar, lokasi, judul, njopr, nspr, pajak, created, updated', 'safe', 'on' => 'search'),
+            array('spt_id, jumlah, lama, kelas_kawasan, kelas_luas, kelas_sudut_pandang, kelas_jalan, panjang, lebar, lokasi, judul, njopr, nspr, pajak, created, updated, reklame_ketinggian_id, reklame_lokasi_id, reklame_luas_id, reklame_njop_id, reklame_njop_ketinggian_id, reklame_strategis_id, reklame_sudut_pandang_id', 'safe', 'on' => 'search'),
         );
     }
 
@@ -58,6 +72,13 @@ class SptReklame extends CActiveRecord {
         // class name for the relations automatically generated below.
         return array(
             'spt' => array(self::BELONGS_TO, 'Spt', 'spt_id'),
+            'reklameKetinggian' => array(self::BELONGS_TO, 'ReklameKetinggian', 'reklame_ketinggian_id'),
+            'reklameLokasi' => array(self::BELONGS_TO, 'ReklameLokasi', 'reklame_lokasi_id'),
+            'reklameLuas' => array(self::BELONGS_TO, 'ReklameLuas', 'reklame_luas_id'),
+            'reklameNjop' => array(self::BELONGS_TO, 'ReklameNjop', 'reklame_njop_id'),
+            'reklameNjopKetinggian' => array(self::BELONGS_TO, 'ReklameNjopKetinggian', 'reklame_njop_ketinggian_id'),
+            'reklameStrategis' => array(self::BELONGS_TO, 'ReklameStrategis', 'reklame_strategis_id'),
+            'reklameSudutPandang' => array(self::BELONGS_TO, 'ReklameSudutPandang', 'reklame_sudut_pandang_id'),
         );
     }
 
@@ -82,6 +103,13 @@ class SptReklame extends CActiveRecord {
             'pajak' => Yii::t('trans', 'Pajak'),
             'created' => Yii::t('trans', 'Created'),
             'updated' => Yii::t('trans', 'Updated'),
+            'reklame_ketinggian_id' => Yii::t('trans', 'Reklame Ketinggian'),
+            'reklame_lokasi_id' => Yii::t('trans', 'Reklame Lokasi'),
+            'reklame_luas_id' => Yii::t('trans', 'Reklame Luas'),
+            'reklame_njop_id' => Yii::t('trans', 'Reklame Njop'),
+            'reklame_njop_ketinggian_id' => Yii::t('trans', 'Reklame Njop Ketinggian'),
+            'reklame_strategis_id' => Yii::t('trans', 'Reklame Strategis'),
+            'reklame_sudut_pandang_id' => Yii::t('trans', 'Reklame Sudut Pandang'),
         );
     }
 
@@ -146,5 +174,20 @@ class SptReklame extends CActiveRecord {
             ),
         );
     }
-
+    
+    public function getLokasiOptions() {
+        return CHtml::listData(ReklameLokasi::model()->findAll(array('order' => 'id ASC')), 'idNilai', 'nama');        
+    }
+    
+    public function getSudutPandangOptions() {
+        return CHtml::listData(ReklameSudutPandang::model()->findAll(array('order' => 'id ASC')), 'idNilai', 'nama');        
+    }
+    
+    public function getKetinggianOptions() {
+        return CHtml::listData(ReklameKetinggian::model()->findAll(array('order' => 'id ASC')), 'idNilai', 'nama');        
+    }
+    
+    public function getLuasOptions() {
+        return CHtml::listData(ReklameLuas::model()->findAll(array('order' => 'id ASC')), 'idNilai', 'nama');        
+    }
 }

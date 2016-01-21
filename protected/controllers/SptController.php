@@ -589,9 +589,11 @@ class SptController extends Controller {
         $model = new Spt;
         $model->nomor = 'AUTO';
         $model->jenis_pajak = Spt::JENIS_PAJAK_REKLAME;
+        $model->jenis_pemungutan = Spt::PUNGUTAN_OFFICE;
         $model->periode = date('Y');
         $model->tanggal_proses = date('d/m/Y');
         $model->tanggal_entry = date('d/m/Y');
+        $model->sptReklame = new SptReklame();
 
         if (isset($_POST['Spt'])) {
             $transaction = Yii::app()->db->beginTransaction();
@@ -625,8 +627,9 @@ class SptController extends Controller {
                 $model_item->kode_rekening_id = $model->kode_rekening_id;
                 $model->kode_rekening_id = Spt::PARENT_REKLAME;
                 $flag = $model->save() && $flag;
-                $model_item->spt_id = $model->primaryKey;
+                $model->sptReklame->spt_id = $model_item->spt_id = $model->primaryKey;
                 $flag = $model_item->save() && $flag;
+                $flag = $model->sptReklame->save() && $flag;
             } else {
                 $flag = false;
             }
@@ -682,6 +685,7 @@ class SptController extends Controller {
                 $model->kode_rekening_id = Spt::PARENT_REKLAME;
                 $flag = $model->save() && $flag;
                 $flag = $model_item->save() && $flag;
+                $flag = $model->sptReklame->save() && $flag;
             } else {
                 $flag = false;
                 if (!$model->allowUpdate) {

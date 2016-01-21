@@ -22,11 +22,11 @@
 
     <?php echo $form->errorSummary($model); ?>
 
+    <?php echo $form->dropdownListControlGroup($model, 'kode_rekening_id', KodeRekening::model()->getParentTreeOptions(Spt::PARENT_REKLAME), array('span' => 5, 'empty' => Yii::t('trans', '-- Pilih Kode Rekening --'))); ?>
+
     <?php echo $form->textFieldControlGroup($model, 'nama', array('span' => 5, 'maxlength' => 255)); ?>
 
     <?php echo $form->textFieldControlGroup($model, 'nilai', array('span' => 5)); ?>
-
-    <?php echo $form->textFieldControlGroup($model, 'kode_rekening_id', array('span' => 5)); ?>
 
     <div class="form-actions">
         <?php

@@ -114,6 +114,10 @@ class ReklameLokasi extends CActiveRecord {
         );
     }
 
+    public function getIdNilai() {
+        return $this->id !== null ? $this->id . '|' . $this->nilai : '';
+    }
+
     protected function beforeValidate() {
         $this->nilai = $this->bobot * $this->score;
         return parent::beforeValidate();

@@ -75,6 +75,7 @@ class WPJasper extends CApplicationComponent {
     public function generateReport($reportId, $format = 'pdf', $inputControls = null, $fileName = 'report', $pages = null) {
         $uri = '/reports/' . Yii::app()->session['user_choose_db'] . '/' . $reportId;
         $defaultControls = array(
+            'REPORT_LOCALE' => TranslateModule::translator()->getLanguage(),
             'CompanyName' => Yii::app()->params['company_name_report'],
             'CompanyAddress' => Yii::app()->params['company_address_report'],
             'CompanySlogan' => Yii::app()->params['company_description_report']

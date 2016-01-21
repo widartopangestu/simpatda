@@ -125,6 +125,18 @@ $this->menu = array(
 
             <?php echo $form->textAreaControlGroup($model, 'uraian', array('rows' => 3, 'span' => 4)); ?>
 
+            <?php echo $form->hiddenField($model->sptReklame, 'reklame_lokasi_id'); ?>
+            <?php echo TbHtml::dropDownListControlGroup('reklame_lokasi', '', $model->sptReklame->lokasiOptions, array('label' => 'Lokasi', 'empty' => '-- Pilih Lokasi --')); ?>
+
+            <?php echo $form->hiddenField($model->sptReklame, 'reklame_sudut_pandang_id'); ?>
+            <?php echo TbHtml::dropDownListControlGroup('reklame_sudut_pandang', '', $model->sptReklame->sudutPandangOptions, array('label' => 'Sudut Pandang', 'empty' => '-- Pilih Sudut Pandang --')); ?>
+
+            <?php echo $form->hiddenField($model->sptReklame, 'reklame_ketinggian_id'); ?>
+            <?php echo TbHtml::dropDownListControlGroup('reklame_ketinggian', '', $model->sptReklame->ketinggianOptions, array('label' => 'Ketinggian', 'empty' => '-- Pilih Ketinggian --')); ?>
+
+            <?php echo $form->hiddenField($model->sptReklame, 'reklame_luas_id'); ?>
+            <?php echo TbHtml::dropDownListControlGroup('reklame_luas', '', $model->sptReklame->luasOptions, array('label' => 'Luas', 'empty' => '-- Pilih Luas --')); ?>
+
         </div>
     </div>
     <div class="form-actions">

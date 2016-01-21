@@ -433,7 +433,7 @@ class JReportController extends Controller {
                 $rep = new WPJasper();
                 $reportId = 'setoran_pajak';
                 $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
-                $pembuat = Pejabat::model()->findByPk($model->pembuat);
+                $bendahara = Pejabat::model()->findByPk($model->bendahara);
                 $params = array(
                     'JudulLaporan' => $judul_laporan,
                     'SubJudulLaporan' => Yii::t('trans', 'Dari Nomor {nomor_from} s/d. {nomor_to} Tahun {periode}', array('{nomor_from}' => $model->nomor_from, '{nomor_to}' => $model->nomor_to, '{periode}' => $model->periode)),
@@ -443,10 +443,10 @@ class JReportController extends Controller {
                     'JabatanTtd' => $mengetahui->jabatan->nama,
                     'NipTtd' => $mengetahui->nip,
                     'KetTtd1' => Yii::app()->params['kota_perusahaan'] . ", " . date_format(date_create_from_format('d/m/Y', $model->tanggal), "d F Y"),
-                    'PangkatTtd1' => $pembuat->pangkat->nama,
-                    'NamaTtd1' => $pembuat->nama,
-                    'JabatanTtd1' => $pembuat->jabatan->nama,
-                    'NipTtd1' => $pembuat->nip,
+                    'PangkatTtd1' => $bendahara->pangkat->nama,
+                    'NamaTtd1' => $bendahara->nama,
+                    'JabatanTtd1' => $bendahara->jabatan->nama,
+                    'NipTtd1' => $bendahara->nip,
                     'Par_SQL' => 'SELECT * FROM v_setoran_pajak' . $where,
                 );
                 if (isset($_POST['type_report'])) {
@@ -495,7 +495,7 @@ class JReportController extends Controller {
                 $rep = new WPJasper();
                 $reportId = 'bpps';
                 $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
-                $pembuat = Pejabat::model()->findByPk($model->pembuat);
+                $bendahara = Pejabat::model()->findByPk($model->bendahara);
                 $params = array(
                     'JudulLaporan' => $judul_laporan,
                     'SubJudulLaporan' => Yii::t('trans', 'Dari Tanggal {date_from} s/d. {date_to}', array('{date_from}' => $model->date_from, '{date_to}' => $model->date_to)),
@@ -505,10 +505,10 @@ class JReportController extends Controller {
                     'JabatanTtd' => $mengetahui->jabatan->nama,
                     'NipTtd' => $mengetahui->nip,
                     'KetTtd1' => Yii::app()->params['kota_perusahaan'] . ", " . date("d F Y"),
-                    'PangkatTtd1' => $pembuat->pangkat->nama,
-                    'NamaTtd1' => $pembuat->nama,
-                    'JabatanTtd1' => $pembuat->jabatan->nama,
-                    'NipTtd1' => $pembuat->nip,
+                    'PangkatTtd1' => $bendahara->pangkat->nama,
+                    'NamaTtd1' => $bendahara->nama,
+                    'JabatanTtd1' => $bendahara->jabatan->nama,
+                    'NipTtd1' => $bendahara->nip,
                     'Par_SQL' => 'SELECT * FROM v_setoran_pajak' . $where . ' order by kecamatan',
                 );
                 if (isset($_POST['type_report'])) {
@@ -557,7 +557,7 @@ class JReportController extends Controller {
                 $rep = new WPJasper();
                 $reportId = 'bpps_detail';
                 $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
-                $pembuat = Pejabat::model()->findByPk($model->pembuat);
+                $bendahara = Pejabat::model()->findByPk($model->bendahara);
                 $params = array(
                     'JudulLaporan' => $judul_laporan,
                     'SubJudulLaporan' => Yii::t('trans', 'Dari Tanggal {date_from} s/d. {date_to}', array('{date_from}' => $model->date_from, '{date_to}' => $model->date_to)),
@@ -567,10 +567,10 @@ class JReportController extends Controller {
                     'JabatanTtd' => $mengetahui->jabatan->nama,
                     'NipTtd' => $mengetahui->nip,
                     'KetTtd1' => Yii::app()->params['kota_perusahaan'] . ", " . date("d F Y"),
-                    'PangkatTtd1' => $pembuat->pangkat->nama,
-                    'NamaTtd1' => $pembuat->nama,
-                    'JabatanTtd1' => $pembuat->jabatan->nama,
-                    'NipTtd1' => $pembuat->nip,
+                    'PangkatTtd1' => $bendahara->pangkat->nama,
+                    'NamaTtd1' => $bendahara->nama,
+                    'JabatanTtd1' => $bendahara->jabatan->nama,
+                    'NipTtd1' => $bendahara->nip,
                     'Par_SQL' => 'SELECT * FROM v_setoran_spt_item' . $where . ' order by nama_kecamatan',
                 );
                 if (isset($_POST['type_report'])) {
@@ -732,9 +732,13 @@ class JReportController extends Controller {
                 $reportId = 'produksi_penerimaan_galian';
                 $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
                 $pembuat = Pejabat::model()->findByPk($model->pembuat);
+                $sub_judul = Yii::t('trans', 'Kabupaten Muara Enim Bulan {bulan_from} s/d {bulan_to} {periode}', array('{bulan_from}' => Yii::app()->locale->getMonthName($model->bulan_from), '{bulan_to}' => Yii::app()->locale->getMonthName($model->bulan_to), '{periode}' => $model->periode));
+                if ($model->bulan_from == $model->bulan_to)
+                    $sub_judul = Yii::t('trans', 'Kabupaten Muara Enim Bulan {bulan_from} {periode}', array('{bulan_from}' => Yii::app()->locale->getMonthName($model->bulan_from), '{bulan_to}' => Yii::app()->locale->getMonthName($model->bulan_to), '{periode}' => $model->periode));
+
                 $params = array(
                     'JudulLaporan' => $judul_laporan,
-                    'SubJudulLaporan' => Yii::t('trans', 'Kabupaten Muara Enim Bulan {bulan_from} s/d {bulan_to} {periode}', array('{bulan_from}' => Yii::app()->locale->getMonthName($model->bulan_from), '{bulan_to}' => Yii::app()->locale->getMonthName($model->bulan_to), '{periode}' => $model->periode)),
+                    'SubJudulLaporan' => $sub_judul,
                     'Periode' => $model->periode,
                     'KetTtd' => 'Mengetahui,',
                     'PangkatTtd' => $mengetahui->pangkat->nama,
@@ -808,7 +812,7 @@ class JReportController extends Controller {
                     'NamaTtd' => $mengetahui->nama,
                     'JabatanTtd' => $mengetahui->jabatan->nama,
                     'NipTtd' => $mengetahui->nip,
-                    'KetTtd1' => Yii::app()->params['kota_perusahaan'] . ", " . date("d F Y"),
+                    'KetTtd1' => Yii::app()->params['kota_perusahaan'] . ", " . strftime("%d %B %Y"),
                     'PangkatTtd1' => $pembuat->pangkat->nama,
                     'NamaTtd1' => $pembuat->nama,
                     'JabatanTtd1' => $pembuat->jabatan->nama,
@@ -841,9 +845,9 @@ class JReportController extends Controller {
             $model->attributes = $_POST['JrBpsWaletForm'];
             if ($model->validate()) {
                 $filter = array();
-                $judul_laporan = 'Buku Pembantu Setoran/Penetapan Pajak Reklame';
+                $judul_laporan = 'Buku Pembantu Setoran/Penetapan Pajak Walet';
                 $where = '';
-                $filter[] = 'kode_rekening_id=' . Spt::PARENT_Reklame;
+                $filter[] = 'kode_rekening_id=' . Spt::PARENT_WALET;
                 if ((isset($model->date_from) && trim($model->date_from) != "") && (isset($model->date_to) && trim($model->date_to) != ""))
                     $filter[] = "tanggal_bayar BETWEEN '" . date("Y-m-d", strtotime(date_format(date_create_from_format('d/m/Y', $model->date_from), "Y-m-d"))) . "' AND '" . date("Y-m-d", strtotime(date_format(date_create_from_format('d/m/Y', $model->date_to), "Y-m-d") . ' +1 day')) . "'";
 

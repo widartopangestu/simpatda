@@ -114,6 +114,10 @@ class ReklameKetinggian extends CActiveRecord {
         );
     }
 
+    public function getIdNilai() {
+        return $this->id . '|' . $this->nilai;
+    }
+
     protected function beforeValidate() {
         $this->nilai = $this->bobot * $this->score;
         return parent::beforeValidate();

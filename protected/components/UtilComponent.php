@@ -130,8 +130,7 @@ class UtilComponent extends CApplicationComponent {
         return $results;
     }
 
-    public
-            function convert_number($number) {
+    public function convert_number($number) {
 
         $hyphen = '-';
         $conjunction = ' and ';

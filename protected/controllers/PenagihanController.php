@@ -9,7 +9,7 @@ class PenagihanController extends Controller {
      */
     public function filters() {
         return array(
-            'WAuth',
+            'WAuth - jsonNpwpd, dynamicKelurahan',
         );
     }
 
@@ -39,6 +39,12 @@ class PenagihanController extends Controller {
                 $wajib_pajak = WajibPajak::model()->findByPk($model->wajib_pajak_id);
                 $alamat = $wajib_pajak->alamat . ' Kel. ' . $wajib_pajak->kelurahan . ' Kec. ' . $wajib_pajak->kecamatan . ' ' . $wajib_pajak->kabupaten;
                 $mengetahui = Pejabat::model()->findByPk($model->mengetahui);
+                $sql = "SELECT sum(pajak + denda) as total FROM v_surat_teguran $where";
+                $result = Yii::app()->db->createCommand($sql)->queryRow();
+                $terbilang = "";
+                if ($result['total'] != null) {
+                    $terbilang = Yii::app()->util->number_to_words($result['total']);
+                }
                 $params = array(
                     'JudulLaporan' => 'SURAT TEGURAN',
                     'SubJudulLaporan' => 'Nomor :..............',
@@ -50,6 +56,7 @@ class PenagihanController extends Controller {
                     'Npwpd' => 'NPWPD/NPWPRD *) : ' . $wajib_pajak->npwpd,
                     'Kepada' => 'Kepada Yth.<br>' . $wajib_pajak->nama . '<br>' . $alamat,
                     'Par_SQL' => 'SELECT * FROM v_surat_teguran' . $where,
+                    'Terbilang' => $terbilang,
                 );
                 if (isset($_POST['type_report'])) {
                     $rep->generateReport($reportId, $_POST['type_report'], $params, $filename);
@@ -210,4 +217,22 @@ class PenagihanController extends Controller {
         }
     }
 
+    public function actionJsonNpwpd() {
+        $q = isset($_REQUEST['q']) ? $_REQUEST['q'] : '';
+        //query not in akan memakan waktu lama jika data banyak
+        $where = '';
+        if ($q !== '') {
+            $where .= "WHERE (npwpd ILIKE '%$q%' OR nama ILIKE '%$q%')";
+        }
+        $sql = "SELECT distinct wajib_pajak_id, npwpd, nama FROM v_surat_teguran $where LIMIT 20";
+        $result = Yii::app()->db->createCommand($sql)->queryAll();
+        $data = array();
+        foreach ($result as $item) {
+            $data[] = array(
+                'id' => $item['wajib_pajak_id'],
+                'text' => $item['npwpd'] . ' ' . $item['nama']
+            );
+        }
+        echo CJSON::encode($data);
+    }
 }
