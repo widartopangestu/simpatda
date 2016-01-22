@@ -31,7 +31,7 @@ class PenetapanForm extends CFormModel {
     public function attributeLabels() {
         return array(
             'spt_from' => Yii::t('trans', 'Dari Nomor SPT'),
-            'spt_to' => Yii::t('trans', 's/d Nomor SPT'),
+            'spt_to' => Yii::t('trans', 's/d.'),
             'periode' => Yii::t('trans', 'Periode SPT'),
             'tanggal_penetapan' => Yii::t('trans', 'Tanggal Penetapan'),
         );

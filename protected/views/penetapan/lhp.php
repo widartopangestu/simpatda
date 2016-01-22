@@ -34,11 +34,7 @@ $this->menu = array(
     <?php echo $form->errorSummary($model); ?>
 
     <?php echo $form->textFieldControlGroup($model, 'periode', array('span' => 1)); ?>
-
-    <?php echo $form->textFieldControlGroup($model, 'pemeriksaan_from', array('span' => 2)); ?>
-
-    <?php echo $form->textFieldControlGroup($model, 'pemeriksaan_to', array('span' => 2)); ?>
-
+    <?php echo $form->textFieldSdControlGroup($model, 'pemeriksaan_from', 'pemeriksaan_to', array('span' => 2), array('span' => 2)); ?>
     <?php
     echo $form->datePickerControlGroup($model, 'tanggal_penetapan', array('span' => 2, 'pluginOptions' => array(
             'format' => 'dd/mm/yyyy'

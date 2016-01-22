@@ -812,7 +812,7 @@ class JReportController extends Controller {
                     'NamaTtd' => $mengetahui->nama,
                     'JabatanTtd' => $mengetahui->jabatan->nama,
                     'NipTtd' => $mengetahui->nip,
-                    'KetTtd1' => Yii::app()->params['kota_perusahaan'] . ", " . strftime("%d %B %Y"),
+                    'KetTtd1' => Yii::app()->params['kota_perusahaan'] . ", " . date("d F Y"),
                     'PangkatTtd1' => $pembuat->pangkat->nama,
                     'NamaTtd1' => $pembuat->nama,
                     'JabatanTtd1' => $pembuat->jabatan->nama,

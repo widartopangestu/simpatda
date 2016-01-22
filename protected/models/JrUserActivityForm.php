@@ -21,7 +21,7 @@ class JrUserActivityForm extends CFormModel {
     public function attributeLabels() {
         return array(
             'date_from' => Yii::t('trans', 'Date From'),
-            'date_to' => Yii::t('trans', 'Date To'),
+            'date_to' => Yii::t('trans', 'To'),
             'user_id' => Yii::t('trans', 'User'),
         );
     }

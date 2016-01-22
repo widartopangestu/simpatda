@@ -122,8 +122,8 @@ class Spt extends CActiveRecord {
             'id' => Yii::t('trans', 'ID'),
             'periode' => Yii::t('trans', 'Periode'),
             'nomor' => Yii::t('trans', 'Nomor'),
-            'periode_awal' => Yii::t('trans', 'Periode Awal'),
-            'periode_akhir' => Yii::t('trans', 'Periode Akhir'),
+            'periode_awal' => Yii::t('trans', 'Periode'),
+            'periode_akhir' => Yii::t('trans', 's/d.'),
             'pajak' => Yii::t('trans', 'Pajak'),
             'nilai' => Yii::t('trans', 'Dasar Pengenaan'),
             'jenis_pemungutan' => Yii::t('trans', 'Jenis Pemungutan'),
@@ -277,7 +277,7 @@ class Spt extends CActiveRecord {
     }
 
     public function beforeValidate() {
-        if ($this->isNewRecord) {
+        if ($this->isNewRecord && $this->periode) {
             if (strtolower($this->nomor) === strtolower('AUTO')) {
                 $sql = "SELECT MAX(nomor) AS maxnomor FROM spt WHERE periode='$this->periode'";
                 $result = Yii::app()->db->createCommand($sql)->queryRow();

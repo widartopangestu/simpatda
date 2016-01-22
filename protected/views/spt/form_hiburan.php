@@ -80,7 +80,7 @@ $this->menu = array(
 
             <?php echo $form->textFieldControlGroup($model, 'kelurahan', array('span' => 3, 'maxlength' => 255, 'readonly' => true)); ?>
         </div>
-        <div class="span5">
+        <div class="span6">
             <?php
             echo $form->datePickerControlGroup($model, 'tanggal_proses', array('span' => 2, 'pluginOptions' => array(
                     'format' => 'dd/mm/yyyy',
@@ -98,13 +98,9 @@ $this->menu = array(
             <?php echo $form->dropDownListControlGroup($model, 'jenis_pemungutan', $model->jenisPemungutanOptions, array('span' => 3)); ?>
 
             <?php
-            echo $form->datePickerControlGroup($model, 'periode_awal', array('span' => 2, 'pluginOptions' => array(
+            echo $form->datePickerSdControlGroup($model, 'periode_awal', 'periode_akhir', array('span' => 2, 'pluginOptions' => array(
                     'format' => 'dd/mm/yyyy',
-            )));
-            ?>  
-
-            <?php
-            echo $form->datePickerControlGroup($model, 'periode_akhir', array('span' => 2, 'pluginOptions' => array(
+            )), array('span' => 2, 'pluginOptions' => array(
                     'format' => 'dd/mm/yyyy',
             )));
             ?>  

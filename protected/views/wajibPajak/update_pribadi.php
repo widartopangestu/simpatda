@@ -4,7 +4,6 @@
 ?>
 
 <?php
-
 $this->breadcrumbs = array(
     Yii::t('trans', 'Wajib Pajak') => array('index'),
     $model->id => array('view', 'id' => $model->id),
@@ -63,14 +62,13 @@ $this->menu = array(
             <?php echo $form->textFieldControlGroup($model, 'kelurahan', array('span' => 3, 'maxlength' => 255, 'groupOptions' => array('id' => 'GWajibPajak_kelurahan', 'style' => 'display:none;'))); ?>
 
             <?php echo $form->textFieldControlGroup($model, 'telepon', array('span' => 2, 'maxlength' => 20)); ?>
-
+        </div>
+        <div class="span5">
             <?php echo $form->textFieldControlGroup($model, 'kodepos', array('span' => 1, 'maxlength' => 5)); ?>
 
+            <?php echo $form->ktpFieldControlGroup($model, 'id_jenis', $model->idJenisOptions, 'id_nomor', array('span' => 1), array('span' => 2)); ?>
+
             <?php echo $form->dropDownListControlGroup($model, 'warga_negara', $model->wargaNegaraOptions, array('span' => 2)); ?>
-
-            <?php echo $form->dropDownListControlGroup($model, 'id_jenis', $model->idJenisOptions, array('span' => 1)); ?>
-
-            <?php echo $form->textFieldControlGroup($model, 'id_nomor', array('span' => 3, 'maxlength' => 255)); ?>
 
             <?php
             echo $form->datePickerControlGroup($model, 'tanggal_lahir', array('span' => 2, 'pluginOptions' => array(
@@ -78,8 +76,7 @@ $this->menu = array(
                     'endDate' => date('d/m/Y'),
             )));
             ?>  
-        </div>
-        <div class="span5">
+
             <?php echo $form->textFieldControlGroup($model, 'kk_nomor', array('span' => 3, 'maxlength' => 255)); ?>
 
             <?php
@@ -132,7 +129,7 @@ $this->menu = array(
                 jQuery('#GWajibPajak_kecamatan').hide();
             }
         });
-        jQuery('input[type=text]').keyup (function () {
+        jQuery('input[type=text]').keyup(function () {
             this.value = this.value.toUpperCase();
         });
     });

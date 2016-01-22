@@ -12,7 +12,7 @@ return CMap::mergeArray(
             'copyrightInfo' => 'Copyright &copy; ' . date('Y') . ' by Pangestu |  All Rights Reserved.',
             'optionsPage' => array(10 => 10, 25 => 25, 50 => 50, 100 => 100, 500 => 500, 1000 => 1000),
             'jasper' => true,
-            'jasper_url' => 'http://localhost:8080/jasperserver',
+            'jasper_url' => 'http://localhost:8081/jasperserver',
             'jasper_username' => 'jasperadmin',
             'jasper_password' => 'C430darinaC430',
                 )

@@ -21,8 +21,7 @@ $this->modulTitle = Yii::t('trans', 'Cetak Nota Perhitungan');
     <p class="help-block"><?php echo Yii::t('trans', 'Fields with'); ?> <span class="required">*</span> <?php echo Yii::t('trans', 'are required.'); ?></p>
     <?php echo $form->errorSummary($model); ?>    
     <?php echo $form->textFieldControlGroup($model, 'periode', array('span' => 1)); ?>
-    <?php echo $form->textFieldControlGroup($model, 'nomor_from', array('span' => 2)); ?>
-    <?php echo $form->textFieldControlGroup($model, 'nomor_to', array('span' => 2)); ?>
+    <?php echo $form->textFieldSdControlGroup($model, 'nomor_from', 'nomor_to', array('span' => 2), array('span' => 2)); ?>
     <?php echo $form->dropdownListControlGroup($model, 'mengetahui', $model->pejabatOptions, array('span' => 5)); ?>
     <?php echo $form->dropdownListControlGroup($model, 'diperiksa', $model->pejabatOptions, array('span' => 5)); ?>
     <div class="form-actions">

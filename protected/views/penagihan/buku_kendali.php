@@ -24,17 +24,14 @@ $this->modulTitle = Yii::t('trans', 'Cetak Buku Kendali');
     echo $form->datePickerControlGroup($model, 'tanggal', array('span' => 2, 'pluginOptions' => array(
             'format' => 'dd/mm/yyyy'
     )));
-    ?>
+    ?>    
     <?php
-    echo $form->datePickerControlGroup($model, 'date_from', array('span' => 2, 'pluginOptions' => array(
-            'format' => 'dd/mm/yyyy'
+    echo $form->datePickerSdControlGroup($model, 'date_from', 'date_to', array('span' => 2, 'pluginOptions' => array(
+            'format' => 'dd/mm/yyyy',
+    )), array('span' => 2, 'pluginOptions' => array(
+            'format' => 'dd/mm/yyyy',
     )));
-    ?>
-    <?php
-    echo $form->datePickerControlGroup($model, 'date_to', array('span' => 2, 'pluginOptions' => array(
-            'format' => 'dd/mm/yyyy'
-    )));
-    ?>
+    ?>  
     <?php echo $form->dropdownListControlGroup($model, 'jenis_pajak', $model->kodeRekeningOptions, array('span' => 5, 'empty' => '--')); ?>
     <?php echo $form->dropdownListControlGroup($model, 'jenis_surat_id', $model->jenisSuratOptions, array('span' => 5, 'empty' => '--')); ?>
     <?php echo $form->dropdownListControlGroup($model, 'kecamatan_id', $model->kecamatanOptions, array('span' => 5, 'empty' => '--')); ?>

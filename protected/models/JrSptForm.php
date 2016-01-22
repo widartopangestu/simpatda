@@ -34,7 +34,7 @@ class JrSptForm extends CFormModel {
         return array(
             'periode' => Yii::t('trans', 'Periode'),
             'nomor_from' => Yii::t('trans', 'Nomor SPT Dari'),
-            'nomor_to' => Yii::t('trans', 's/d. Nomor'),
+            'nomor_to' => Yii::t('trans', 's/d.'),
             'mengetahui' => Yii::t('trans', 'Mengetahui'),
             'diperiksa' => Yii::t('trans', 'Diperiksa Oleh'),
         );

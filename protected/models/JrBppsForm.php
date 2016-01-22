@@ -29,7 +29,7 @@ class JrBppsForm extends CFormModel {
             'kecamatan_id' => Yii::t('trans', 'Kecamatan'),
             'via_bayar' => Yii::t('trans', 'BPPS Melalui'),
             'date_from' => Yii::t('trans', 'Tanggal Proses'),
-            'date_to' => Yii::t('trans', 's/d. Tanggal'),
+            'date_to' => Yii::t('trans', 's/d.'),
             'mengetahui' => Yii::t('trans', 'Mengetahui'),
             'bendahara' => Yii::t('trans', 'Bendahara'),
         );

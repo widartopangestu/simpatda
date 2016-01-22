@@ -82,4 +82,36 @@ class FTActiveForm extends TbActiveForm {
         return $this->customControlGroup($select2, $model, $attribute, $htmlOptions);
     }
 
+    public function ktpFieldControlGroup($model, $attribute1, $data, $attribute2, $html1Options = array(), $html2Options = array()) {
+        $control = $this->dropDownList($model, $attribute1, $data, $html1Options);
+        $control .= " " . $this->textField($model, $attribute2, $html2Options);
+        return $this->customControlGroup($control, $model, $attribute1, $html1Options);
+    }
+
+    public function datePickerSdControlGroup($model, $attribute1, $attribute2, $html1Options = array(), $html2Options = array()) {
+        // the options for the Bootstrap JavaScript plugin
+        $datePicker1Options = array(
+            'model' => $model,
+            'attribute' => $attribute1,
+            'pluginOptions' => TbArray::popValue('pluginOptions', $html1Options, array()),
+            'events' => TbArray::popValue('events', $html1Options, array()),
+            'htmlOptions' => $html1Options,
+        );
+        $datePicker2Options = array(
+            'model' => $model,
+            'attribute' => $attribute2,
+            'pluginOptions' => TbArray::popValue('pluginOptions', $html2Options, array()),
+            'events' => TbArray::popValue('events', $html2Options, array()),
+            'htmlOptions' => $html2Options,
+        );
+        $datePicker = $this->owner->widget('yiiwheels.widgets.datepicker.FTDatePicker', $datePicker1Options, true);
+        $datePicker .= " " . $model->getAttributeLabel($attribute2) . " " . $this->owner->widget('yiiwheels.widgets.datepicker.FTDatePicker', $datePicker2Options, true);
+        return $this->customControlGroup($datePicker, $model, $attribute1, $html1Options);
+    }
+    
+    public function textFieldSdControlGroup($model, $attribute1, $attribute2, $html1Options = array(), $html2Options = array()) {
+        $control = $this->textField($model, $attribute1, $html1Options);
+        $control .= " " . $model->getAttributeLabel($attribute2) . " " . $this->textField($model, $attribute2, $html2Options);
+        return $this->customControlGroup($control, $model, $attribute1, $html1Options);
+    }
 }

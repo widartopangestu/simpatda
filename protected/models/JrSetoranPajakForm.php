@@ -35,7 +35,7 @@ class JrSetoranPajakForm extends CFormModel {
         return array(
             'periode' => Yii::t('trans', 'Periode'),
             'nomor_from' => Yii::t('trans', 'Dari Nomor'),
-            'nomor_to' => Yii::t('trans', 's/d. Nomor'),
+            'nomor_to' => Yii::t('trans', 's/d.'),
             'mengetahui' => Yii::t('trans', 'Mengetahui'),
             'bendahara' => Yii::t('trans', 'Bendahara'),
             'tanggal' => Yii::t('trans', 'Tgl. Cetak'),

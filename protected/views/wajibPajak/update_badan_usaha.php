@@ -67,9 +67,7 @@ $this->menu = array(
 
             <?php echo $form->dropDownListControlGroup($model, 'warga_negara', $model->wargaNegaraOptions, array('span' => 2)); ?>
 
-            <?php echo $form->dropDownListControlGroup($model, 'id_jenis', $model->idJenisOptions, array('span' => 1)); ?>
-
-            <?php echo $form->textFieldControlGroup($model, 'id_nomor', array('span' => 3, 'maxlength' => 255)); ?>
+            <?php echo $form->ktpFieldControlGroup($model, 'id_jenis', $model->idJenisOptions, 'id_nomor', array('span' => 1), array('span' => 2)); ?>
 
             <?php
             echo $form->datePickerControlGroup($model, 'tanggal_lahir', array('span' => 2, 'pluginOptions' => array(
@@ -77,17 +75,17 @@ $this->menu = array(
                     'endDate' => date('d/m/Y'),
             )));
             ?>  
-        </div>
-        <div class="span5">
+            
             <?php echo $form->textFieldControlGroup($model, 'kk_nomor', array('span' => 3, 'maxlength' => 255)); ?>
 
+        </div>
+        <div class="span5">
             <?php
             echo $form->datePickerControlGroup($model, 'kk_tanggal', array('span' => 2, 'pluginOptions' => array(
                     'format' => 'dd/mm/yyyy',
                     'endDate' => date('d/m/Y'),
             )));
             ?>  
-
             <?php echo $form->textFieldControlGroup($model, 'pekerjaan', array('span' => 3, 'maxlength' => 255)); ?>
 
             <?php echo $form->textAreaControlGroup($model, 'alamat_pekerjaan', array('rows' => 3, 'span' => 3)); ?>

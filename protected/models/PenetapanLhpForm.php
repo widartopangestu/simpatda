@@ -31,7 +31,7 @@ class PenetapanLhpForm extends CFormModel {
     public function attributeLabels() {
         return array(
             'pemeriksaan_from' => Yii::t('trans', 'Dari Nomor LHP'),
-            'pemeriksaan_to' => Yii::t('trans', 's/d Nomor LHP'),
+            'pemeriksaan_to' => Yii::t('trans', 's/d.'),
             'periode' => Yii::t('trans', 'Periode LHP'),
             'tanggal_penetapan' => Yii::t('trans', 'Tanggal Penetapan'),
         );

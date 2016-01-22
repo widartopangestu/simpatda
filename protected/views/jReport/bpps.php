@@ -22,15 +22,12 @@ $this->modulTitle = Yii::t('trans', 'Laporan') . ' ' . Yii::t('trans', 'Buku Pem
     <p class="help-block"><?php echo Yii::t('trans', 'Fields with'); ?> <span class="required">*</span> <?php echo Yii::t('trans', 'are required.'); ?></p>
     <?php echo $form->errorSummary($model); ?>      
     <?php
-    echo $form->datePickerControlGroup($model, 'date_from', array('span' => 2, 'pluginOptions' => array(
-            'format' => 'dd/mm/yyyy'
+    echo $form->datePickerSdControlGroup($model, 'date_from', 'date_to', array('span' => 2, 'pluginOptions' => array(
+            'format' => 'dd/mm/yyyy',
+    )), array('span' => 2, 'pluginOptions' => array(
+            'format' => 'dd/mm/yyyy',
     )));
-    ?>
-    <?php
-    echo $form->datePickerControlGroup($model, 'date_to', array('span' => 2, 'pluginOptions' => array(
-            'format' => 'dd/mm/yyyy'
-    )));
-    ?>
+    ?>  
     <?php echo $form->dropdownListControlGroup($model, 'kode_rekening_id', $model->kodeRekeningOptions, array('span' => 5, 'empty' => Yii::t('trans', '- Semua Kode Rekening -'))); ?>
     <?php echo $form->dropdownListControlGroup($model, 'kecamatan_id', $model->kecamatanOptions, array('span' => 5, 'empty' => Yii::t('trans', '- Semua Kecamatan -'))); ?>
     <?php echo $form->dropdownListControlGroup($model, 'via_bayar', $model->viaBayarOptions, array('span' => 5)); ?>

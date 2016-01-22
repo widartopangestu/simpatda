@@ -22,7 +22,7 @@ class JrBpsWaletForm extends CFormModel {
     public function attributeLabels() {
         return array(
             'date_from' => Yii::t('trans', 'Tanggal Proses'),
-            'date_to' => Yii::t('trans', 's/d. Tanggal'),
+            'date_to' => Yii::t('trans', 's/d.'),
             'mengetahui' => Yii::t('trans', 'Mengetahui'),
             'pembuat' => Yii::t('trans', 'Pembuat'),
         );
